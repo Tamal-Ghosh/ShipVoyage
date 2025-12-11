@@ -6,35 +6,39 @@ import org.example.shipvoyage.util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
-    public static void createUserTable() {
-       String sql="CREATE TABLE IF NOT EXISTS users (\n"
-               + " userID INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-               + " username TEXT NOT NULL,\n"
-               + " password TEXT NOT NULL,\n"
-               + " email TEXT NOT NULL\n"
-               + ");";
-       try(Connection con = DBConnection.getConnection();
-           PreparedStatement statement=con.prepareStatement(sql);) {
-              statement.executeUpdate();
 
-       }catch (SQLException e)
-         {
-              e.printStackTrace();
-         }
+    public static void createUserTable() {
+        String sql = "CREATE TABLE IF NOT EXISTS users (" +
+                "userID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "username TEXT NOT NULL UNIQUE," +
+                "password TEXT NOT NULL," +
+                "email TEXT NOT NULL" +
+                ");";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean insertUser(String username, String password, String email) {
         String sql = "INSERT INTO users(username, password, email) VALUES(?,?,?)";
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement statement = con.prepareStatement(sql)) {
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, username);
             statement.setString(2, password);
             statement.setString(3, email);
             int rowsInserted = statement.executeUpdate();
+            statement.close();
             return rowsInserted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,5 +46,52 @@ public class UserDAO {
         }
     }
 
+    public static User searchLoginUser(String username, String password) {
+        String sql="SELECT * FROM users WHERE username =? AND password = ?";
+        try(Connection con =DBConnection.getConnection();
+        PreparedStatement statement = con.prepareStatement(sql))
+        {
+            statement.setString(1, username);
+            statement.setString(2, password);
 
+            var rs=statement.executeQuery();
+
+            if(rs.next()){
+                int userID=rs.getInt("userID");
+                String email=rs.getString("email");
+                rs.close();
+                return new User(userID, username, password, email);
+            }
+            else
+                return null;
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static User getUserByUsername(String username) {
+        String sql = "SELECT * FROM users WHERE username = ?";
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                int userID = rs.getInt("userID");
+                String uname = rs.getString("username");
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                rs.close();
+                statement.close();
+                return new User(userID, uname, password, email);
+            }
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

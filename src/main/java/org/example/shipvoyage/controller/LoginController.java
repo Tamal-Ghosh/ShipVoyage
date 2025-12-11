@@ -4,11 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.shipvoyage.dao.UserDAO;
+import org.example.shipvoyage.model.User;
 
 import java.io.IOException;
 
@@ -46,7 +45,16 @@ public class LoginController {
             System.out.println("Missing username or password");
             return;
         }
-
+        User user= new UserDAO().searchLoginUser(username, password);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if(user==null){
+            System.out.println("Invalid username or password");
+            alert.setHeaderText("Invalid username or password");
+            alert.showAndWait();
+            return;
+        }
+        alert.setHeaderText("Successfully Logged In");
+        alert.showAndWait();
         FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/hello-view.fxml"));
         Scene loginScene = new Scene(loader.load());
         Stage stage = (Stage) passwordField.getScene().getWindow();

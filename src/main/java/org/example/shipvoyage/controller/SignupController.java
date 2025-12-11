@@ -4,10 +4,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.example.shipvoyage.dao.UserDAO;
 
 import java.io.IOException;
 
@@ -40,6 +42,19 @@ public class SignupController {
         System.out.println("Username: " + username);
         System.out.println("Email: " + email);
         System.out.println("Password: " + password);
+        boolean added= UserDAO.insertUser(username, password, email);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        if(added){
+            alert.setHeaderText("Signup Successful");
+            alert.showAndWait();
+            System.out.println("User Added Successfully");
+        }else{
+            alert.setHeaderText("Signup Failed");
+            alert.showAndWait();
+            	System.out.println("Error Adding User");
+                return;
+        }
 
         FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/login.fxml"));
         Scene loginScene = new Scene(loader.load());
