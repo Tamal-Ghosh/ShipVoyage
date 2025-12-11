@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="20" prefHeight="400.0" prefWidth="600.0"
+      xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.shipvoyage.controller.LoginController">
+
+    <children>
+
+        <Label text="Login">
+            <font><Font size="22"/></font>
+        </Label>
+
+        <GridPane alignment="CENTER" hgap="15" vgap="15" maxWidth="350">
+            <padding><Insets top="10" bottom="10" left="10" right="10"/></padding>
+
+            <children>
+                <Label text="Username" GridPane.rowIndex="0"/>
+                <TextField fx:id="usernameField" promptText="Enter username" GridPane.columnIndex="1"/>
+
+                <Label text="Password" GridPane.rowIndex="1"/>
+                <PasswordField fx:id="passwordField" promptText="Enter password" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            </children>
+        </GridPane>
+
+        <Button text="Login" fx:id="loginBtn" onAction="#onLogin" prefWidth="150"/>
+
+        <Hyperlink fx:id="regHyperlink" text="Create an account" onAction="#onClickRegLink"/>
+
+    </children>
+</VBox>
