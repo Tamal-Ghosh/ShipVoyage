@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static final String URL = "jdbc:sqlite:users.db";
+    private static final String URL = "jdbc:sqlite:shipvoyage.db";
     private static Connection connection;
 
     public static Connection getConnection() {

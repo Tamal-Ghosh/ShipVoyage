@@ -41,6 +41,7 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+
         if (username.isEmpty() || password.isEmpty()) {
             System.out.println("Missing username or password");
             return;
@@ -49,11 +50,11 @@ public class LoginController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(user==null){
             System.out.println("Invalid username or password");
-            alert.setHeaderText("Invalid username or password");
+            alert.setContentText("Invalid username or password");
             alert.showAndWait();
             return;
         }
-        alert.setHeaderText("Successfully Logged In");
+        alert.setContentText("Successfully Logged In");
         alert.showAndWait();
         FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/hello-view.fxml"));
         Scene loginScene = new Scene(loader.load());

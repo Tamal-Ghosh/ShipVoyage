@@ -46,11 +46,11 @@ public class SignupController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         if(added){
-            alert.setHeaderText("Signup Successful");
+            alert.setContentText("Signup Successful");
             alert.showAndWait();
             System.out.println("User Added Successfully");
         }else{
-            alert.setHeaderText("Signup Failed");
+            alert.setContentText("Signup Failed");
             alert.showAndWait();
             	System.out.println("Error Adding User");
                 return;

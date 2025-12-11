@@ -71,27 +71,5 @@ public class UserDAO {
         }
     }
 
-    public static User getUserByUsername(String username) {
-        String sql = "SELECT * FROM users WHERE username = ?";
-        try {
-            Connection con = DBConnection.getConnection();
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, username);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                int userID = rs.getInt("userID");
-                String uname = rs.getString("username");
-                String password = rs.getString("password");
-                String email = rs.getString("email");
-                rs.close();
-                statement.close();
-                return new User(userID, uname, password, email);
-            }
-            rs.close();
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 }
