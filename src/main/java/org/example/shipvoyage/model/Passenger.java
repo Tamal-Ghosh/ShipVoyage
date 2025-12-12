@@ -20,7 +20,7 @@ public class Passenger {
         this.roomID = roomID;
     }
 
-    // Getters & Setters
+
 
     public int getPassengerID() { return passengerID; }
     public void setPassengerID(int passengerID) { this.passengerID = passengerID; }

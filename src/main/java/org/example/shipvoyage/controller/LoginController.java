@@ -13,6 +13,8 @@ import java.io.IOException;
 
 public class LoginController {
 
+    String role;
+
     @FXML
     private Button loginBtn;
 
@@ -25,11 +27,21 @@ public class LoginController {
     @FXML
     private TextField usernameField;
 
+    public void setRole(String role) {
+        this.role=role;
+    }
+    public String getRole() {
+        return role;
+    }
+
+
     @FXML
     void onClickRegLink(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/signup.fxml"));
         Scene loginScene = new Scene(loader.load());
+        SignupController signupController = loader.getController();
+        signupController.role= this.role;
         Stage stage = (Stage) passwordField.getScene().getWindow();
         stage.setScene(loginScene);
         stage.show();
@@ -49,6 +61,7 @@ public class LoginController {
         User user= new UserDAO().searchLoginUser(username, password);
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(user==null){
+
             System.out.println("Invalid username or password");
             alert.setContentText("Invalid username or password");
             alert.showAndWait();
@@ -56,7 +69,7 @@ public class LoginController {
         }
         alert.setContentText("Successfully Logged In");
         alert.showAndWait();
-        FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/hello-view.fxml"));
+        FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/admin/dashboard.fxml"));
         Scene loginScene = new Scene(loader.load());
         Stage stage = (Stage) passwordField.getScene().getWindow();
         stage.setScene(loginScene);

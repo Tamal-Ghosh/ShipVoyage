@@ -7,8 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class UserDAO {
 
@@ -17,7 +16,8 @@ public class UserDAO {
                 "userID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "username TEXT NOT NULL UNIQUE," +
                 "password TEXT NOT NULL," +
-                "email TEXT NOT NULL" +
+                "email TEXT NOT NULL," +
+                "role TEXT NOT NULL" +
                 ");";
         try {
             Connection con = DBConnection.getConnection();
@@ -29,14 +29,15 @@ public class UserDAO {
         }
     }
 
-    public static boolean insertUser(String username, String password, String email) {
-        String sql = "INSERT INTO users(username, password, email) VALUES(?,?,?)";
+    public static boolean insertUser(String username, String password, String email, String role) {
+        String sql = "INSERT INTO users(username, password, email,role) VALUES(?,?,?,?)";
         try {
             Connection con = DBConnection.getConnection();
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, username);
             statement.setString(2, password);
             statement.setString(3, email);
+            statement.setString(4, role);
             int rowsInserted = statement.executeUpdate();
             statement.close();
             return rowsInserted > 0;
@@ -54,13 +55,14 @@ public class UserDAO {
             statement.setString(1, username);
             statement.setString(2, password);
 
-            var rs=statement.executeQuery();
+            ResultSet rs=statement.executeQuery();
 
             if(rs.next()){
                 int userID=rs.getInt("userID");
                 String email=rs.getString("email");
+                String role=rs.getString("role");
                 rs.close();
-                return new User(userID, username, password, email);
+                return new User(userID, username, password, email, role);
             }
             else
                 return null;

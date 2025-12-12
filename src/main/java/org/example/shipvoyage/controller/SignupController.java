@@ -14,6 +14,7 @@ import org.example.shipvoyage.dao.UserDAO;
 import java.io.IOException;
 
 public class SignupController {
+    String role;
 
     @FXML
     private TextField emailField;
@@ -34,25 +35,27 @@ public class SignupController {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty() ) {
+
+
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || role.isEmpty()) {
             System.out.println("Missing Information");
             return;
         }
 
-        System.out.println("Username: " + username);
-        System.out.println("Email: " + email);
-        System.out.println("Password: " + password);
-        boolean added= UserDAO.insertUser(username, password, email);
+//        System.out.println("Username: " + username);
+//        System.out.println("Email: " + email);
+//        System.out.println("Password: " + password);
+        boolean added= UserDAO.insertUser(username, password, email, role);
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         if(added){
             alert.setContentText("Signup Successful");
             alert.showAndWait();
-            System.out.println("User Added Successfully");
+            //System.out.println("User Added Successfully");
         }else{
             alert.setContentText("Signup Failed");
             alert.showAndWait();
-            	System.out.println("Error Adding User");
+            	//System.out.println("Error Adding User");
                 return;
         }
 
@@ -72,4 +75,10 @@ public class SignupController {
         stage.setScene(loginScene);
         stage.show();
     }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+
 }

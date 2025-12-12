@@ -18,4 +18,5 @@ module org.example.shipvoyage {
     opens org.example.shipvoyage.app to javafx.fxml;
     exports org.example.shipvoyage.controller;
     opens org.example.shipvoyage.controller to javafx.fxml;
+    opens org.example.shipvoyage.controller.admin to javafx.fxml;
 }
