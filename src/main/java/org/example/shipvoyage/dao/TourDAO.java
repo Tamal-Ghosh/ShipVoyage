@@ -104,4 +104,25 @@ public class TourDAO {
             }
         }
 
+        public static Tour getTourById(int id) {
+            String sql = "SELECT * FROM tours WHERE id=?";
+            try (Connection con = DBConnection.getConnection();
+                 PreparedStatement statement = con.prepareStatement(sql)) {
+                statement.setInt(1, id);
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    return new Tour(
+                            rs.getInt("id"),
+                            rs.getString("tour_name"),
+                            rs.getString("route"),
+                            rs.getInt("duration"),
+                            rs.getString("description")
+                    );
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
 }

@@ -32,7 +32,6 @@ public class ManageToursController {
     private Tour selectedTour = null;
 
     public void initialize() {
-        TourDAO.createTourTable();
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tourName"));

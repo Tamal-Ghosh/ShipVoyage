@@ -1,5 +1,10 @@
 package org.example.shipvoyage.util;
 
+import org.example.shipvoyage.dao.ShipDAO;
+import org.example.shipvoyage.dao.TourDAO;
+import org.example.shipvoyage.dao.TourInstanceDAO;
+import org.example.shipvoyage.dao.UserDAO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,5 +23,12 @@ public class DBConnection {
             e.printStackTrace();
         }
         return connection;
+    }
+    public static void createAllTables() {
+        UserDAO.createUserTable();
+        TourDAO.createTourTable();
+        ShipDAO.createShipTable();
+        TourInstanceDAO.createTable();
+
     }
 }

@@ -36,4 +36,22 @@ public class DashboardController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/admin/manage-tours.fxml"));
         dashRootPane.setCenter(loader.load());
     }
+
+    @FXML
+    void onManageTourInstanceClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/admin/manage-tour-instances.fxml"));
+        dashRootPane.setCenter(loader.load());
+    }
+
+    @FXML
+    void onManageRoomsClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/admin/manage-rooms.fxml"));
+        dashRootPane.setCenter(loader.load());
+    }
+
+    @FXML
+    void onViewBookingsClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/admin/view-bookings.fxml"));
+        dashRootPane.setCenter(loader.load());
+    }
 }

@@ -12,6 +12,7 @@ module org.example.shipvoyage {
     requires com.almasb.fxgl.all;
     requires java.sql;
 
+
     opens org.example.shipvoyage to javafx.fxml;
     exports org.example.shipvoyage;
 

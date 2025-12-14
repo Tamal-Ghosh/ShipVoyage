@@ -27,7 +27,6 @@ public class ManageShipsController {
     private Ship selectedShip = null;
 
     public void initialize() {
-        ShipDAO.createShipTable();
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("shipName"));

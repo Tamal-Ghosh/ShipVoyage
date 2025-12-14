@@ -20,9 +20,9 @@
             <Label maxWidth="Infinity" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="ADMIN PANEL" />
             <Button maxWidth="Infinity" onAction="#onManageShipsClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Ships" />
             <Button maxWidth="Infinity" onAction="#onManageToursClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Tours" />
-            <Button maxWidth="Infinity"  style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Tour Instances" />
-            <Button maxWidth="Infinity"  style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Rooms" />
-            <Button maxWidth="Infinity"  style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="View Bookings" />
+            <Button maxWidth="Infinity" onAction="#onManageTourInstanceClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Tour Instances" />
+            <Button maxWidth="Infinity" onAction="#onManageRoomsClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Rooms" />
+            <Button maxWidth="Infinity" onAction="#onViewBookingsClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="View Bookings" />
             <Label maxWidth="Infinity" style="-fx-text-fill: white; -fx-font-size: 12px;" text="Logged in as Admin" />
         </VBox>
     </left>

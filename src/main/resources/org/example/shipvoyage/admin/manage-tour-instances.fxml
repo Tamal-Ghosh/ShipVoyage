@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.shipvoyage.controller.admin.ManageTourInstancesController">
+
+    <top>
+        <Label text="Manage Tour Instances"
+               style="-fx-font-size: 24px;"
+               BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TableView fx:id="instanceTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="tourIdColumn" text="Tour" prefWidth="200"/>
+                    <TableColumn fx:id="shipIdColumn" text="Ship" prefWidth="200"/>
+                    <TableColumn fx:id="startDateColumn" text="Start Date" prefWidth="150"/>
+                    <TableColumn fx:id="endDateColumn" text="End Date" prefWidth="150"/>
+                    <TableColumn fx:id="actionColumn" text="Actions" prefWidth="160"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="15" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <HBox spacing="10">
+                <ComboBox fx:id="tourComboBox" promptText="Select Tour" HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="shipComboBox" promptText="Select Ship" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <HBox spacing="10">
+                <DatePicker fx:id="startDatePicker" promptText="Start Date" HBox.hgrow="ALWAYS"/>
+                <DatePicker fx:id="endDatePicker" promptText="End Date" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <HBox spacing="10">
+                <Button fx:id="saveButton"
+                        text="Save"
+                        onAction="#onSaveInstance"
+                        HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="clearButton"
+                        text="Clear"
+                        onAction="#onClearForm"
+                        HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

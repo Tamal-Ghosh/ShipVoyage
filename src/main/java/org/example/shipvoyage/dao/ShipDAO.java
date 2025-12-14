@@ -83,4 +83,25 @@ public class ShipDAO {
         }
         return ships;
     }
+
+    public static  Ship getShipById(int id) {
+        String sql = "SELECT * FROM ships WHERE id=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Ship(
+                            rs.getInt("id"),
+                            rs.getString("shipName"),
+                            rs.getInt("capacity")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
 }
