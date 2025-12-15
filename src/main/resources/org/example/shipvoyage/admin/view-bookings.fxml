@@ -20,6 +20,11 @@
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
+            <HBox spacing="10">
+                <ComboBox fx:id="shipComboBox" promptText="Select Ship" HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="tourInstanceComboBox" promptText="Select Tour" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
             <BorderPane style="-fx-border-color: #dfe6e9;
                                -fx-border-width: 1.5;
                                -fx-border-radius: 8;
@@ -29,16 +34,19 @@
                     <TableView fx:id="bookingTable" VBox.vgrow="ALWAYS">
                         <columns>
                             <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                            <TableColumn fx:id="passengerColumn" text="Passenger Name" prefWidth="150"/>
-                            <TableColumn fx:id="shipColumn" text="Ship Name" prefWidth="150"/>
+                            <TableColumn fx:id="nameColumn" text="Customer Name" prefWidth="150"/>
+                            <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
+                            <TableColumn fx:id="tourDateColumn" text="Tour Date" prefWidth="120"/>
                             <TableColumn fx:id="roomColumn" text="Room Number" prefWidth="100"/>
-                            <TableColumn fx:id="dateColumn" text="Booking Date" prefWidth="120"/>
+                            <TableColumn fx:id="totalPaymentColumn" text="Total Payment" prefWidth="100"/>
+                            <TableColumn fx:id="duePaymentColumn" text="Due Payment" prefWidth="100"/>
                             <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
                             <TableColumn fx:id="actionColumn" text="Actions" prefWidth="150"/>
                         </columns>
                     </TableView>
                 </center>
             </BorderPane>
+
         </VBox>
     </center>
 

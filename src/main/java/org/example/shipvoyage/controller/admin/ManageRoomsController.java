@@ -26,31 +26,26 @@ public class ManageRoomsController {
     public TextField roomNumberField;
     public ComboBox<String> roomTypeComboBox;
     public TextField priceField;
-
     public Button saveButton;
 
     private ObservableList<Room> roomList = FXCollections.observableArrayList();
-    private Room selectedRoom;
+    private Room selectedRoom = null;
 
     public void initialize() {
-
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         roomNumberColumn.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
         roomTypeColumn.setCellValueFactory(new PropertyValueFactory<>("roomType"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerNight"));
 
-        roomTypeComboBox.setItems(FXCollections.observableArrayList("Standard"));
+        roomTypeComboBox.setItems(FXCollections.observableArrayList("Single", "Double"));
 
         loadShips();
-
         shipComboBox.setOnAction(e -> loadRooms());
-
         addActionButtons();
     }
 
     private void loadShips() {
         shipComboBox.setItems(FXCollections.observableArrayList(ShipDAO.getAllShips()));
-
         shipComboBox.setCellFactory(cb -> new ListCell<>() {
             @Override
             protected void updateItem(Ship ship, boolean empty) {
@@ -58,7 +53,6 @@ public class ManageRoomsController {
                 setText(empty || ship == null ? null : ship.getShipName());
             }
         });
-
         shipComboBox.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Ship ship, boolean empty) {
@@ -83,11 +77,11 @@ public class ManageRoomsController {
             @Override
             public TableCell<Room, Void> call(TableColumn<Room, Void> param) {
                 return new TableCell<>() {
-                    Button edit = new Button("Edit");
-                    Button del = new Button("Delete");
+                    private final Button editBtn = new Button("Edit");
+                    private final Button delBtn = new Button("Delete");
 
                     {
-                        edit.setOnAction(e -> {
+                        editBtn.setOnAction(e -> {
                             selectedRoom = getTableView().getItems().get(getIndex());
                             roomNumberField.setText(selectedRoom.getRoomNumber());
                             roomTypeComboBox.setValue(selectedRoom.getRoomType());
@@ -95,11 +89,13 @@ public class ManageRoomsController {
                             saveButton.setText("Update");
                         });
 
-                        del.setOnAction(e -> {
+                        delBtn.setOnAction(e -> {
                             Room r = getTableView().getItems().get(getIndex());
                             if (RoomDAO.deleteRoom(r.getId())) {
                                 roomList.remove(r);
-                                AlertUtil.showInfo("Room deleted");
+                                AlertUtil.showInfo("Room deleted successfully!");
+                            } else {
+                                AlertUtil.showWarning("Failed to delete room!");
                             }
                         });
                     }
@@ -107,7 +103,7 @@ public class ManageRoomsController {
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
-                        setGraphic(empty ? null : new HBox(10, edit, del));
+                        setGraphic(empty ? null : new HBox(10, editBtn, delBtn));
                     }
                 };
             }
@@ -115,43 +111,52 @@ public class ManageRoomsController {
     }
 
     public void onSaveRoom(ActionEvent e) {
-
         Ship ship = shipComboBox.getValue();
         if (ship == null) {
-            AlertUtil.showWarning("Select ship first");
+            AlertUtil.showWarning("Select a ship first!");
             return;
         }
 
+        int currentRoomCount = RoomDAO.getRoomsByShip(ship.getId()).size();
+        if (selectedRoom == null && currentRoomCount >= ship.getCapacity()) {
+            AlertUtil.showWarning("Cannot add more rooms. Ship capacity reached!");
+            return;
+        }
+
+        String roomNumber = roomNumberField.getText();
+        String roomType = roomTypeComboBox.getValue();
         double price;
+
+        if (roomNumber.isEmpty() || roomType == null || priceField.getText().isEmpty()) {
+            AlertUtil.showWarning("Fill all room details!");
+            return;
+        }
+
         try {
             price = Double.parseDouble(priceField.getText());
-        } catch (Exception ex) {
-            AlertUtil.showWarning("Invalid price");
+        } catch (NumberFormatException ex) {
+            AlertUtil.showWarning("Invalid price!");
             return;
         }
 
         if (selectedRoom == null) {
-            RoomDAO.addRoom(new Room(
-                    0,
-                    ship.getId(),
-                    roomNumberField.getText(),
-                    roomTypeComboBox.getValue(),
-                    price
-            ));
+            RoomDAO.addRoom(new Room(0, ship.getId(), roomNumber, roomType, price));
+            AlertUtil.showInfo("Room added successfully!");
         } else {
-            selectedRoom.setRoomNumber(roomNumberField.getText());
-            selectedRoom.setRoomType(roomTypeComboBox.getValue());
+            selectedRoom.setRoomNumber(roomNumber);
+            selectedRoom.setRoomType(roomType);
             selectedRoom.setPricePerNight(price);
             RoomDAO.updateRoom(selectedRoom);
             selectedRoom = null;
             saveButton.setText("Save");
+            AlertUtil.showInfo("Room updated successfully!");
         }
 
-        clear();
+        clearFields();
         loadRooms();
     }
 
-    private void clear() {
+    private void clearFields() {
         roomNumberField.clear();
         roomTypeComboBox.getSelectionModel().clearSelection();
         priceField.clear();

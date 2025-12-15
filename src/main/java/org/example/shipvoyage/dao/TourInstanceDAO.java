@@ -74,6 +74,52 @@ public class TourInstanceDAO {
         }
         return tourInstances;
     }
+    public static List<TourInstance> getTourInstancesByShip(int shipId) {
+        List<TourInstance> tourInstances = new ArrayList<>();
+        String sql = "SELECT * FROM tour_instances WHERE ship_id=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setInt(1, shipId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                tourInstances.add(new TourInstance(
+                        rs.getInt("id"),
+                        rs.getInt("tour_id"),
+                        rs.getInt("ship_id"),
+                        LocalDate.parse(rs.getString("start_date")),
+                        LocalDate.parse(rs.getString("end_date"))
+                ));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tourInstances;
+    }
+    public static TourInstance getTourInstanceById(int id) {
+        String sql = "SELECT * FROM tour_instances WHERE id=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new TourInstance(
+                        rs.getInt("id"),
+                        rs.getInt("tour_id"),
+                        rs.getInt("ship_id"),
+                        LocalDate.parse(rs.getString("start_date")),
+                        LocalDate.parse(rs.getString("end_date"))
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
     public static boolean updateTourInstance(TourInstance tourInstance) {
         String sql = "UPDATE tour_instances SET tour_id=?, ship_id=?, start_date=?, end_date=? WHERE id=?";
