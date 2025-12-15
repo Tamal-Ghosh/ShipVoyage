@@ -1,9 +1,6 @@
 package org.example.shipvoyage.util;
 
-import org.example.shipvoyage.dao.ShipDAO;
-import org.example.shipvoyage.dao.TourDAO;
-import org.example.shipvoyage.dao.TourInstanceDAO;
-import org.example.shipvoyage.dao.UserDAO;
+import org.example.shipvoyage.dao.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,6 +26,7 @@ public class DBConnection {
         TourDAO.createTourTable();
         ShipDAO.createShipTable();
         TourInstanceDAO.createTable();
+        RoomDAO.createTable();
 
     }
 }

@@ -1,60 +1,32 @@
 package org.example.shipvoyage.model;
 
 public class Room {
-    private int roomID;
-    private int shipID;
+    private int id;
+    private int shipId;
     private String roomNumber;
-    private String status;
-    private String type;
-    private int price;
+    private String roomType;
+    private double pricePerNight;
 
-
-    public Room(int roomID, int shipID, String roomNumber, String status, String type, int price) {
-        this.roomID = roomID;
-        this.shipID = shipID;
+    public Room(int id, int shipId, String roomNumber, String roomType, double pricePerNight) {
+        this.id = id;
+        this.shipId = shipId;
         this.roomNumber = roomNumber;
-        this.status = status;
-        this.type = type;
-        this.price = price;
+        this.roomType = roomType;
+        this.pricePerNight = pricePerNight;
     }
 
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public Room(int shipID, String roomNumber, String type, int price) {
-        this.shipID = shipID;
-        this.roomNumber = roomNumber;
-        this.status = "AVAILABLE";
-        this.type = type;
-        this.price = price;
-    }
-
-
-    public int getRoomID() { return roomID; }
-    public void setRoomID(int roomID) { this.roomID = roomID; }
-
-    public int getShipID() { return shipID; }
-    public void setShipID(int shipID) { this.shipID = shipID; }
+    public int getShipId() { return shipId; }
+    public void setShipId(int shipId) { this.shipId = shipId; }
 
     public String getRoomNumber() { return roomNumber; }
     public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getRoomType() { return roomType; }
+    public void setRoomType(String roomType) { this.roomType = roomType; }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-
-    public int getPrice() { return price; }
-    public void setPrice(int price) { this.price = price; }
-
-    @Override
-    public String toString() {
-        return "Room{" +
-                "roomID=" + roomID +
-                ", shipID=" + shipID +
-                ", roomNumber='" + roomNumber + '\'' +
-                ", status='" + status + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                '}';
-    }
+    public double getPricePerNight() { return pricePerNight; }
+    public void setPricePerNight(double pricePerNight) { this.pricePerNight = pricePerNight; }
 }
