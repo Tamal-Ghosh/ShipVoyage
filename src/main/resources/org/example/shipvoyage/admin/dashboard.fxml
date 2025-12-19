@@ -18,6 +18,7 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
             <Label maxWidth="Infinity" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="ADMIN PANEL" />
+            <Button maxWidth="Infinity" onAction="#onDashboardClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Dashboard" />
             <Button maxWidth="Infinity" onAction="#onManageShipsClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Ships" />
             <Button maxWidth="Infinity" onAction="#onManageToursClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Tours" />
             <Button maxWidth="Infinity" onAction="#onManageTourInstanceClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Tour Instances" />
