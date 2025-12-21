@@ -24,6 +24,7 @@
             <Button maxWidth="Infinity" onAction="#onManageTourInstanceClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Tour Instances" />
             <Button maxWidth="Infinity" onAction="#onManageRoomsClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Manage Rooms" />
             <Button maxWidth="Infinity" onAction="#onViewBookingsClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="View Bookings" />
+         <Button fx:id="btnLogout" maxWidth="Infinity" onAction="#onLogoutClick" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-size: 14px;" text="Logout" />
             <Label maxWidth="Infinity" style="-fx-text-fill: white; -fx-font-size: 12px;" text="Logged in as Admin" />
         </VBox>
     </left>

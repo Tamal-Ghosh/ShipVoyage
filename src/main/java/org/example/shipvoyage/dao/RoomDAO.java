@@ -17,6 +17,7 @@ public class RoomDAO {
                 room_number TEXT NOT NULL,
                 room_type TEXT NOT NULL,
                 price_per_night REAL NOT NULL,
+                available INTEGER NOT NULL DEFAULT 1,
                 UNIQUE (ship_id, room_number),
                 FOREIGN KEY (ship_id) REFERENCES ships(id) ON DELETE CASCADE
             );
@@ -31,13 +32,14 @@ public class RoomDAO {
     }
 
     public static boolean addRoom(Room room) {
-        String sql = "INSERT INTO rooms (ship_id, room_number, room_type, price_per_night) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO rooms (ship_id, room_number, room_type, price_per_night, available) VALUES (?,?,?,?,?)";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, room.getShipId());
             stmt.setString(2, room.getRoomNumber());
             stmt.setString(3, room.getRoomType());
             stmt.setDouble(4, room.getPricePerNight());
+            stmt.setInt(5, room.isAvailable() ? 1 : 0);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,13 +48,14 @@ public class RoomDAO {
     }
 
     public static boolean updateRoom(Room room) {
-        String sql = "UPDATE rooms SET room_number=?, room_type=?, price_per_night=? WHERE id=?";
+        String sql = "UPDATE rooms SET room_number=?, room_type=?, price_per_night=?, available=? WHERE id=?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, room.getRoomNumber());
             stmt.setString(2, room.getRoomType());
             stmt.setDouble(3, room.getPricePerNight());
-            stmt.setInt(4, room.getId());
+            stmt.setInt(4, room.isAvailable() ? 1 : 0);
+            stmt.setInt(5, room.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,7 +88,8 @@ public class RoomDAO {
                         rs.getInt("ship_id"),
                         rs.getString("room_number"),
                         rs.getString("room_type"),
-                        rs.getDouble("price_per_night")
+                        rs.getDouble("price_per_night"),
+                        rs.getInt("available") == 1
                 ));
             }
         } catch (SQLException e) {
@@ -106,7 +110,8 @@ public class RoomDAO {
                         rs.getInt("ship_id"),
                         rs.getString("room_number"),
                         rs.getString("room_type"),
-                        rs.getDouble("price_per_night")
+                        rs.getDouble("price_per_night"),
+                        rs.getInt("available") == 1
                 ));
             }
         } catch (SQLException e) {

@@ -77,4 +77,13 @@ public class DashboardController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
         dashRootPane.setCenter(loader.load());
     }
+
+    @FXML
+    private void onLogoutClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/user-type.fxml"));
+        javafx.scene.Scene scene = new javafx.scene.Scene(loader.load());
+        javafx.stage.Stage stage = (javafx.stage.Stage) dashRootPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 }

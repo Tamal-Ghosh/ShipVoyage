@@ -141,7 +141,8 @@ public class ManageRoomsController {
         }
 
         if (selectedRoom == null) {
-            RoomDAO.addRoom(new Room(0, ship.getId(), roomNumber, roomType, price));
+            boolean available=true;
+            RoomDAO.addRoom(new Room(0, ship.getId(), roomNumber, roomType, price,available));
             AlertUtil.showInfo("Room added successfully!");
         } else {
             selectedRoom.setRoomNumber(roomNumber);

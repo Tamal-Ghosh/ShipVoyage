@@ -6,13 +6,15 @@ public class Room {
     private String roomNumber;
     private String roomType;
     private double pricePerNight;
+    private boolean available;
 
-    public Room(int id, int shipId, String roomNumber, String roomType, double pricePerNight) {
+    public Room(int id, int shipId, String roomNumber, String roomType, double pricePerNight, boolean available) {
         this.id = id;
         this.shipId = shipId;
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.pricePerNight = pricePerNight;
+        this.available = available;
     }
 
     public int getId() { return id; }
@@ -29,4 +31,7 @@ public class Room {
 
     public double getPricePerNight() { return pricePerNight; }
     public void setPricePerNight(double pricePerNight) { this.pricePerNight = pricePerNight; }
+
+    public boolean isAvailable() { return available; }
+    public void setAvailable(boolean available) { this.available = available; }
 }

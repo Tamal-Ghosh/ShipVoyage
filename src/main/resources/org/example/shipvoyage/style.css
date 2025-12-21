@@ -1,0 +1,50 @@
+.root {
+    -fx-font-family: "Segoe UI";
+}
+
+.results-box {
+    -fx-spacing: 12;
+    -fx-padding: 15;
+}
+
+.tour-card {
+    -fx-padding: 14;
+    -fx-spacing: 6;
+    -fx-background-color: #f9f9f9;
+    -fx-background-radius: 10;
+    -fx-border-color: #b0b0b0;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+}
+
+.tour-card:hover {
+    -fx-background-color: #eef3ff;
+    -fx-border-color: #2a73ff;
+}
+
+.tour-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.tour-text {
+    -fx-font-size: 13px;
+}
+
+.no-result {
+    -fx-font-size: 14px;
+    -fx-text-fill: #777;
+}
+.toggle-button {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+    -fx-cursor: hand;
+}
+
+.button {
+    -fx-cursor: hand;
+}
+
+.label {
+    -fx-text-fill: #333333;
+}

@@ -3,17 +3,26 @@ package org.example.shipvoyage.controller.passenger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.example.shipvoyage.dao.TourDAO;
+import org.example.shipvoyage.dao.TourInstanceDAO;
 import org.example.shipvoyage.model.Tour;
+import org.example.shipvoyage.model.TourInstance;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.example.shipvoyage.dao.ShipDAO.getShipById;
+import static org.example.shipvoyage.dao.TourDAO.getTourById;
+import static org.example.shipvoyage.util.AlertUtil.showWarning;
 
 public class PassengerHomeController {
 
@@ -28,9 +37,6 @@ public class PassengerHomeController {
 
     @FXML
     private Button searchButton;
-
-    @FXML
-    private VBox centerVBox;
 
     @FXML
     private VBox resultsBox;
@@ -49,87 +55,147 @@ public class PassengerHomeController {
     private void loadSuggestions() {
         Set<String> fromSet = new HashSet<>();
         Set<String> toSet = new HashSet<>();
+
         for (Tour t : TourDAO.getAllTours()) {
             fromSet.add(t.getFrom());
             toSet.add(t.getTo());
         }
+
         fromSuggestions = FXCollections.observableArrayList(fromSet);
         toSuggestions = FXCollections.observableArrayList(toSet);
     }
 
-    private void setupAutoComplete(TextField textField, ObservableList<String> suggestions) {
-        ContextMenu contextMenu = new ContextMenu();
-        textField.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
-            String input = textField.getText().toLowerCase();
+    private void setupAutoComplete(TextField field, ObservableList<String> suggestions) {
+        ContextMenu menu = new ContextMenu();
+
+        field.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+            String input = field.getText().toLowerCase();
+
             if (input.isEmpty()) {
-                contextMenu.hide();
+                menu.hide();
                 return;
             }
-            ObservableList<MenuItem> menuItems = FXCollections.observableArrayList();
-            for (String s : suggestions.stream()
+
+            List<MenuItem> items = suggestions.stream()
                     .filter(s -> s.toLowerCase().startsWith(input))
-                    .collect(Collectors.toList())) {
-                MenuItem item = new MenuItem(s);
-                item.setOnAction(e -> {
-                    textField.setText(s);
-                    textField.positionCaret(s.length());
-                    contextMenu.hide();
-                });
-                menuItems.add(item);
-            }
-            if (!menuItems.isEmpty()) {
-                contextMenu.getItems().setAll(menuItems);
-                if (!contextMenu.isShowing()) contextMenu.show(textField, Side.BOTTOM, 0, 0);
+                    .map(s -> {
+                        MenuItem item = new MenuItem(s);
+                        item.setOnAction(ev -> {
+                            field.setText(s);
+                            field.positionCaret(s.length());
+                            menu.hide();
+                        });
+                        return item;
+                    })
+                    .toList();
+
+            if (!items.isEmpty()) {
+                menu.getItems().setAll(items);
+                menu.show(field, Side.BOTTOM, 0, 0);
             } else {
-                contextMenu.hide();
+                menu.hide();
             }
         });
     }
 
     private void searchTours() {
+
         String from = fromField.getText().trim();
         String to = toField.getText().trim();
-        if (datePicker.getValue() == null) {
-            showAlert("Please select a date.");
+        LocalDate selectedDate = datePicker.getValue();
+
+        if (selectedDate == null) {
+            showWarning("Please select a date.");
             return;
         }
 
-        String date = datePicker.getValue().toString();
-
         if (from.isEmpty() || to.isEmpty()) {
-            showAlert("Please fill From and To locations.");
+            showWarning("Please fill From and To.");
             return;
         }
 
         resultsBox.getChildren().clear();
 
-        for (Tour t : TourDAO.getAllTours()) {
-            if (t.getFrom().equalsIgnoreCase(from) && t.getTo().equalsIgnoreCase(to)) {
-                VBox tourBox = new VBox(5);
-                tourBox.setPadding(new Insets(10));
-                tourBox.setStyle("-fx-border-color: gray; -fx-border-radius: 5; -fx-border-width: 1; -fx-background-radius: 5;");
-                Label nameLabel = new Label("Tour: " + t.getTourName());
-                nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-                Label fromLabel = new Label("From: " + t.getFrom());
-                Label toLabel = new Label("To: " + t.getTo());
-                Label durationLabel = new Label("Duration: " + t.getDuration() + "Days");
-                Label descLabel = new Label("Description: " + t.getDescription());
-                tourBox.getChildren().addAll(nameLabel, fromLabel, toLabel, durationLabel, descLabel);
-                resultsBox.getChildren().add(tourBox);
-            }
+        List<TourInstance> upcomingTourInstances = TourInstanceDAO.getAllTourInstances().stream()
+                .filter(t -> {
+                    Tour tour = getTourById(t.getTourId());
+                    return tour != null &&
+                            tour.getFrom().equalsIgnoreCase(from) &&
+                            tour.getTo().equalsIgnoreCase(to) &&
+                            !t.getStartDate().isBefore(selectedDate);
+                })
+                .sorted(Comparator.comparing(TourInstance::getStartDate))
+                .toList();
+
+        for (TourInstance t : upcomingTourInstances) {
+            resultsBox.getChildren().add(createTourCard(t));
         }
 
         if (resultsBox.getChildren().isEmpty()) {
-            Label noResult = new Label("No tours found for selected criteria.");
+            Label noResult = new Label("No upcoming tours found for this route.");
+            noResult.getStyleClass().add("no-result");
             resultsBox.getChildren().add(noResult);
         }
     }
 
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+
+    private VBox createTourCard(TourInstance t) {
+
+        VBox card = new VBox();
+        card.getStyleClass().add("tour-card");
+
+        Label title = new Label("Tour: " + getTourById(t.getTourId()).getTourName());
+        title.getStyleClass().add("tour-title");
+
+        Label ship = new Label("Ship: " + getShipById(t.getShipId()).getShipName());
+        Label  From = new Label("From: " + getTourById(t.getTourId()).getFrom());
+        Label  To = new Label("To: " + getTourById(t.getTourId()).getTo());
+        Label duration = new Label("Duration: " + getTourById(t.getTourId()).getDuration() + " Days");
+        Label start = new Label("Start: " + t.getStartDate());
+        Label end = new Label("End: " + t.getEndDate());
+
+        ship.getStyleClass().add("tour-text");
+        From.getStyleClass().add("tour-text");
+        To.getStyleClass().add("tour-text");
+        duration.getStyleClass().add("tour-text");
+        start.getStyleClass().add("tour-text");
+        end.getStyleClass().add("tour-text");
+
+        card.getChildren().addAll(
+                title,
+                ship,
+                From,
+                To,
+                duration,
+                start,
+                end
+        );
+
+        //card.setOnMouseClicked(e -> openTourDetails(t));
+
+        return card;
     }
+
+//    private void openTourDetails(Tour tour) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(
+//                    getClass().getResource(
+//                            "/org/example/shipvoyage/view/passenger/tour-details.fxml"
+//                    )
+//            );
+//            Parent root = loader.load();
+//
+//            TourDetailsController controller = loader.getController();
+//            controller.setTour(tour);
+//
+//            Stage stage = new Stage();
+//            stage.setTitle("Tour Details");
+//            stage.setScene(new Scene(root));
+//            stage.show();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            showWarning("Unable to open tour details.");
+//        }
+//    }
 }
