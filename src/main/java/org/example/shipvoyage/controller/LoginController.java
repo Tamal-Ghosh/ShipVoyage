@@ -28,55 +28,59 @@ public class LoginController {
     private TextField usernameField;
 
     public void setRole(String role) {
-        this.role=role;
+        this.role = role;
     }
+
     public String getRole() {
         return role;
     }
 
-
     @FXML
     void onClickRegLink(ActionEvent event) throws IOException {
-
-        FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/signup.fxml"));
-        Scene loginScene = new Scene(loader.load());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/signup.fxml"));
+        Scene signupScene = new Scene(loader.load());
         SignupController signupController = loader.getController();
-        signupController.role= this.role;
+        signupController.role = this.role;
         Stage stage = (Stage) passwordField.getScene().getWindow();
-        stage.setScene(loginScene);
+        stage.setScene(signupScene);
         stage.show();
-
     }
 
     @FXML
-    void onLogin(ActionEvent event) throws  IOException {
+    void onLogin(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-
 
         if (username.isEmpty() || password.isEmpty()) {
             System.out.println("Missing username or password");
             return;
         }
-        User user= new UserDAO().searchLoginUser(username, password);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        if(user==null){
 
+        User user = new UserDAO().searchLoginUser(username, password);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        if (user == null) {
             System.out.println("Invalid username or password");
             alert.setContentText("Invalid username or password");
             alert.showAndWait();
             return;
         }
+
         alert.setContentText("Successfully Logged In");
         alert.showAndWait();
-        FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/admin/dashboard.fxml"));
-        Scene loginScene = new Scene(loader.load());
+
         Stage stage = (Stage) passwordField.getScene().getWindow();
-        stage.setScene(loginScene);
+
+        if ("admin".equalsIgnoreCase(user.getRole())) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/admin/dashboard.fxml"));
+            Scene adminScene = new Scene(loader.load());
+            stage.setScene(adminScene);
+        } else {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/passenger-home.fxml"));
+            Scene passengerScene = new Scene(loader.load());
+            stage.setScene(passengerScene);
+        }
+
         stage.show();
-
-
-
     }
-
 }

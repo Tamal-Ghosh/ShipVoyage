@@ -16,12 +16,14 @@ public class ManageToursController {
     public TableView<Tour> tourTable;
     public TableColumn<Tour, Integer> idColumn;
     public TableColumn<Tour, String> nameColumn;
-    public TableColumn<Tour, String> routeColumn;
+    public TableColumn<Tour, String> fromColumn;
+    public TableColumn<Tour, String> toColumn;
     public TableColumn<Tour, Integer> durationColumn;
     public TableColumn<Tour, Void> actionColumn;
 
     public TextField nameField;
-    public TextField routeField;
+    public TextField fromField;
+    public TextField toField;
     public TextField durationField;
     public TextField descriptionField;
 
@@ -35,7 +37,8 @@ public class ManageToursController {
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tourName"));
-        routeColumn.setCellValueFactory(new PropertyValueFactory<>("route"));
+        fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
+        toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));
         durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
 
         loadTours();
@@ -60,7 +63,8 @@ public class ManageToursController {
                         editBtn.setOnAction(event -> {
                             Tour tour = getTableView().getItems().get(getIndex());
                             nameField.setText(tour.getTourName());
-                            routeField.setText(tour.getRoute());
+                            fromField.setText(tour.getFrom());
+                            toField.setText(tour.getTo());
                             durationField.setText(String.valueOf(tour.getDuration()));
                             descriptionField.setText(tour.getDescription());
                             selectedTour = tour;
@@ -96,11 +100,12 @@ public class ManageToursController {
 
     public void onSaveTour(ActionEvent actionEvent) {
         String name = nameField.getText();
-        String route = routeField.getText();
+        String from = fromField.getText();
+        String to = toField.getText();
         String durationText = durationField.getText();
         String description = descriptionField.getText();
 
-        if (name.isEmpty() || route.isEmpty() || durationText.isEmpty()) {
+        if (name.isEmpty() || from.isEmpty() || to.isEmpty() || durationText.isEmpty()) {
             AlertUtil.showWarning("Please fill all fields!");
             return;
         }
@@ -114,12 +119,13 @@ public class ManageToursController {
         }
 
         if (selectedTour == null) {
-            Tour tour = new Tour(0, name, route, duration, description);
+            Tour tour = new Tour(0, name, from, to, duration, description);
             TourDAO.addTour(tour);
             AlertUtil.showInfo("Tour added successfully!");
         } else {
             selectedTour.setTourName(name);
-            selectedTour.setRoute(route);
+            selectedTour.setFrom(from);
+            selectedTour.setTo(to);
             selectedTour.setDuration(duration);
             selectedTour.setDescription(description);
 
@@ -145,7 +151,8 @@ public class ManageToursController {
 
     private void clearFields() {
         nameField.clear();
-        routeField.clear();
+        fromField.clear();
+        toField.clear();
         durationField.clear();
         descriptionField.clear();
     }

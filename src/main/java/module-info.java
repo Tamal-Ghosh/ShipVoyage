@@ -21,6 +21,7 @@ module org.example.shipvoyage {
 
     exports org.example.shipvoyage.controller;
     opens org.example.shipvoyage.controller to javafx.fxml;
+    opens org.example.shipvoyage.controller.passenger to javafx.fxml;
     opens org.example.shipvoyage.controller.admin to javafx.fxml;
 
     opens org.example.shipvoyage.model to javafx.base, javafx.fxml;

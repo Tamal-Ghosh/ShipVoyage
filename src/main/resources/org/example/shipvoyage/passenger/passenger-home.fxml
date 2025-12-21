@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.shipvoyage.controller.passenger.PassengerHomeController">
+
+    <left>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="20" left="10" right="10" top="20"/>
+            </padding>
+            <Button maxWidth="Infinity" prefHeight="30.0" text="Home"/>
+            <Button maxWidth="Infinity" prefHeight="30.0" text="Bookings"/>
+            <Button maxWidth="Infinity" prefHeight="30.0" text="Profile"/>
+            <Button maxWidth="Infinity" prefHeight="30.0" text="Logout"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20" fx:id="centerVBox">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20"/>
+            </padding>
+
+            <Label style="-fx-font-size: 24px;" text="Search for Tours"/>
+
+            <GridPane alignment="CENTER" hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT"/>
+                    <ColumnConstraints halignment="LEFT"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints vgrow="NEVER"/>
+                    <RowConstraints vgrow="NEVER"/>
+                    <RowConstraints vgrow="NEVER"/>
+                    <RowConstraints vgrow="NEVER"/>
+                </rowConstraints>
+
+                <Label text="From:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="fromField" promptText="Enter starting location"
+                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="To:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="toField" promptText="Enter destination"
+                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Button fx:id="searchButton" text="Search"
+                        GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                        GridPane.rowIndex="3"/>
+            </GridPane>
+
+            <ScrollPane prefHeight="300" fitToWidth="true">
+                <content>
+                    <VBox fx:id="resultsBox" spacing="10"/>
+                </content>
+            </ScrollPane>
+
+        </VBox>
+    </center>
+
+</BorderPane>
