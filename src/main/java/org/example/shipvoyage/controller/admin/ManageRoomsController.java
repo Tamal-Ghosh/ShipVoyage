@@ -21,7 +21,6 @@ public class ManageRoomsController {
     public TableColumn<Room, String> roomTypeColumn;
     public TableColumn<Room, Double> priceColumn;
     public TableColumn<Room, Void> actionColumn;
-
     public ComboBox<Ship> shipComboBox;
     public TextField roomNumberField;
     public ComboBox<String> roomTypeComboBox;
@@ -88,7 +87,6 @@ public class ManageRoomsController {
                             priceField.setText(String.valueOf(selectedRoom.getPricePerNight()));
                             saveButton.setText("Update");
                         });
-
                         delBtn.setOnAction(e -> {
                             Room r = getTableView().getItems().get(getIndex());
                             if (RoomDAO.deleteRoom(r.getId())) {
@@ -112,14 +110,16 @@ public class ManageRoomsController {
 
     public void onSaveRoom(ActionEvent e) {
         Ship ship = shipComboBox.getValue();
-        if (ship == null) {
-            AlertUtil.showWarning("Select a ship first!");
-            return;
-        }
+        if (ship == null) return;
 
         int currentRoomCount = RoomDAO.getRoomsByShip(ship.getId()).size();
+
         if (selectedRoom == null && currentRoomCount >= ship.getCapacity()) {
-            AlertUtil.showWarning("Cannot add more rooms. Ship capacity reached!");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Capacity Reached");
+            alert.setHeaderText(null);
+            alert.setContentText("Cannot add more rooms. Ship capacity reached!");
+            alert.showAndWait();
             return;
         }
 
@@ -127,15 +127,16 @@ public class ManageRoomsController {
         String roomType = roomTypeComboBox.getValue();
         double price;
 
-        if (roomNumber.isEmpty() || roomType == null || priceField.getText().isEmpty()) {
-            AlertUtil.showWarning("Fill all room details!");
-            return;
-        }
+        if (roomNumber.isEmpty() || roomType == null || priceField.getText().isEmpty()) return;
 
         try {
             price = Double.parseDouble(priceField.getText());
         } catch (NumberFormatException ex) {
-            AlertUtil.showWarning("Invalid price!");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Price");
+            alert.setHeaderText(null);
+            alert.setContentText("Price must be a valid number!");
+            alert.showAndWait();
             return;
         }
 

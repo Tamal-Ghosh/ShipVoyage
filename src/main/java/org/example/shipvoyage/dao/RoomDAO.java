@@ -10,17 +10,21 @@ import java.util.List;
 public class RoomDAO {
 
     public static void createTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS rooms ("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "ship_id INTEGER NOT NULL,"
-                + "room_number TEXT NOT NULL,"
-                + "room_type TEXT NOT NULL,"
-                + "price_per_night REAL NOT NULL,"
-                + "FOREIGN KEY (ship_id) REFERENCES ships(id)"
-                + ");";
+        String sql = """
+            CREATE TABLE IF NOT EXISTS rooms (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ship_id INTEGER NOT NULL,
+                room_number TEXT NOT NULL,
+                room_type TEXT NOT NULL,
+                price_per_night REAL NOT NULL,
+                UNIQUE (ship_id, room_number),
+                FOREIGN KEY (ship_id) REFERENCES ships(id) ON DELETE CASCADE
+            );
+            """;
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.executeUpdate();
+             Statement stmt = con.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON;");
+            stmt.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,8 +38,7 @@ public class RoomDAO {
             stmt.setString(2, room.getRoomNumber());
             stmt.setString(3, room.getRoomType());
             stmt.setDouble(4, room.getPricePerNight());
-            int rows = stmt.executeUpdate();
-            return rows > 0;
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -50,8 +53,7 @@ public class RoomDAO {
             stmt.setString(2, room.getRoomType());
             stmt.setDouble(3, room.getPricePerNight());
             stmt.setInt(4, room.getId());
-            int rows = stmt.executeUpdate();
-            return rows > 0;
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -63,8 +65,7 @@ public class RoomDAO {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, roomId);
-            int rows = stmt.executeUpdate();
-            return rows > 0;
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

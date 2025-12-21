@@ -9,7 +9,6 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import org.example.shipvoyage.dao.RoomDAO;
 import org.example.shipvoyage.dao.ShipDAO;
-import org.example.shipvoyage.model.Room;
 import org.example.shipvoyage.model.Ship;
 
 import java.util.Optional;
@@ -64,12 +63,22 @@ public class ManageShipsController {
 
                         delBtn.setOnAction(event -> {
                             Ship ship = getTableView().getItems().get(getIndex());
-                            boolean deleted = ShipDAO.deleteShip(ship.getId());
-                            if (deleted) {
-                                shipList.remove(ship);
-                                showAlert(Alert.AlertType.INFORMATION, "Deleted", "Ship deleted successfully!");
-                            } else {
-                                showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete ship!");
+
+                            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                            confirm.setTitle("Delete Ship");
+                            confirm.setHeaderText(null);
+                            confirm.setContentText("Are you sure you want to delete this ship and all its rooms?");
+                            Optional<ButtonType> result = confirm.showAndWait();
+
+                            if (result.isPresent() && result.get() == ButtonType.OK) {
+                                RoomDAO.deleteRoom(ship.getId());
+                                boolean shipDeleted = ShipDAO.deleteShip(ship.getId());
+                                if (shipDeleted) {
+                                    shipList.remove(ship);
+                                    showAlert(Alert.AlertType.INFORMATION, "Deleted", "Ship and all associated rooms deleted successfully!");
+                                } else {
+                                    showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete ship!");
+                                }
                             }
                         });
                     }
@@ -105,9 +114,7 @@ public class ManageShipsController {
         if (selectedShip == null) {
             boolean inserted = ShipDAO.insertShip(name, capacity);
             if (inserted) {
-                Ship newShip = ShipDAO.getAllShips().get(ShipDAO.getAllShips().size() - 1);
-                addRoomsForShip(newShip.getId(), capacity);
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Ship and rooms added successfully!");
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Ship added successfully!");
                 clearFields();
                 loadShips();
             } else {
@@ -124,42 +131,6 @@ public class ManageShipsController {
             } else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to update ship!");
             }
-        }
-    }
-
-    private void addRoomsForShip(int shipId, int capacity) {
-        for (int i = 1; i <= capacity; i++) {
-            TextInputDialog roomNumberDialog = new TextInputDialog();
-            roomNumberDialog.setTitle("Room Information");
-            roomNumberDialog.setHeaderText("Enter room number for Room " + i);
-            roomNumberDialog.setContentText("Room Number:");
-            Optional<String> roomNumberOpt = roomNumberDialog.showAndWait();
-            if (roomNumberOpt.isEmpty()) continue;
-            String roomNumber = roomNumberOpt.get();
-
-            ChoiceDialog<String> roomTypeDialog = new ChoiceDialog<>("Single", "Single", "Double");
-            roomTypeDialog.setTitle("Room Type");
-            roomTypeDialog.setHeaderText("Select room type for Room " + i);
-            roomTypeDialog.setContentText("Room Type:");
-            Optional<String> roomTypeOpt = roomTypeDialog.showAndWait();
-            if (roomTypeOpt.isEmpty()) continue;
-            String roomType = roomTypeOpt.get();
-
-            TextInputDialog priceDialog = new TextInputDialog();
-            priceDialog.setTitle("Room Price");
-            priceDialog.setHeaderText("Enter price per night for Room " + i);
-            priceDialog.setContentText("Price:");
-            Optional<String> priceOpt = priceDialog.showAndWait();
-            double price = 0;
-            if (priceOpt.isPresent()) {
-                try {
-                    price = Double.parseDouble(priceOpt.get());
-                } catch (NumberFormatException e) {
-                    price = 0;
-                }
-            }
-
-            RoomDAO.addRoom(new Room(0, shipId, roomNumber, roomType, price));
         }
     }
 
