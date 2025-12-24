@@ -17,17 +17,28 @@ public class RoomDAO {
                 room_number TEXT NOT NULL,
                 room_type TEXT NOT NULL,
                 price_per_night REAL NOT NULL,
-                available INTEGER NOT NULL DEFAULT 1,
                 UNIQUE (ship_id, room_number),
                 FOREIGN KEY (ship_id) REFERENCES ships(id) ON DELETE CASCADE
             );
-            """;
+        """;
         try (Connection con = DBConnection.getConnection();
              Statement stmt = con.createStatement()) {
             stmt.execute("PRAGMA foreign_keys = ON;");
             stmt.execute(sql);
+            addAvailableColumnIfNotExists(); // ensure available column exists
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void addAvailableColumnIfNotExists() {
+        try (Connection con = DBConnection.getConnection();
+             Statement stmt = con.createStatement()) {
+            stmt.execute("ALTER TABLE rooms ADD COLUMN available INTEGER NOT NULL DEFAULT 1;");
+        } catch (SQLException e) {
+            if (!e.getMessage().contains("duplicate column name")) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -118,5 +129,27 @@ public class RoomDAO {
             e.printStackTrace();
         }
         return rooms;
+    }
+
+    public static Room getRoomById(int id) {
+        String sql = "SELECT * FROM rooms WHERE id=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Room(
+                        rs.getInt("id"),
+                        rs.getInt("ship_id"),
+                        rs.getString("room_number"),
+                        rs.getString("room_type"),
+                        rs.getDouble("price_per_night"),
+                        rs.getInt("available") == 1
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -2,41 +2,22 @@ package org.example.shipvoyage.model;
 
 public class Booking {
     private int id;
-    private String customerName;
-    private String email;
-    private Ship ship;
-    private TourInstance tourInstance;
+    private int tourInstanceId;
+    private int roomId;
     private String roomNumber;
-    private double totalPayment;
-    private double duePayment;
-    private String status;
+    private int passengerId;
 
-    public Booking() {}
+    public Booking(int id, int tourInstanceId, int roomId, String roomNumber, int passengerId) {
+        this.id = id;
+        this.tourInstanceId = tourInstanceId;
+        this.roomId = roomId;
+        this.roomNumber = roomNumber;
+        this.passengerId = passengerId;
+    }
 
     public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public String getCustomerName() { return customerName; }
-    public void setCustomerName(String customerName) { this.customerName = customerName; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public Ship getShip() { return ship; }
-    public void setShip(Ship ship) { this.ship = ship; }
-
-    public TourInstance getTourInstance() { return tourInstance; }
-    public void setTourInstance(TourInstance tourInstance) { this.tourInstance = tourInstance; }
-
+    public int getTourInstanceId() { return tourInstanceId; }
+    public int getRoomId() { return roomId; }
     public String getRoomNumber() { return roomNumber; }
-    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
-
-    public double getTotalPayment() { return totalPayment; }
-    public void setTotalPayment(double totalPayment) { this.totalPayment = totalPayment; }
-
-    public double getDuePayment() { return duePayment; }
-    public void setDuePayment(double duePayment) { this.duePayment = duePayment; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public int getPassengerId() { return passengerId; }
 }

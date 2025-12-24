@@ -2,6 +2,7 @@ package org.example.shipvoyage.controller.passenger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
@@ -16,12 +17,12 @@ import org.example.shipvoyage.dao.TourInstanceDAO;
 import org.example.shipvoyage.model.Tour;
 import org.example.shipvoyage.model.TourInstance;
 
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static org.example.shipvoyage.dao.ShipDAO.getShipById;
-import static org.example.shipvoyage.dao.TourDAO.getTourById;
 import static org.example.shipvoyage.util.AlertUtil.showWarning;
 
 public class PassengerHomeController {
@@ -55,27 +56,22 @@ public class PassengerHomeController {
     private void loadSuggestions() {
         Set<String> fromSet = new HashSet<>();
         Set<String> toSet = new HashSet<>();
-
         for (Tour t : TourDAO.getAllTours()) {
             fromSet.add(t.getFrom());
             toSet.add(t.getTo());
         }
-
         fromSuggestions = FXCollections.observableArrayList(fromSet);
         toSuggestions = FXCollections.observableArrayList(toSet);
     }
 
     private void setupAutoComplete(TextField field, ObservableList<String> suggestions) {
         ContextMenu menu = new ContextMenu();
-
         field.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
             String input = field.getText().toLowerCase();
-
             if (input.isEmpty()) {
                 menu.hide();
                 return;
             }
-
             List<MenuItem> items = suggestions.stream()
                     .filter(s -> s.toLowerCase().startsWith(input))
                     .map(s -> {
@@ -86,9 +82,7 @@ public class PassengerHomeController {
                             menu.hide();
                         });
                         return item;
-                    })
-                    .toList();
-
+                    }).toList();
             if (!items.isEmpty()) {
                 menu.getItems().setAll(items);
                 menu.show(field, Side.BOTTOM, 0, 0);
@@ -99,103 +93,69 @@ public class PassengerHomeController {
     }
 
     private void searchTours() {
-
         String from = fromField.getText().trim();
         String to = toField.getText().trim();
         LocalDate selectedDate = datePicker.getValue();
-
         if (selectedDate == null) {
             showWarning("Please select a date.");
             return;
         }
-
         if (from.isEmpty() || to.isEmpty()) {
             showWarning("Please fill From and To.");
             return;
         }
-
         resultsBox.getChildren().clear();
-
         List<TourInstance> upcomingTourInstances = TourInstanceDAO.getAllTourInstances().stream()
                 .filter(t -> {
-                    Tour tour = getTourById(t.getTourId());
+                    Tour tour = TourDAO.getTourById(t.getTourId());
                     return tour != null &&
                             tour.getFrom().equalsIgnoreCase(from) &&
                             tour.getTo().equalsIgnoreCase(to) &&
                             !t.getStartDate().isBefore(selectedDate);
-                })
-                .sorted(Comparator.comparing(TourInstance::getStartDate))
-                .toList();
-
-        for (TourInstance t : upcomingTourInstances) {
-            resultsBox.getChildren().add(createTourCard(t));
-        }
-
-        if (resultsBox.getChildren().isEmpty()) {
+                }).toList();
+        if (upcomingTourInstances.isEmpty()) {
             Label noResult = new Label("No upcoming tours found for this route.");
             noResult.getStyleClass().add("no-result");
             resultsBox.getChildren().add(noResult);
+            return;
+        }
+        for (TourInstance t : upcomingTourInstances) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                        "/org/example/shipvoyage/passenger/tour-card.fxml"));
+                Parent card = loader.load();
+                TourCardController controller = loader.getController();
+                controller.setData(t);
+                resultsBox.getChildren().add(card);
+            } catch (Exception e) {
+                e.printStackTrace();
+                showWarning("Error loading tour card.");
+            }
         }
     }
 
-
-    private VBox createTourCard(TourInstance t) {
-
-        VBox card = new VBox();
-        card.getStyleClass().add("tour-card");
-
-        Label title = new Label("Tour: " + getTourById(t.getTourId()).getTourName());
-        title.getStyleClass().add("tour-title");
-
-        Label ship = new Label("Ship: " + getShipById(t.getShipId()).getShipName());
-        Label  From = new Label("From: " + getTourById(t.getTourId()).getFrom());
-        Label  To = new Label("To: " + getTourById(t.getTourId()).getTo());
-        Label duration = new Label("Duration: " + getTourById(t.getTourId()).getDuration() + " Days");
-        Label start = new Label("Start: " + t.getStartDate());
-        Label end = new Label("End: " + t.getEndDate());
-
-        ship.getStyleClass().add("tour-text");
-        From.getStyleClass().add("tour-text");
-        To.getStyleClass().add("tour-text");
-        duration.getStyleClass().add("tour-text");
-        start.getStyleClass().add("tour-text");
-        end.getStyleClass().add("tour-text");
-
-        card.getChildren().addAll(
-                title,
-                ship,
-                From,
-                To,
-                duration,
-                start,
-                end
-        );
-
-        //card.setOnMouseClicked(e -> openTourDetails(t));
-
-        return card;
+    public static void openBookingPage(TourInstance instance) {
+        try {
+            FXMLLoader loader = new FXMLLoader(PassengerHomeController.class.getResource(
+                    "/org/example/shipvoyage/passenger/passenger-booking.fxml"));
+            Parent root = loader.load();
+            BookingController controller = loader.getController();
+            controller.setTourInstance(instance);
+            Stage stage = new Stage();
+            stage.setTitle("Book Rooms");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showWarning("Unable to open booking page.");
+        }
     }
-
-//    private void openTourDetails(Tour tour) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(
-//                    getClass().getResource(
-//                            "/org/example/shipvoyage/view/passenger/tour-details.fxml"
-//                    )
-//            );
-//            Parent root = loader.load();
-//
-//            TourDetailsController controller = loader.getController();
-//            controller.setTour(tour);
-//
-//            Stage stage = new Stage();
-//            stage.setTitle("Tour Details");
-//            stage.setScene(new Scene(root));
-//            stage.show();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            showWarning("Unable to open tour details.");
-//        }
-//    }
+    @FXML
+    private void onLogoutClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/user-type.fxml"));
+        javafx.scene.Scene scene = new javafx.scene.Scene(loader.load());
+        javafx.stage.Stage stage = (Stage) fromField.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 }

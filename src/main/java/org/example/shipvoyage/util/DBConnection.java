@@ -27,6 +27,7 @@ public class DBConnection {
         ShipDAO.createShipTable();
         TourInstanceDAO.createTable();
         RoomDAO.createTable();
+        BookingDAO.createTable();
 
     }
 }

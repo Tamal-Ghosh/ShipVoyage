@@ -22,10 +22,10 @@
             <padding>
                 <Insets bottom="20" left="10" right="10" top="20"/>
             </padding>
-            <Button maxWidth="Infinity" prefHeight="30.0" text="Home"/>
+            <Button maxWidth="Infinity"  prefHeight="30.0" text="Home"/>
             <Button maxWidth="Infinity" prefHeight="30.0" text="Bookings"/>
             <Button maxWidth="Infinity" prefHeight="30.0" text="Profile"/>
-            <Button maxWidth="Infinity" prefHeight="30.0" text="Logout"/>
+            <Button maxWidth="Infinity" onAction="#onLogoutClick" prefHeight="30.0" text="Logout"/>
         </VBox>
     </left>
 
