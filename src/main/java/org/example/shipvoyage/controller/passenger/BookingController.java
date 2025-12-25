@@ -1,17 +1,20 @@
 package org.example.shipvoyage.controller.passenger;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.example.shipvoyage.dao.BookingDAO;
 import org.example.shipvoyage.dao.RoomDAO;
 import org.example.shipvoyage.model.Booking;
 import org.example.shipvoyage.model.Room;
 import org.example.shipvoyage.model.TourInstance;
 import org.example.shipvoyage.model.User;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +37,28 @@ public class BookingController {
     @FXML
     private Button Confirm_Booking;
 
-    private TourInstance tourInstance;
+    @FXML
+    private RadioButton VisaRadio;
 
+    @FXML
+    private RadioButton bkashRadio;
+
+    @FXML
+    private ToggleGroup paymentToggleGroup;
+
+    private TourInstance tourInstance;
     private Map<Room, ToggleButton> roomButtons = new HashMap<>();
     private double totalAmount = 0;
-
     private User currentUser = Session.loggedInUser;
 
+
+
+    @FXML
+    public void initialize() {
+        paymentToggleGroup = new ToggleGroup();
+        VisaRadio.setToggleGroup(paymentToggleGroup);
+        bkashRadio.setToggleGroup(paymentToggleGroup);
+    }
     public void setTourInstance(TourInstance instance) {
         this.tourInstance = instance;
         loadRooms();
@@ -50,27 +68,21 @@ public class BookingController {
         List<Room> rooms = RoomDAO.getRoomsByShip(tourInstance.getShipId());
         List<Integer> bookedRoomIds = BookingDAO.getBookedRoomIds(tourInstance.getId());
 
-        int cols = 4;
-        int row = 0, col = 0;
+        int cols = 4, row = 0, col = 0;
 
         for (Room room : rooms) {
             ToggleButton btn = new ToggleButton(room.getRoomNumber());
             btn.setPrefSize(80, 80);
             btn.setStyle(getColorForRoom(room, false));
 
-            if (!room.isAvailable() || bookedRoomIds.contains(room.getId())) {
-                btn.setDisable(true);
-            }
+            if (!room.isAvailable() || bookedRoomIds.contains(room.getId())) btn.setDisable(true);
 
             btn.setOnAction(e -> handleSelection(room, btn));
             roomGrid.add(btn, col, row);
             roomButtons.put(room, btn);
 
             col++;
-            if (col == cols) {
-                col = 0;
-                row++;
-            }
+            if (col == cols) { col = 0; row++; }
         }
 
         Confirm_Booking.setOnAction(e -> onConfirmBooking());
@@ -80,7 +92,6 @@ public class BookingController {
         boolean isSelected = btn.isSelected();
         if (isSelected) totalAmount += room.getPricePerNight();
         else totalAmount -= room.getPricePerNight();
-
         btn.setStyle(getColorForRoom(room, isSelected));
         totalLabel.setText("Total: $" + totalAmount);
     }
@@ -112,6 +123,14 @@ public class BookingController {
             roomNumbers.add(room.getRoomNumber());
         }
 
+        String selectedPaymentMethod;
+        if (VisaRadio.isSelected()) selectedPaymentMethod = "Visa";
+        else if (bkashRadio.isSelected()) selectedPaymentMethod = "bKash";
+        else {
+            showWarning("Please select a payment method.");
+            return;
+        }
+
         Booking booking = new Booking(
                 0,
                 tourInstance.getId(),
@@ -119,21 +138,42 @@ public class BookingController {
                 roomIds,
                 roomNumbers,
                 totalAmount,
-                "Booked"
+                "Booked",
+                "Pending",
+                "Unpaid"
         );
 
         boolean success = BookingDAO.addBooking(booking);
 
         if (success) {
-            showInfo("Booking confirmed successfully!");
+            showInfo("Booking confirmed successfully! Proceed to payment.");
             selectedRooms.forEach(r -> {
                 roomButtons.get(r).setDisable(true);
                 roomButtons.get(r).setSelected(false);
             });
             totalAmount = 0;
             totalLabel.setText("Total: $0");
+
+            try {
+                FXMLLoader loader;
+                if ("Visa".equals(selectedPaymentMethod)) {
+                    loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/visa-payment.fxml"));
+                } else {
+                    loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/bkash-payment.fxml"));
+                }
+                Stage stage = new Stage();
+                stage.setTitle(selectedPaymentMethod + " Payment");
+                stage.setScene(new Scene(loader.load()));
+                PaymentController controller = loader.getController();
+                controller.setBooking(booking);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         } else {
             showWarning("Some rooms could not be booked. They may already be taken.");
         }
     }
+
 }

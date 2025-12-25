@@ -22,8 +22,9 @@
 
             <HBox spacing="10">
                 <Label text="Select Tour Instance:"/>
-                <ComboBox fx:id="tourInstanceComboBox" promptText="None" HBox.hgrow="ALWAYS"/>
-
+                <ComboBox fx:id="tourInstanceComboBox"
+                          promptText="None"
+                          HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <BorderPane style="-fx-border-color: #dfe6e9;
@@ -39,9 +40,8 @@
                             <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
                             <TableColumn fx:id="tourDateColumn" text="Tour Date" prefWidth="120"/>
                             <TableColumn fx:id="roomColumn" text="Room Number" prefWidth="100"/>
-                            <TableColumn fx:id="totalPaymentColumn" text="Total Payment" prefWidth="100"/>
-                            <TableColumn fx:id="duePaymentColumn" text="Due Payment" prefWidth="100"/>
-                            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                            <TableColumn fx:id="totalPaymentColumn" text="Total Payment" prefWidth="120"/>
+                            <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
                             <TableColumn fx:id="actionColumn" text="Actions" prefWidth="150"/>
                         </columns>
                     </TableView>
