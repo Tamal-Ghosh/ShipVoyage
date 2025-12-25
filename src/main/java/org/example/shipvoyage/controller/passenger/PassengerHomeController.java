@@ -110,7 +110,7 @@ public class PassengerHomeController {
             return;
         }
 
-        resultsBox.getChildren().clear(); // clear only the ScrollPane results, not the whole centerVBox
+        resultsBox.getChildren().clear();
 
         List<TourInstance> upcomingTourInstances = TourInstanceDAO.getAllTourInstances().stream()
                 .filter(t -> {

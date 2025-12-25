@@ -39,20 +39,25 @@ public class BookingCardController {
         dates.setText(instance.getStartDate() + " to " + instance.getEndDate());
         rooms.setText("Rooms: " + String.join(", ", booking.getRoomNumbers()));
 
-        cancelButton.setOnAction(e -> cancelBooking());
+        cancelButton.setOnAction(e -> cancelBooking(instance));
     }
 
-    private void cancelBooking() {
-        boolean success = BookingDAO.cancelBookingByInstanceAndPassenger(
-                booking.getTourInstanceId(),
-                booking.getPassengerId()
-        );
-        if (success) {
-            showInfo("Booking cancelled successfully");
-            onCancel.run();
+    private void cancelBooking(TourInstance tourInstance) {
+        if (tourInstance.getStartDate().isAfter(java.time.LocalDate.now().plusDays(1))) {
+            boolean success = BookingDAO.cancelBookingByInstanceAndPassenger(
+                    booking.getTourInstanceId(),
+                    booking.getPassengerId()
+            );
+            if (success) {
+                showInfo("Booking cancelled successfully");
+                onCancel.run();
+            } else {
+                showWarning("Unable to cancel booking");
+            }
         } else {
-            showWarning("Unable to cancel booking");
+            showWarning("Booking cannot be cancelled less than 1 day before the tour starts");
         }
     }
+
 
 }
