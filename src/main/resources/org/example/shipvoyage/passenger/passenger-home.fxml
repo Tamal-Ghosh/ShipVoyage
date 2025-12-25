@@ -15,6 +15,7 @@
 <BorderPane prefHeight="600.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="homeBorderPane"
             fx:controller="org.example.shipvoyage.controller.passenger.PassengerHomeController">
 
     <left>
@@ -22,9 +23,9 @@
             <padding>
                 <Insets bottom="20" left="10" right="10" top="20"/>
             </padding>
-            <Button maxWidth="Infinity"  prefHeight="30.0" text="Home"/>
-            <Button maxWidth="Infinity" prefHeight="30.0" text="Bookings"/>
-            <Button maxWidth="Infinity" prefHeight="30.0" text="Profile"/>
+            <Button maxWidth="Infinity"  onAction="#onHomeClick" prefHeight="30.0" text="Home"/>
+            <Button maxWidth="Infinity" onAction="#onBookingsClick" prefHeight="30.0" text="Bookings"/>
+            <Button maxWidth="Infinity" onAction="#onProfileClick" prefHeight="30.0" text="Profile"/>
             <Button maxWidth="Infinity" onAction="#onLogoutClick" prefHeight="30.0" text="Logout"/>
         </VBox>
     </left>

@@ -6,15 +6,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.shipvoyage.dao.TourDAO;
 import org.example.shipvoyage.dao.TourInstanceDAO;
-import org.example.shipvoyage.model.Tour;
 import org.example.shipvoyage.model.TourInstance;
 
 import java.io.IOException;
@@ -26,6 +26,9 @@ import java.util.Set;
 import static org.example.shipvoyage.util.AlertUtil.showWarning;
 
 public class PassengerHomeController {
+
+    @FXML
+    private BorderPane homeBorderPane;
 
     @FXML
     private TextField fromField;
@@ -42,11 +45,13 @@ public class PassengerHomeController {
     @FXML
     private VBox resultsBox;
 
+    private Node homeCenter;
     private ObservableList<String> fromSuggestions;
     private ObservableList<String> toSuggestions;
 
     @FXML
     public void initialize() {
+        homeCenter = homeBorderPane.getCenter();
         loadSuggestions();
         setupAutoComplete(fromField, fromSuggestions);
         setupAutoComplete(toField, toSuggestions);
@@ -56,7 +61,7 @@ public class PassengerHomeController {
     private void loadSuggestions() {
         Set<String> fromSet = new HashSet<>();
         Set<String> toSet = new HashSet<>();
-        for (Tour t : TourDAO.getAllTours()) {
+        for (var t : TourDAO.getAllTours()) {
             fromSet.add(t.getFrom());
             toSet.add(t.getTo());
         }
@@ -104,25 +109,26 @@ public class PassengerHomeController {
             showWarning("Please fill From and To.");
             return;
         }
-        resultsBox.getChildren().clear();
+
+        resultsBox.getChildren().clear(); // clear only the ScrollPane results, not the whole centerVBox
+
         List<TourInstance> upcomingTourInstances = TourInstanceDAO.getAllTourInstances().stream()
                 .filter(t -> {
-                    Tour tour = TourDAO.getTourById(t.getTourId());
+                    var tour = TourDAO.getTourById(t.getTourId());
                     return tour != null &&
                             tour.getFrom().equalsIgnoreCase(from) &&
                             tour.getTo().equalsIgnoreCase(to) &&
                             !t.getStartDate().isBefore(selectedDate);
                 }).toList();
+
         if (upcomingTourInstances.isEmpty()) {
-            Label noResult = new Label("No upcoming tours found for this route.");
-            noResult.getStyleClass().add("no-result");
-            resultsBox.getChildren().add(noResult);
+            resultsBox.getChildren().add(new Label("No upcoming tours found for this route."));
             return;
         }
+
         for (TourInstance t : upcomingTourInstances) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                        "/org/example/shipvoyage/passenger/tour-card.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/tour-card.fxml"));
                 Parent card = loader.load();
                 TourCardController controller = loader.getController();
                 controller.setData(t);
@@ -134,10 +140,10 @@ public class PassengerHomeController {
         }
     }
 
+
     public static void openBookingPage(TourInstance instance) {
         try {
-            FXMLLoader loader = new FXMLLoader(PassengerHomeController.class.getResource(
-                    "/org/example/shipvoyage/passenger/passenger-booking.fxml"));
+            FXMLLoader loader = new FXMLLoader(PassengerHomeController.class.getResource("/org/example/shipvoyage/passenger/passenger-booking.fxml"));
             Parent root = loader.load();
             BookingController controller = loader.getController();
             controller.setTourInstance(instance);
@@ -150,12 +156,37 @@ public class PassengerHomeController {
             showWarning("Unable to open booking page.");
         }
     }
+
     @FXML
     private void onLogoutClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/user-type.fxml"));
-        javafx.scene.Scene scene = new javafx.scene.Scene(loader.load());
-        javafx.stage.Stage stage = (Stage) fromField.getScene().getWindow();
-        stage.setScene(scene);
+        Stage stage = (Stage) homeBorderPane.getScene().getWindow();
+        stage.setScene(new javafx.scene.Scene(loader.load()));
         stage.show();
+    }
+
+    @FXML
+    private void onProfileClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/profile.fxml"));
+        Parent profileView = loader.load();
+        homeBorderPane.setCenter(profileView);
+    }
+
+    @FXML
+    private void onHomeClick() {
+        fromField.clear();
+        toField.clear();
+        datePicker.setValue(null);
+        resultsBox.getChildren().clear();
+        homeBorderPane.setCenter(homeCenter);
+    }
+
+    @FXML
+    private void onBookingsClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/show-passenger-booking.fxml"));
+        Parent bookingsView = loader.load();
+        ShowBookingController controller = loader.getController();
+        controller.setPassengerId(Session.loggedInUser.getUserID());
+        homeBorderPane.setCenter(bookingsView);
     }
 }

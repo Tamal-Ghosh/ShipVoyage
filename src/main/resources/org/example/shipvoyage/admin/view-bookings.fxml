@@ -21,8 +21,9 @@
             </padding>
 
             <HBox spacing="10">
-                <ComboBox fx:id="shipComboBox" promptText="Select Ship" HBox.hgrow="ALWAYS"/>
-                <ComboBox fx:id="tourInstanceComboBox" promptText="Select Tour" HBox.hgrow="ALWAYS"/>
+                <Label text="Select Tour Instance:"/>
+                <ComboBox fx:id="tourInstanceComboBox" promptText="None" HBox.hgrow="ALWAYS"/>
+
             </HBox>
 
             <BorderPane style="-fx-border-color: #dfe6e9;

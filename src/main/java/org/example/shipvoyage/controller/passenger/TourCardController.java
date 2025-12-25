@@ -49,7 +49,7 @@ public class TourCardController {
             startDate.setText(instance.getStartDate().toString());
             endDate.setText(instance.getEndDate().toString());
 
-            Ship ship = ShipDAO.getShipById(tour.getId());
+            Ship ship = ShipDAO.getShipById(instance.getId());
             if (ship != null) {
                 shipName.setText(ship.getShipName());
             } else {

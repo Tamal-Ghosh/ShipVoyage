@@ -11,13 +11,14 @@ import org.example.shipvoyage.dao.RoomDAO;
 import org.example.shipvoyage.model.Booking;
 import org.example.shipvoyage.model.Room;
 import org.example.shipvoyage.model.TourInstance;
-
+import org.example.shipvoyage.model.User;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.example.shipvoyage.util.AlertUtil.showWarning;
 import static org.example.shipvoyage.util.AlertUtil.showInfo;
+import static org.example.shipvoyage.util.AlertUtil.showWarning;
 
 public class BookingController {
 
@@ -38,6 +39,8 @@ public class BookingController {
     private Map<Room, ToggleButton> roomButtons = new HashMap<>();
     private double totalAmount = 0;
 
+    private User currentUser = Session.loggedInUser;
+
     public void setTourInstance(TourInstance instance) {
         this.tourInstance = instance;
         loadRooms();
@@ -46,34 +49,38 @@ public class BookingController {
     private void loadRooms() {
         List<Room> rooms = RoomDAO.getRoomsByShip(tourInstance.getShipId());
         List<Integer> bookedRoomIds = BookingDAO.getBookedRoomIds(tourInstance.getId());
+
         int cols = 4;
         int row = 0, col = 0;
+
         for (Room room : rooms) {
             ToggleButton btn = new ToggleButton(room.getRoomNumber());
-            btn.setPrefSize(60, 60);
+            btn.setPrefSize(80, 80);
             btn.setStyle(getColorForRoom(room, false));
+
             if (!room.isAvailable() || bookedRoomIds.contains(room.getId())) {
                 btn.setDisable(true);
             }
+
             btn.setOnAction(e -> handleSelection(room, btn));
             roomGrid.add(btn, col, row);
             roomButtons.put(room, btn);
+
             col++;
             if (col == cols) {
                 col = 0;
                 row++;
             }
         }
+
         Confirm_Booking.setOnAction(e -> onConfirmBooking());
     }
 
     private void handleSelection(Room room, ToggleButton btn) {
         boolean isSelected = btn.isSelected();
-        if (isSelected) {
-            totalAmount += room.getPricePerNight();
-        } else {
-            totalAmount -= room.getPricePerNight();
-        }
+        if (isSelected) totalAmount += room.getPricePerNight();
+        else totalAmount -= room.getPricePerNight();
+
         btn.setStyle(getColorForRoom(room, isSelected));
         totalLabel.setText("Total: $" + totalAmount);
     }
@@ -81,7 +88,7 @@ public class BookingController {
     private String getColorForRoom(Room room, boolean selected) {
         if (selected) return "-fx-background-color: #2a73ff; -fx-text-fill: white;";
         if (!room.isAvailable()) return "-fx-background-color: orange; -fx-text-fill: white;";
-        if (room.getRoomType().equalsIgnoreCase("Single")) return "-fx-background-color: green; -fx-text-fill: white;";
+        if ("Single".equalsIgnoreCase(room.getRoomType())) return "-fx-background-color: green; -fx-text-fill: white;";
         return "-fx-background-color: purple; -fx-text-fill: white;";
     }
 
@@ -97,25 +104,36 @@ public class BookingController {
             return;
         }
 
-        boolean allSuccess = true;
+        List<Integer> roomIds = new ArrayList<>();
+        List<String> roomNumbers = new ArrayList<>();
+
         for (Room room : selectedRooms) {
-            Booking booking = new Booking(
-                    0,
-                    tourInstance.getId(),
-                    room.getId(),
-                    room.getRoomNumber(),
-                    1
-            );
-            boolean success = BookingDAO.addBooking(booking);
-            if (!success) allSuccess = false;
-            else roomButtons.get(room).setDisable(true);
+            roomIds.add(room.getId());
+            roomNumbers.add(room.getRoomNumber());
         }
 
-        if (allSuccess) showInfo("Booking confirmed successfully!");
-        else showWarning("Some rooms could not be booked as they are already taken.");
+        Booking booking = new Booking(
+                0,
+                tourInstance.getId(),
+                currentUser.getUserID(),
+                roomIds,
+                roomNumbers,
+                totalAmount,
+                "Booked"
+        );
 
-        totalAmount = 0;
-        totalLabel.setText("Total: $0");
-        roomButtons.values().forEach(btn -> btn.setSelected(false));
+        boolean success = BookingDAO.addBooking(booking);
+
+        if (success) {
+            showInfo("Booking confirmed successfully!");
+            selectedRooms.forEach(r -> {
+                roomButtons.get(r).setDisable(true);
+                roomButtons.get(r).setSelected(false);
+            });
+            totalAmount = 0;
+            totalLabel.setText("Total: $0");
+        } else {
+            showWarning("Some rooms could not be booked. They may already be taken.");
+        }
     }
 }

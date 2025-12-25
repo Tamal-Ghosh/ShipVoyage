@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.shipvoyage.controller.passenger.Session;
 import org.example.shipvoyage.dao.UserDAO;
 import org.example.shipvoyage.model.User;
 
@@ -66,20 +67,28 @@ public class LoginController {
             return;
         }
 
-        alert.setContentText("Successfully Logged In");
-        alert.showAndWait();
+
 
         Stage stage = (Stage) passwordField.getScene().getWindow();
 
-        if ("admin".equalsIgnoreCase(user.getRole())) {
+        if ("admin".equalsIgnoreCase(user.getRole()) && "admin".equalsIgnoreCase(this.role)) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/admin/dashboard.fxml"));
             Scene adminScene = new Scene(loader.load());
             stage.setScene(adminScene);
-        } else {
+        } else if ("passenger".equalsIgnoreCase(user.getRole()) && "passenger".equalsIgnoreCase(this.role)) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/passenger-home.fxml"));
             Scene passengerScene = new Scene(loader.load());
             stage.setScene(passengerScene);
         }
+        else {
+            alert.setContentText("Role mismatch. Please login with the correct user type.");
+            alert.showAndWait();
+            return;
+        }
+        Session.loggedInUser = user;
+
+        alert.setContentText("Successfully Logged In");
+        alert.showAndWait();
 
         stage.show();
     }
