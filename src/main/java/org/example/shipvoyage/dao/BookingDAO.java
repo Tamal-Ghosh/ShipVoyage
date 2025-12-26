@@ -61,28 +61,23 @@ public class BookingDAO {
 
     public static boolean updatePaymentStatus(Booking booking) {
         String sql = """
-        UPDATE bookings
-        SET payment_method=?, payment_status=?, totalPrice=?
-        WHERE tour_instance_id=? AND passenger_id=?
-    """;
+            UPDATE bookings
+            SET payment_method=?, payment_status=?, totalPrice=?
+            WHERE tour_instance_id=? AND passenger_id=?
+        """;
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
-
             stmt.setString(1, booking.getPaymentMethod());
             stmt.setString(2, booking.getPaymentStatus());
             stmt.setDouble(3, booking.getTotalPrice());
             stmt.setInt(4, booking.getTourInstanceId());
             stmt.setInt(5, booking.getPassengerId());
-
-            int rows = stmt.executeUpdate();
-            System.out.println("Payment update rows affected: " + rows);
-            return rows > 0;
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-
 
     public static List<Integer> getBookedRoomIds(int tourInstanceId) {
         List<Integer> booked = new ArrayList<>();
@@ -106,7 +101,7 @@ public class BookingDAO {
             stmt.setInt(1, passengerId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Booking existingBooking = bookings.stream()
+                Booking existing = bookings.stream()
                         .filter(b -> {
                             try {
                                 return b.getTourInstanceId() == rs.getInt("tour_instance_id");
@@ -116,9 +111,10 @@ public class BookingDAO {
                         })
                         .findFirst()
                         .orElse(null);
-                if (existingBooking != null) {
-                    existingBooking.getRoomIds().add(rs.getInt("room_id"));
-                    existingBooking.getRoomNumbers().add(rs.getString("room_number"));
+
+                if (existing != null) {
+                    existing.getRoomIds().add(rs.getInt("room_id"));
+                    existing.getRoomNumbers().add(rs.getString("room_number"));
                 } else {
                     List<Integer> roomIds = new ArrayList<>();
                     List<String> roomNumbers = new ArrayList<>();
@@ -155,57 +151,6 @@ public class BookingDAO {
         }
     }
 
-    public static List<Booking> getBookingsByShipAndTour(int shipId, int tourInstanceId) {
-        List<Booking> bookings = new ArrayList<>();
-        String sql = """
-            SELECT b.id, b.tour_instance_id, b.room_id, b.room_number, b.passenger_id, b.payment_method, b.payment_status, b.totalPrice
-            FROM bookings b
-            JOIN tour_instances t ON b.tour_instance_id = t.id
-            WHERE t.ship_id = ? AND t.id = ?
-        """;
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, shipId);
-            stmt.setInt(2, tourInstanceId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Booking existingBooking = bookings.stream()
-                        .filter(b -> {
-                            try {
-                                return b.getPassengerId() == rs.getInt("passenger_id");
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-                        })
-                        .findFirst()
-                        .orElse(null);
-                if (existingBooking != null) {
-                    existingBooking.getRoomIds().add(rs.getInt("room_id"));
-                    existingBooking.getRoomNumbers().add(rs.getString("room_number"));
-                } else {
-                    List<Integer> roomIds = new ArrayList<>();
-                    List<String> roomNumbers = new ArrayList<>();
-                    roomIds.add(rs.getInt("room_id"));
-                    roomNumbers.add(rs.getString("room_number"));
-                    bookings.add(new Booking(
-                            rs.getInt("id"),
-                            rs.getInt("tour_instance_id"),
-                            rs.getInt("passenger_id"),
-                            roomIds,
-                            roomNumbers,
-                            rs.getDouble("totalPrice"),
-                            "Booked",
-                            rs.getString("payment_method"),
-                            rs.getString("payment_status")
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return bookings;
-    }
-
     public static boolean cancelBookingByInstanceAndPassenger(int tourInstanceId, int passengerId) {
         String sql = "DELETE FROM bookings WHERE tour_instance_id=? AND passenger_id=?";
         try (Connection con = DBConnection.getConnection();
@@ -218,9 +163,15 @@ public class BookingDAO {
             return false;
         }
     }
+
     public static List<Booking> getBookingsByTourInstance(int tourInstanceId) {
         List<Booking> bookings = new ArrayList<>();
-        String sql = "SELECT * FROM bookings WHERE tour_instance_id=?";
+        String sql = """
+        SELECT b.*, u.username AS passenger_name, u.email AS passenger_email
+        FROM bookings b
+        JOIN users u ON b.passenger_id = u.userID
+        WHERE b.tour_instance_id = ?
+    """;
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -249,7 +200,7 @@ public class BookingDAO {
                     roomIds.add(rs.getInt("room_id"));
                     roomNumbers.add(rs.getString("room_number"));
 
-                    bookings.add(new Booking(
+                    Booking booking = new Booking(
                             rs.getInt("id"),
                             rs.getInt("tour_instance_id"),
                             rs.getInt("passenger_id"),
@@ -259,7 +210,13 @@ public class BookingDAO {
                             "Booked",
                             rs.getString("payment_method"),
                             rs.getString("payment_status")
-                    ));
+                    );
+
+                    // Set passenger name and email from users table
+                    booking.setPassengerName(rs.getString("passenger_name"));
+                    booking.setPassengerEmail(rs.getString("passenger_email"));
+
+                    bookings.add(booking);
                 }
             }
         } catch (SQLException e) {
@@ -270,4 +227,29 @@ public class BookingDAO {
 
 
 
+    public static String getPassengerNameById(int passengerId) {
+        String sql = "SELECT name FROM passengers WHERE id=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, passengerId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getString("name");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String getPassengerEmailById(int passengerId) {
+        String sql = "SELECT email FROM passengers WHERE id=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, passengerId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getString("email");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

@@ -10,7 +10,7 @@
 
     <top>
         <Label text="View Bookings"
-               style="-fx-font-size: 24px; -fx-font-weight: bold;"
+               style="-fx-font-size: 22px; -fx-font-weight: bold;"
                BorderPane.alignment="CENTER"/>
     </top>
 
@@ -21,32 +21,21 @@
             </padding>
 
             <HBox spacing="10">
-                <Label text="Select Tour Instance:"/>
-                <ComboBox fx:id="tourInstanceComboBox"
-                          promptText="None"
-                          HBox.hgrow="ALWAYS"/>
+                <Label text="Tour Instance"/>
+                <ComboBox fx:id="tourInstanceComboBox" HBox.hgrow="ALWAYS"/>
             </HBox>
 
-            <BorderPane style="-fx-border-color: #dfe6e9;
-                               -fx-border-width: 1.5;
-                               -fx-border-radius: 8;
-                               -fx-background-radius: 8;
-                               -fx-padding: 8;">
-                <center>
-                    <TableView fx:id="bookingTable" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                            <TableColumn fx:id="nameColumn" text="Customer Name" prefWidth="150"/>
-                            <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
-                            <TableColumn fx:id="tourDateColumn" text="Tour Date" prefWidth="120"/>
-                            <TableColumn fx:id="roomColumn" text="Room Number" prefWidth="100"/>
-                            <TableColumn fx:id="totalPaymentColumn" text="Total Payment" prefWidth="120"/>
-                            <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
-                            <TableColumn fx:id="actionColumn" text="Actions" prefWidth="150"/>
-                        </columns>
-                    </TableView>
-                </center>
-            </BorderPane>
+            <TableView fx:id="bookingTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="nameColumn" text="Name" prefWidth="150"/>
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
+                    <TableColumn fx:id="roomColumn" text="Rooms" prefWidth="120"/>
+                    <TableColumn fx:id="totalPaymentColumn" text="Total" prefWidth="100"/>
+                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                    <TableColumn fx:id="actionColumn" text="Action" prefWidth="120"/>
+                </columns>
+            </TableView>
 
         </VBox>
     </center>

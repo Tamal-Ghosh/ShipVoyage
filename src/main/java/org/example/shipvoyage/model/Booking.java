@@ -6,6 +6,8 @@ public class Booking {
     private int id;
     private int tourInstanceId;
     private int passengerId;
+    private String passengerName;
+    private String passengerEmail;
     private List<Integer> roomIds;
     private List<String> roomNumbers;
     private double totalPrice;
@@ -44,4 +46,13 @@ public class Booking {
     public void setStatus(String status) { this.status = status; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
     public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
+    public String getRoomNumbersAsString() {
+        return String.join(", ", roomNumbers);
+    }
+    public void setPassengerName(String passengerName) { this.passengerName = passengerName; }
+    public void setPassengerEmail(String passengerEmail) { this.passengerEmail = passengerEmail; }
+    public String getPassengerName() { return passengerName; }
+    public String getPassengerEmail() { return passengerEmail; }
+
+
 }

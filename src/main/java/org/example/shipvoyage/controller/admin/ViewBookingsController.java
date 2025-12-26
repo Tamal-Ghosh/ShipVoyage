@@ -28,9 +28,6 @@ public class ViewBookingsController {
     private TableColumn<Booking, String> emailColumn;
 
     @FXML
-    private TableColumn<Booking, String> tourDateColumn;
-
-    @FXML
     private TableColumn<Booking, String> roomColumn;
 
     @FXML
@@ -49,7 +46,6 @@ public class ViewBookingsController {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("passengerName"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("passengerEmail"));
-        tourDateColumn.setCellValueFactory(new PropertyValueFactory<>("tourDate"));
         roomColumn.setCellValueFactory(new PropertyValueFactory<>("roomNumbersAsString"));
         totalPaymentColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("paymentStatus"));
@@ -61,6 +57,27 @@ public class ViewBookingsController {
         );
 
         tourInstanceComboBox.setOnAction(e -> loadBookings());
+
+        actionColumn.setCellFactory(col -> new TableCell<>() {
+            private final Button btn = new Button("Cancel");
+
+            {
+                btn.setOnAction(e -> {
+                    Booking booking = getTableView().getItems().get(getIndex());
+                    BookingDAO.cancelBookingByInstanceAndPassenger(
+                            booking.getTourInstanceId(),
+                            booking.getPassengerId()
+                    );
+                    loadBookings();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : btn);
+            }
+        });
     }
 
     private void loadBookings() {
@@ -70,7 +87,7 @@ public class ViewBookingsController {
             return;
         }
         bookingList.setAll(
-                BookingDAO.getBookingsByShipAndTour(instance.getShipId(), instance.getId())
+                BookingDAO.getBookingsByTourInstance(instance.getId())
         );
     }
 }
