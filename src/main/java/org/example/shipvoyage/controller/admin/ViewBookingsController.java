@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.shipvoyage.dao.BookingDAO;
+import org.example.shipvoyage.dao.TourDAO;
 import org.example.shipvoyage.dao.TourInstanceDAO;
 import org.example.shipvoyage.model.Booking;
 import org.example.shipvoyage.model.TourInstance;
@@ -52,9 +53,32 @@ public class ViewBookingsController {
 
         bookingTable.setItems(bookingList);
 
-        tourInstanceComboBox.setItems(
-                FXCollections.observableArrayList(TourInstanceDAO.getAllTourInstances())
-        );
+        ObservableList<TourInstance> instances = FXCollections.observableArrayList(TourInstanceDAO.getAllTourInstances());
+        tourInstanceComboBox.setItems(instances);
+
+        tourInstanceComboBox.setCellFactory(cb -> new ListCell<>() {
+            @Override
+            protected void updateItem(TourInstance item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(TourDAO.getTourById(item.getTourId()).getTourName() + " (Start: " + item.getStartDate() + ")");
+                }
+            }
+        });
+
+        tourInstanceComboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(TourInstance item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(TourDAO.getTourById(item.getTourId()).getTourName() + " (Start: " + item.getStartDate() + ")");
+                }
+            }
+        });
 
         tourInstanceComboBox.setOnAction(e -> loadBookings());
 

@@ -1,66 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.shipvoyage.controller.admin.ManageRoomsController">
+<BorderPane style="-fx-background-color: #f5f6fa;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.shipvoyage.controller.admin.ManageRoomsController">
 
     <top>
-        <Label text="Manage Rooms"
-               style="-fx-font-size: 24px; -fx-font-weight: bold;"
-               BorderPane.alignment="CENTER"/>
+        <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2f3640;" text="Manage Rooms">
+            <BorderPane.margin>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </BorderPane.margin>
+        </Label>
     </top>
 
     <center>
         <VBox spacing="15">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="0" left="20" right="20" top="0" />
             </padding>
-
-            <BorderPane style="-fx-border-color: #dfe6e9;
-                               -fx-border-width: 1.5;
-                               -fx-border-radius: 8;
-                               -fx-background-radius: 8;
-                               -fx-padding: 8;">
-                <center>
-                    <TableView fx:id="roomTable" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                            <TableColumn fx:id="roomNumberColumn" text="Room Number" prefWidth="150"/>
-                            <TableColumn fx:id="roomTypeColumn" text="Room Type" prefWidth="100"/>
-                            <TableColumn fx:id="priceColumn" text="Price" prefWidth="100"/>
-                            <TableColumn fx:id="actionColumn" text="Actions" prefWidth="150"/>
-                        </columns>
-                    </TableView>
-                </center>
-            </BorderPane>
+            <TableView fx:id="roomTable" style="-fx-font-size: 14px;" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
+                    <TableColumn fx:id="roomNumberColumn" prefWidth="150" text="Room Number" />
+                    <TableColumn fx:id="roomTypeColumn" prefWidth="120" text="Room Type" />
+                    <TableColumn fx:id="priceColumn" prefWidth="100" text="Price" />
+                    <TableColumn fx:id="actionColumn" prefWidth="180" text="Actions" />
+                </columns>
+                <style>
+                    -fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10,0,0,2);
+                </style>
+            </TableView>
         </VBox>
     </center>
 
     <bottom>
-        <VBox spacing="10">
+        <VBox spacing="12" style="-fx-background-color: #f1f2f6; -fx-border-color: #dcdde1; -fx-border-width: 1 0 0 0;">
             <padding>
-                <Insets top="15" right="20" bottom="20" left="20"/>
+                <Insets bottom="15" left="20" right="20" top="15" />
             </padding>
 
-            <HBox spacing="10">
-                <ComboBox fx:id="shipComboBox" promptText="Select Ship" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="roomNumberField" promptText="Room Number" HBox.hgrow="ALWAYS"/>
-            </HBox>
+            <GridPane hgap="20" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50" />
+                    <ColumnConstraints percentWidth="50" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints vgrow="ALWAYS" />
+                    <RowConstraints vgrow="ALWAYS" />
+                </rowConstraints>
 
-            <HBox spacing="10">
-                <ComboBox fx:id="roomTypeComboBox" promptText="Room Type" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="priceField" promptText="Price" HBox.hgrow="ALWAYS"/>
-            </HBox>
+                <!-- Nested Grid for Ship -->
+                <GridPane hgap="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="27.0" />
+                        <ColumnConstraints percentWidth="73.0" />
+                    </columnConstraints>
+                    <Label style="-fx-font-weight: bold;" text="Select Ship:" GridPane.columnIndex="0" />
+                    <ComboBox fx:id="shipComboBox" promptText="None" GridPane.columnIndex="1" HBox.hgrow="ALWAYS" />
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
 
-            <HBox spacing="10">
-                <Button fx:id="saveButton" text="Save" onAction="#onSaveRoom" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="clearButton" text="Clear"  HBox.hgrow="ALWAYS"/>
+                <!-- Nested Grid for Room Number -->
+                <GridPane hgap="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="33.0" />
+                        <ColumnConstraints percentWidth="67.0" />
+                    </columnConstraints>
+                    <Label style="-fx-font-weight: bold;" text="Room Number:" GridPane.columnIndex="0" />
+                    <TextField fx:id="roomNumberField" maxWidth="150" promptText="Enter Room Number" GridPane.columnIndex="1" HBox.hgrow="ALWAYS" />
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+
+                <!-- Nested Grid for Room Type -->
+                <GridPane hgap="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="27.0" />
+                        <ColumnConstraints percentWidth="73.0" />
+                    </columnConstraints>
+                    <Label style="-fx-font-weight: bold;" text="Room Type:" GridPane.columnIndex="0" />
+                    <ComboBox fx:id="roomTypeComboBox" promptText="None" GridPane.columnIndex="1" HBox.hgrow="ALWAYS" />
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+
+                <!-- Nested Grid for Price -->
+                <GridPane hgap="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="33.0" />
+                        <ColumnConstraints percentWidth="67.0" />
+                    </columnConstraints>
+                    <Label style="-fx-font-weight: bold;" text="Price:" GridPane.columnIndex="0" />
+                    <Spinner fx:id="priceSpinner" GridPane.columnIndex="1" HBox.hgrow="ALWAYS" />
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+            </GridPane>
+
+            <HBox alignment="CENTER" spacing="8">
+                <Button fx:id="clearButton" style="-fx-background-color: #dcdde1; -fx-text-fill: #2f3640; -fx-font-weight: bold; -fx-pref-width: 100; -fx-background-radius: 5;" text="Clear" />
+                <Button fx:id="saveButton" style="-fx-background-color: #4cd137; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 100; -fx-background-radius: 5;" text="Save" />
             </HBox>
         </VBox>
     </bottom>
-
 </BorderPane>

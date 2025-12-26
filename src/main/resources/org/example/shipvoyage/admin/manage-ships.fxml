@@ -1,60 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.shipvoyage.controller.admin.ManageShipsController">
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.shipvoyage.controller.admin.ManageShipsController">
 
     <top>
-        <Label text="Manage Ships"
-               style="-fx-font-size: 24px;"
-               BorderPane.alignment="CENTER"/>
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Manage Ships" BorderPane.alignment="CENTER" />
     </top>
 
     <center>
         <VBox spacing="15">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
             <TableView fx:id="shipTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                    <TableColumn fx:id="nameColumn" text="Ship Name" prefWidth="200"/>
-                    <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100"/>
-                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+                    <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
+                    <TableColumn fx:id="nameColumn" prefWidth="200" text="Ship Name" />
+                    <TableColumn fx:id="capacityColumn" prefWidth="100" text="Capacity" />
+                    <TableColumn fx:id="actionsColumn" prefWidth="150" text="Actions" />
                 </columns>
             </TableView>
         </VBox>
     </center>
 
     <bottom>
-        <VBox spacing="10">
+        <VBox spacing="12">
             <padding>
-                <Insets top="15" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="15" />
             </padding>
 
-            <HBox spacing="10">
-                <TextField fx:id="nameField"
-                           promptText="Ship Name"
-                           HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="capacityField"
-                           promptText="Capacity"
-                           HBox.hgrow="ALWAYS"/>
-            </HBox>
+            <GridPane hgap="20" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50" />
+                    <ColumnConstraints percentWidth="50" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints vgrow="ALWAYS" />
+                </rowConstraints>
 
-            <HBox spacing="10">
-                <Button fx:id="saveButton"
-                        text="Save"
-                        onAction="#OnShipSaveClicked"
-                        HBox.hgrow="ALWAYS"/>
-                <Button fx:id="cancelButton"
-                        text="Cancel"
-                        onAction="#OnShipCancelClicked"
-                        HBox.hgrow="ALWAYS"/>
+                <GridPane hgap="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="28.0" />
+                        <ColumnConstraints percentWidth="72.0" />
+                    </columnConstraints>
+                    <Label style="-fx-font-weight: bold;" text="Ship Name:" GridPane.columnIndex="0" />
+                    <TextField fx:id="nameField" promptText="Enter Ship Name" GridPane.columnIndex="1" HBox.hgrow="ALWAYS" />
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+
+                <GridPane hgap="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="24.0" />
+                        <ColumnConstraints percentWidth="76.0" />
+                    </columnConstraints>
+                    <Label style="-fx-font-weight: bold;" text="Capacity:" GridPane.columnIndex="0" />
+                    <Spinner fx:id="capacitySpinner" GridPane.columnIndex="1" HBox.hgrow="ALWAYS" />
+               <rowConstraints>
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+            </GridPane>
+
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Button fx:id="saveButton" onAction="#OnShipSaveClicked" style="-fx-font-weight: bold; -fx-pref-width: 100; -fx-background-color: #4cd137; -fx-text-fill: white;" text="Save" />
+                <Button fx:id="cancelButton" onAction="#OnShipCancelClicked" style="-fx-font-weight: bold; -fx-pref-width: 100; -fx-background-color: #dcdde1; -fx-text-fill: #2f3640;" text="Cancel" />
             </HBox>
         </VBox>
     </bottom>

@@ -3,6 +3,7 @@ package org.example.shipvoyage.controller.admin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -25,11 +26,15 @@ public class ManageShipsController {
     public TextField capacityField;
     public Button saveButton;
     public Button cancelButton;
+    @FXML
+    private Spinner<Integer> capacitySpinner;
 
     private ObservableList<Ship> shipList = FXCollections.observableArrayList();
     private Ship selectedShip = null;
 
     public void initialize() {
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 100);
+        capacitySpinner.setValueFactory(valueFactory);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("shipName"));
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));

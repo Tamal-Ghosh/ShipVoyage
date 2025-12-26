@@ -24,13 +24,18 @@ public class ManageRoomsController {
     public ComboBox<Ship> shipComboBox;
     public TextField roomNumberField;
     public ComboBox<String> roomTypeComboBox;
-    public TextField priceField;
     public Button saveButton;
+    public Spinner<Integer> priceSpinner;
 
     private ObservableList<Room> roomList = FXCollections.observableArrayList();
     private Room selectedRoom = null;
 
     public void initialize() {
+        priceSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10000, 0, 1)
+        );
+        priceSpinner.setEditable(true);
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         roomNumberColumn.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
         roomTypeColumn.setCellValueFactory(new PropertyValueFactory<>("roomType"));
@@ -84,7 +89,7 @@ public class ManageRoomsController {
                             selectedRoom = getTableView().getItems().get(getIndex());
                             roomNumberField.setText(selectedRoom.getRoomNumber());
                             roomTypeComboBox.setValue(selectedRoom.getRoomType());
-                            priceField.setText(String.valueOf(selectedRoom.getPricePerNight()));
+                            priceSpinner.getValueFactory().setValue((int) selectedRoom.getPricePerNight());
                             saveButton.setText("Update");
                         });
                         delBtn.setOnAction(e -> {
@@ -125,24 +130,13 @@ public class ManageRoomsController {
 
         String roomNumber = roomNumberField.getText();
         String roomType = roomTypeComboBox.getValue();
-        double price;
+        double price = priceSpinner.getValue();
 
-        if (roomNumber.isEmpty() || roomType == null || priceField.getText().isEmpty()) return;
-
-        try {
-            price = Double.parseDouble(priceField.getText());
-        } catch (NumberFormatException ex) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Invalid Price");
-            alert.setHeaderText(null);
-            alert.setContentText("Price must be a valid number!");
-            alert.showAndWait();
-            return;
-        }
+        if (roomNumber.isEmpty() || roomType == null) return;
 
         if (selectedRoom == null) {
-            boolean available=true;
-            RoomDAO.addRoom(new Room(0, ship.getId(), roomNumber, roomType, price,available));
+            boolean available = true;
+            RoomDAO.addRoom(new Room(0, ship.getId(), roomNumber, roomType, price, available));
             AlertUtil.showInfo("Room added successfully!");
         } else {
             selectedRoom.setRoomNumber(roomNumber);
@@ -161,6 +155,6 @@ public class ManageRoomsController {
     private void clearFields() {
         roomNumberField.clear();
         roomTypeComboBox.getSelectionModel().clearSelection();
-        priceField.clear();
+        priceSpinner.getValueFactory().setValue(0);
     }
 }
