@@ -17,8 +17,9 @@ public class BookingCardController {
     @FXML private Label tourName;
     @FXML private Label from;
     @FXML private Label to;
-    @FXML private Label dates;
-    @FXML private Label rooms;
+    @FXML private Label startDate;
+    @FXML private Label endDate;
+    @FXML private Label totalPrice;
     @FXML private Button cancelButton;
 
     private Booking booking;
@@ -28,16 +29,15 @@ public class BookingCardController {
         this.booking = booking;
         this.onCancel = onCancel;
 
-        TourInstance instance =
-                TourInstanceDAO.getTourInstanceById(booking.getTourInstanceId());
-        Tour tour =
-                TourDAO.getTourById(instance.getTourId());
+        TourInstance instance = TourInstanceDAO.getTourInstanceById(booking.getTourInstanceId());
+        Tour tour = TourDAO.getTourById(instance.getTourId());
 
         tourName.setText(tour.getTourName());
         from.setText(tour.getFrom());
         to.setText(tour.getTo());
-        dates.setText(instance.getStartDate() + " to " + instance.getEndDate());
-        rooms.setText("Rooms: " + String.join(", ", booking.getRoomNumbers()));
+        startDate.setText(instance.getStartDate().toString());
+        endDate.setText(instance.getEndDate().toString());
+        totalPrice.setText(String.format("%,.0f ৳", booking.getTotalPrice()));
 
         cancelButton.setOnAction(e -> cancelBooking(instance));
     }
@@ -58,6 +58,4 @@ public class BookingCardController {
             showWarning("Booking cannot be cancelled less than 1 day before the tour starts");
         }
     }
-
-
 }

@@ -8,8 +8,7 @@
     -fx-padding: 15;
 }
 
-.card,
-.tour-card {
+.card, .tour-card {
     -fx-background-color: #1E293B;
     -fx-padding: 16;
     -fx-spacing: 8;
@@ -24,8 +23,8 @@
     -fx-border-color: #38BDF8;
 }
 
-.label {
-    -fx-text-fill: #E5E7EB;
+.label, .tour-text {
+    -fx-text-fill: #CBD5E1;
 }
 
 .title {
@@ -40,14 +39,9 @@
 }
 
 .tour-title {
-    -fx-font-size: 15px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #F8FAFC;
-}
-
-.tour-text {
-    -fx-font-size: 13px;
-    -fx-text-fill: #CBD5E1;
 }
 
 .no-result {
@@ -55,9 +49,7 @@
     -fx-text-fill: #94A3B8;
 }
 
-.text-field,
-.password-field,
-.date-picker {
+.text-field, .password-field, .date-picker {
     -fx-background-color: #1E293B;
     -fx-text-fill: #F8FAFC;
     -fx-prompt-text-fill: #94A3B8;
@@ -69,9 +61,7 @@
     -fx-font-size: 14px;
 }
 
-.text-field:focused,
-.password-field:focused,
-.date-picker:focused {
+.text-field:focused, .password-field:focused, .date-picker:focused {
     -fx-border-color: #38BDF8;
 }
 
@@ -84,7 +74,10 @@
 .primary-button {
     -fx-background-color: #38BDF8;
     -fx-text-fill: #0F172A;
-    -fx-font-size: 17px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
 }
 
 .primary-button:hover {
@@ -124,100 +117,4 @@
 
 .hyperlink:hover {
     -fx-text-fill: #7DD3FC;
-}
-.tour-card {
-    -fx-background-color: #1E293B;
-    -fx-background-radius: 16;
-    -fx-border-radius: 16;
-    -fx-border-color: #334155;
-    -fx-padding: 16;
-    -fx-spacing: 8;
-    -fx-cursor: hand;
-}
-
-.tour-card:hover {
-    -fx-background-color: #24344D;
-    -fx-border-color: #38BDF8;
-}
-
-.tour-title {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #F8FAFC;
-}
-
-.tour-text {
-    -fx-font-size: 14px;
-    -fx-text-fill: #CBD5E1;
-}
-
-.primary-button {
-    -fx-background-color: #38BDF8;
-    -fx-text-fill: #0F172A;
-    -fx-font-weight: bold;
-    -fx-background-radius: 20;
-    -fx-cursor: hand;
-}
-
-.primary-button:hover {
-    -fx-background-color: #0EA5E9;
-}
-/* Root Window */
-.root {
-    -fx-font-family: "Segoe UI";
-    -fx-background-color: #0F172A;
-}
-
-/* Containers */
-.results-box {
-    -fx-spacing: 12;
-}
-
-/* Cards */
-.card, .tour-card {
-    -fx-background-color: #1E293B;
-    -fx-padding: 16;
-    -fx-spacing: 8;
-    -fx-background-radius: 16;
-    -fx-border-radius: 16;
-    -fx-border-color: #334155;
-    -fx-cursor: hand;
-}
-
-.tour-card:hover {
-    -fx-background-color: #24344D;
-    -fx-border-color: #38BDF8;
-}
-
-/* Labels */
-.label, .tour-text {
-    -fx-text-fill: #CBD5E1;
-}
-
-.tour-title {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #F8FAFC;
-}
-
-/* Buttons */
-.button {
-    -fx-cursor: hand;
-    -fx-font-weight: bold;
-    -fx-background-radius: 26;
-}
-
-.primary-button {
-    -fx-background-color: #38BDF8;
-    -fx-text-fill: #0F172A;
-    -fx-font-size: 14px;
-}
-
-.primary-button:hover {
-    -fx-background-color: #0EA5E9;
-}
-
-.primary-button:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
 }

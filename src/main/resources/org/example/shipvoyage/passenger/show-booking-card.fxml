@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/25"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.shipvoyage.controller.passenger.BookingCardController"
-      spacing="8"
-      style="-fx-border-color: gray; -fx-border-radius:8; -fx-padding:12;">
+      spacing="12"
+      style="-fx-background-color: #1E293B; -fx-background-radius: 16; -fx-border-radius: 16; -fx-border-color: #334155; -fx-padding: 16;">
 
-    <Label fx:id="tourName" style="-fx-font-size:16; -fx-font-weight:bold"/>
+    <Label fx:id="tourName"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #F8FAFC;"/>
 
-    <HBox spacing="10">
-        <Label text="From:"/>
-        <Label fx:id="from"/>
-        <Label text="To:"/>
-        <Label fx:id="to"/>
+    <HBox spacing="8">
+        <Label text="From:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
+        <Label fx:id="from" style="-fx-text-fill: #CBD5E1;"/>
+        <Label text="To:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold; padding-left: 20;"/>
+        <Label fx:id="to" style="-fx-text-fill: #CBD5E1;"/>
     </HBox>
 
-    <Label fx:id="dates"/>
-    <Label fx:id="rooms"/>
+    <HBox spacing="8">
+        <Label text="Start:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
+        <Label fx:id="startDate" style="-fx-text-fill: #CBD5E1;"/>
+        <Label text="End:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold; padding-left: 20;"/>
+        <Label fx:id="endDate" style="-fx-text-fill: #CBD5E1;"/>
+    </HBox>
 
-    <Button fx:id="cancelButton" text="Cancel Booking"/>
+    <HBox spacing="8">
+        <Label text="Total Price:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
+        <Label fx:id="totalPrice" style="-fx-text-fill: #CBD5E1;"/>
+    </HBox>
+
+    <Button fx:id="cancelButton" text="Cancel Booking"
+            style="-fx-background-color: #38BDF8; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;"
+            prefHeight="36" prefWidth="160"/>
 </VBox>
