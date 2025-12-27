@@ -1,74 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <BorderPane prefHeight="600.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:id="homeBorderPane"
-            fx:controller="org.example.shipvoyage.controller.passenger.PassengerHomeController">
+            fx:controller="org.example.shipvoyage.controller.passenger.PassengerHomeController"
+            style="-fx-background-color: #0F172A;">
 
     <left>
-        <VBox spacing="10">
-            <padding>
-                <Insets bottom="20" left="10" right="10" top="20"/>
-            </padding>
-            <Button maxWidth="Infinity"  onAction="#onHomeClick" prefHeight="30.0" text="Home"/>
-            <Button maxWidth="Infinity" onAction="#onBookingsClick" prefHeight="30.0" text="Bookings"/>
-            <Button maxWidth="Infinity" onAction="#onProfileClick" prefHeight="30.0" text="Profile"/>
-            <Button maxWidth="Infinity" onAction="#onLogoutClick" prefHeight="30.0" text="Logout"/>
+        <VBox spacing="12" style="-fx-background-color: #1E293B; -fx-padding: 20;">
+            <Button text="Home" maxWidth="Infinity" prefHeight="40" onAction="#onHomeClick"
+                    style="-fx-background-color: #018790; -fx-text-fill: #F4F4F4; -fx-font-weight: bold; -fx-background-radius: 10;"/>
+            <Button text="Bookings" maxWidth="Infinity" prefHeight="40" onAction="#onBookingsClick"
+                    style="-fx-background-color: #018790; -fx-text-fill: #F4F4F4; -fx-font-weight: bold; -fx-background-radius: 10;"/>
+            <Button text="Profile" maxWidth="Infinity" prefHeight="40" onAction="#onProfileClick"
+                    style="-fx-background-color: #018790; -fx-text-fill: #F4F4F4; -fx-font-weight: bold; -fx-background-radius: 10;"/>
+            <Button text="Logout" maxWidth="Infinity" prefHeight="40" onAction="#onLogoutClick"
+                    style="-fx-background-color: #00B7B5; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 10;"/>
         </VBox>
     </left>
 
     <center>
-        <VBox alignment="TOP_CENTER" spacing="20" fx:id="centerVBox">
+        <VBox alignment="TOP_CENTER" spacing="24" fx:id="centerVBox">
             <padding>
-                <Insets bottom="20" left="20" right="20" top="20"/>
+                <Insets top="30" right="30" bottom="30" left="30"/>
             </padding>
 
-            <Label style="-fx-font-size: 24px;" text="Search for Tours"/>
+            <Label text="Search for Tours"
+                   style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #F4F4F4;"/>
 
-            <GridPane alignment="CENTER" hgap="10" vgap="10">
+            <GridPane alignment="CENTER" hgap="16" vgap="16">
                 <columnConstraints>
-                    <ColumnConstraints halignment="RIGHT"/>
-                    <ColumnConstraints halignment="LEFT"/>
+                    <ColumnConstraints halignment="RIGHT" percentWidth="30"/>
+                    <ColumnConstraints halignment="LEFT" percentWidth="70"/>
                 </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints vgrow="NEVER"/>
-                    <RowConstraints vgrow="NEVER"/>
-                    <RowConstraints vgrow="NEVER"/>
-                    <RowConstraints vgrow="NEVER"/>
-                </rowConstraints>
 
-                <Label text="From:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <TextField fx:id="fromField" promptText="Enter starting location"
-                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="From:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                       style="-fx-text-fill: #F4F4F4; -fx-font-weight: bold;"/>
+                <TextField fx:id="fromField" promptText="Enter starting location" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                           style="-fx-background-color: #1E293B; -fx-text-fill: #F4F4F4; -fx-prompt-text-fill: #94A3B8; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #334155; -fx-border-width: 1.2;"/>
 
-                <Label text="To:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <TextField fx:id="toField" promptText="Enter destination"
-                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="To:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                       style="-fx-text-fill: #F4F4F4; -fx-font-weight: bold;"/>
+                <TextField fx:id="toField" promptText="Enter destination" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                           style="-fx-background-color: #1E293B; -fx-text-fill: #F4F4F4; -fx-prompt-text-fill: #94A3B8; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #334155; -fx-border-width: 1.2;"/>
 
-                <Label text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                       style="-fx-text-fill: #F4F4F4; -fx-font-weight: bold;"/>
+                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                            style="-fx-background-color: #1E293B; -fx-text-fill: #F4F4F4; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #334155; -fx-border-width: 1.2;"/>
 
-                <Button fx:id="searchButton" text="Search"
-                        GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                        GridPane.rowIndex="3"/>
+                <Button fx:id="searchButton" text="Search" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"
+                        style="-fx-background-color: #38BDF8; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; -fx-pref-width: 120; -fx-pref-height: 38;"/>
             </GridPane>
 
-            <ScrollPane prefHeight="300" fitToWidth="true">
+            <ScrollPane prefHeight="300" fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
                 <content>
-                    <VBox fx:id="resultsBox" spacing="10"/>
+                    <VBox fx:id="resultsBox" spacing="12"/>
                 </content>
             </ScrollPane>
 

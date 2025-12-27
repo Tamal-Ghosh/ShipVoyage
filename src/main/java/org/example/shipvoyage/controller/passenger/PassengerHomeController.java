@@ -122,7 +122,9 @@ public class PassengerHomeController {
                 }).toList();
 
         if (upcomingTourInstances.isEmpty()) {
-            resultsBox.getChildren().add(new Label("No upcoming tours found for this route."));
+            Label noToursLabel = new Label("No upcoming tours found for this route.");
+            noToursLabel.setStyle("-fx-text-fill: #F4F4F4; -fx-font-size: 16px; -fx-font-weight: bold;");
+            resultsBox.getChildren().add(noToursLabel);
             return;
         }
 
@@ -130,6 +132,7 @@ public class PassengerHomeController {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/tour-card.fxml"));
                 Parent card = loader.load();
+                card.setStyle("-fx-background-color: #1E293B; -fx-background-radius: 15; -fx-padding: 10;");
                 TourCardController controller = loader.getController();
                 controller.setData(t);
                 resultsBox.getChildren().add(card);
@@ -139,6 +142,7 @@ public class PassengerHomeController {
             }
         }
     }
+
 
 
     public static void openBookingPage(TourInstance instance) {

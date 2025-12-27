@@ -3,41 +3,61 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<AnchorPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.shipvoyage.controller.SignupController"
-            prefHeight="420.0" prefWidth="600.0">
+            prefWidth="600"
+            prefHeight="420"
+            stylesheets="@style.css"
+            styleClass="root">
 
     <children>
-        <VBox alignment="CENTER" spacing="20" AnchorPane.leftAnchor="0"
-              AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <VBox alignment="CENTER"
+              spacing="24"
+              AnchorPane.topAnchor="0"
+              AnchorPane.bottomAnchor="0"
+              AnchorPane.leftAnchor="0"
+              AnchorPane.rightAnchor="0">
 
-            <Label text="Create Account">
-                <font><Font size="20"/></font>
-            </Label>
+            <VBox alignment="CENTER"
+                  spacing="6"
+                  styleClass="card">
+                <children>
+                    <Label text="Create Account" styleClass="title"/>
+                    <Label text="Fill in your details to continue" styleClass="subtitle"/>
+                </children>
+            </VBox>
 
-            <GridPane hgap="15" vgap="15" maxWidth="400">
-                <padding>
-                    <Insets top="10" bottom="10" left="10" right="10"/>
-                </padding>
+            <GridPane hgap="16"
+                      vgap="16"
+                      maxWidth="420"
+                      style="-fx-padding: 20;">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="35"/>
+                    <ColumnConstraints percentWidth="65"/>
+                </columnConstraints>
 
-                <Label text="Username:" GridPane.rowIndex="0" />
+                <Label text="Username" GridPane.rowIndex="0" style="-fx-text-fill: #F8FAFC;"/>
                 <TextField fx:id="usernameField" promptText="Enter username" GridPane.columnIndex="1"/>
 
-                <Label text="Email:" GridPane.rowIndex="1"/>
+                <Label text="Email" GridPane.rowIndex="1" style="-fx-text-fill: #F8FAFC;"/>
                 <TextField fx:id="emailField" promptText="Enter email" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label text="Password:" GridPane.rowIndex="2"/>
+                <Label text="Password" GridPane.rowIndex="2" style="-fx-text-fill: #F8FAFC;"/>
                 <PasswordField fx:id="passwordField" promptText="Enter password" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
-
             </GridPane>
 
-            <Button text="Sign Up" fx:id="signupBtn" onAction="#handleSignup" prefWidth="150"/>
+            <Button fx:id="signupBtn"
+                    text="Sign Up"
+                    onAction="#handleSignup"
+                    prefWidth="220"
+                    prefHeight="46"
+                    styleClass="primary-button"/>
 
-            <Hyperlink text="Already have an account? Login" onAction="#goToLogin"/>
+            <Hyperlink text="Already have an account? Login"
+                       onAction="#goToLogin"
+                       styleClass="hyperlink"/>
 
         </VBox>
     </children>
