@@ -9,6 +9,8 @@ public class User {
     private String password;
     private String role;
     private Image profileImage;
+    private String profileImagePath;
+    private String createdAt;
 
     public User(int userID, String username, String password, String email, String role) {
         this.userID = userID;
@@ -35,6 +37,12 @@ public class User {
 
     public Image getProfileImage() { return profileImage; }
     public void setProfileImage(Image profileImage) { this.profileImage = profileImage; }
+
+    public String getProfileImagePath() { return profileImagePath; }
+    public void setProfileImagePath(String profileImagePath) { this.profileImagePath = profileImagePath; }
+
+    public String getCreatedAt() { return createdAt; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
 
 

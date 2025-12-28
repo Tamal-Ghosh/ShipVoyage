@@ -51,6 +51,18 @@
     -fx-cursor: hand;
 }
 
+/* Ensure inner label also renders white for MenuButton */
+.nav-user-menu .label {
+    -fx-text-fill: white;
+    -fx-label-fill: white;
+}
+
+/* Dropdown items: keep text dark for readability */
+.nav-user-menu .menu-item .label {
+    -fx-text-fill: #111111;
+    -fx-label-fill: #111111;
+}
+
 /* Hero Section with Search */
 .hero-section {
     -fx-background-color: linear-gradient(to bottom, #1E4A8A, #2563B5);

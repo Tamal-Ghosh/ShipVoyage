@@ -22,12 +22,16 @@
 
         <!-- Avatar Section -->
         <VBox spacing="16" alignment="CENTER">
-            <!-- TODO: Add profile picture here -->
-            <StackPane style="-fx-background-color: #E5E7EB; -fx-background-radius: 60;" prefWidth="120" prefHeight="120">
-                <ImageView fx:id="profileImageView" fitHeight="120" fitWidth="120" preserveRatio="true"/>
-                <Label text="👤" style="-fx-font-size: 48px; -fx-text-fill: #9CA3AF;"/>
-            </StackPane>
-            <Button text="Change Photo" onAction="#onChangeImage" styleClass="ghost-button" prefWidth="140"/>
+          <StackPane prefWidth="120" prefHeight="120">
+            <ImageView fx:id="profileImageView" fitHeight="120" fitWidth="120" preserveRatio="false">
+              <clip>
+                <javafx.scene.shape.Circle radius="60" centerX="60" centerY="60" />
+              </clip>
+            </ImageView>
+            <Label fx:id="avatarPlaceholder" text="👤" style="-fx-font-size: 48px; -fx-text-fill: #9CA3AF;"/>
+          </StackPane>
+          <Button fx:id="changePhotoButton" text="Change Photo" onAction="#onChangeImage"
+              styleClass="ghost-button" prefWidth="140" visible="false" managed="false"/>
         </VBox>
 
         <Separator/>
@@ -49,14 +53,14 @@
             <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1"
                       styleClass="text-field" promptText="Enter email"/>
 
-            <Label text="Member Since" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                 <Label text="Member Since" GridPane.columnIndex="0" GridPane.rowIndex="2"
                    style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
-            <Label text="January 2022" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                 <Label fx:id="memberSinceLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"
                    style="-fx-text-fill: #6B7280;"/>
 
-            <Label text="Total Bookings" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                 <Label text="Total Bookings" GridPane.columnIndex="0" GridPane.rowIndex="3"
                    style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
-            <Label text="5 cruises" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                 <Label fx:id="totalBookingsLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="3"
                    style="-fx-text-fill: #6B7280;"/>
         </GridPane>
 

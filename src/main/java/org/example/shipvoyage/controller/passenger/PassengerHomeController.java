@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -66,6 +67,10 @@ public class PassengerHomeController {
     @FXML
     private Button nextButton;
 
+    @FXML
+    private MenuButton userMenuButton;
+
+
     private ObservableList<String> fromSuggestions;
     private ObservableList<String> toSuggestions;
     private List<TourInstance> allTourInstances = new java.util.ArrayList<>();
@@ -81,6 +86,12 @@ public class PassengerHomeController {
         searchButton.setOnAction(e -> searchTours());
         // Backup original center content to restore on Home
         homeContentBackup = new java.util.ArrayList<>(centerVBox.getChildren());
+        // Set username in nav menu dynamically
+        if (userMenuButton != null && Session.loggedInUser != null) {
+            String name = Session.loggedInUser.getUsername();
+            if (name == null || name.isBlank()) name = "User";
+            userMenuButton.setText("👤 " + name);
+        }
         
         // Setup navigation buttons
         if (prevButton != null) {

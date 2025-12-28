@@ -23,7 +23,7 @@
             <Button text="Home" styleClass="nav-button" onAction="#onHomeClick"/>
             <Button text="My Trips" styleClass="nav-button" onAction="#onBookingsClick"/>
             <Button text="Support" styleClass="nav-button"/>
-            <MenuButton text="👤 John Carter" styleClass="nav-user-menu">
+            <MenuButton fx:id="userMenuButton" text="👤" styleClass="nav-user-menu">
                 <items>
                     <MenuItem text="Profile" onAction="#onProfileClick"/>
                     <MenuItem text="Settings"/>
