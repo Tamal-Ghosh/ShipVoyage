@@ -1,39 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/25"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.shipvoyage.controller.passenger.ProfileController"
-      spacing="15" alignment="TOP_CENTER" >
+      stylesheets="@../style.css"
+      styleClass="app-container"
+      spacing="30">
+    
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="40" right="40" bottom="40" left="40"/>
     </padding>
 
-    <Label text="Profile" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <VBox styleClass="booking-container" spacing="30" maxWidth="600" alignment="TOP_CENTER">
+        
+        <Label text="My Profile" styleClass="booking-title" alignment="CENTER"/>
 
-    <ImageView fx:id="profileImageView" fitHeight="120" fitWidth="120" style="-fx-border-color: gray; -fx-border-width: 1;"/>
-    <Button text="Change Image" onAction="#onChangeImage"/>
+        <!-- Avatar Section -->
+        <VBox spacing="16" alignment="CENTER">
+            <!-- TODO: Add profile picture here -->
+            <StackPane style="-fx-background-color: #E5E7EB; -fx-background-radius: 60;" prefWidth="120" prefHeight="120">
+                <ImageView fx:id="profileImageView" fitHeight="120" fitWidth="120" preserveRatio="true"/>
+                <Label text="👤" style="-fx-font-size: 48px; -fx-text-fill: #9CA3AF;"/>
+            </StackPane>
+            <Button text="Change Photo" onAction="#onChangeImage" styleClass="ghost-button" prefWidth="140"/>
+        </VBox>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Username:" minWidth="80"/>
-        <TextField fx:id="usernameField" prefWidth="250"/>
-    </HBox>
+        <Separator/>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Email:" minWidth="80"/>
-        <TextField fx:id="emailField" prefWidth="250"/>
-    </HBox>
+        <!-- Profile Information -->
+        <GridPane hgap="20" vgap="20">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="35"/>
+                <ColumnConstraints percentWidth="65"/>
+            </columnConstraints>
 
-    <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="editButton" text="Edit Profile" onAction="#onEditProfile"/>
-        <Button fx:id="saveButton" text="Save" onAction="#onSaveProfile"/>
-    </HBox>
+            <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                   style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                      styleClass="text-field" promptText="Enter username"/>
+
+            <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                   style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                      styleClass="text-field" promptText="Enter email"/>
+
+            <Label text="Member Since" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                   style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <Label text="January 2022" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                   style="-fx-text-fill: #6B7280;"/>
+
+            <Label text="Total Bookings" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                   style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <Label text="5 cruises" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                   style="-fx-text-fill: #6B7280;"/>
+        </GridPane>
+
+        <Separator/>
+
+        <!-- Action Buttons -->
+        <HBox spacing="12" alignment="CENTER">
+            <Button fx:id="editButton" text="Edit Profile" onAction="#onEditProfile" 
+                    styleClass="secondary-button" prefWidth="140"/>
+            <Button fx:id="saveButton" text="Save Changes" onAction="#onSaveProfile" 
+                    styleClass="primary-button" prefWidth="140"/>
+        </HBox>
+
+    </VBox>
 
 </VBox>

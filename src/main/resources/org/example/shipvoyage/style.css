@@ -1,120 +1,470 @@
+/* ============================================
+   CRUISE BOOKING UI - MODERN DESIGN SYSTEM
+   ============================================ */
+
+/* Base & Layout */
 .root {
-    -fx-font-family: "Segoe UI";
-    -fx-background-color: #0F172A;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #F5F7FA;
 }
 
-.results-box {
-    -fx-spacing: 12;
-    -fx-padding: 15;
+.app-container {
+    -fx-background-color: #F5F7FA;
 }
 
-.card, .tour-card {
-    -fx-background-color: #1E293B;
-    -fx-padding: 16;
-    -fx-spacing: 8;
-    -fx-background-radius: 16;
-    -fx-border-radius: 16;
-    -fx-border-color: #334155;
+/* Navigation Bar */
+.nav-bar {
+    -fx-background-color: linear-gradient(to right, #1E4A8A, #2563B5);
+    -fx-padding: 16 40;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 2);
+}
+
+.nav-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 16;
     -fx-cursor: hand;
 }
 
-.tour-card:hover {
-    -fx-background-color: #24344D;
-    -fx-border-color: #38BDF8;
+.nav-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 6;
 }
 
-.label, .tour-text {
-    -fx-text-fill: #CBD5E1;
+.nav-user-menu {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
 }
 
-.title {
-    -fx-font-size: 26px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #F8FAFC;
+/* Hero Section with Search */
+.hero-section {
+    -fx-background-color: linear-gradient(to bottom, #1E4A8A, #2563B5);
+    -fx-padding: 80 40 80 40;
+    -fx-alignment: CENTER;
+    /* TODO: Add cruise ship background image here */
+    /* Recommended: Add a semi-transparent cruise ship image overlay */
 }
 
-.subtitle {
+.search-container {
+    -fx-background-color: rgba(30, 58, 98, 0.95);
+    -fx-background-radius: 12;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 4);
+    -fx-max-width: 900;
+}
+
+.search-label {
+    -fx-text-fill: white;
     -fx-font-size: 14px;
-    -fx-text-fill: #CBD5E1;
+    -fx-font-weight: 700;
+}
+
+.search-input {
+    -fx-background-color: white;
+    -fx-text-fill: #1F2937;
+    -fx-prompt-text-fill: #9CA3AF;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #E5E7EB;
+    -fx-padding: 12 16;
+    -fx-font-size: 15px;
+    -fx-pref-height: 48;
+}
+
+.search-input:focused {
+    -fx-border-color: #3B82F6;
+    -fx-border-width: 2;
+}
+
+.search-button {
+    -fx-background-color: #EA580C;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 14 32;
+    -fx-cursor: hand;
+    -fx-pref-height: 48;
+}
+
+.search-button:hover {
+    -fx-background-color: #DC2626;
+}
+
+/* Main Content Area */
+.content-wrapper {
+    -fx-padding: 40 40 40 40;
+    -fx-spacing: 30;
+}
+
+.section-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F2937;
+}
+
+.section-header {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 12;
+}
+
+/* Destination Cards */
+.destination-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 12, 0, 0, 4);
+    -fx-cursor: hand;
+    -fx-padding: 0;
+    -fx-pref-width: 280;
+    -fx-pref-height: 320;
+}
+
+.destination-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 18, 0, 0, 6);
+    -fx-translate-y: -4;
+}
+
+.destination-image {
+    -fx-background-radius: 12 12 0 0;
+    -fx-pref-height: 200;
+    /* TODO: Add destination images here */
+    /* Caribbean: tropical beach image */
+    /* Mediterranean: coastal town image */
+    /* Alaska: glacier/mountains image */
+}
+
+.destination-info {
+    -fx-padding: 20;
+    -fx-spacing: 8;
+}
+
+.destination-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F2937;
+}
+
+.price-tag {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.price-prefix {
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+}
+
+/* Upcoming Trips Sidebar */
+.trips-sidebar {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 24;
+    -fx-spacing: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);
+    -fx-pref-width: 350;
+}
+
+.trip-card {
+    -fx-background-color: #F9FAFB;
+    -fx-background-radius: 10;
+    -fx-padding: 16;
+    -fx-spacing: 8;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.trip-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F2937;
+}
+
+.trip-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6B7280;
+}
+
+.trip-date {
+    -fx-font-size: 13px;
+    -fx-text-fill: #9CA3AF;
+}
+
+.status-badge {
+    -fx-padding: 6 12;
+    -fx-background-radius: 12;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.status-confirmed {
+    -fx-background-color: #D1FAE5;
+    -fx-text-fill: #065F46;
+}
+
+.status-pending {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+}
+
+.view-all-link {
+    -fx-text-fill: #2563B5;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-underline: true;
+}
+
+.view-all-link:hover {
+    -fx-text-fill: #1E40AF;
+}
+
+/* Special Offers Banner */
+.offers-banner {
+    -fx-background-color: linear-gradient(to right, #F59E0B, #EA580C);
+    -fx-background-radius: 12;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 4);
+    /* TODO: Add promotional cruise ship image on the right side */
+}
+
+.offers-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.offers-subtitle {
+    -fx-font-size: 18px;
+    -fx-text-fill: white;
+}
+
+.offers-button {
+    -fx-background-color: white;
+    -fx-text-fill: #EA580C;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 14 28;
+    -fx-cursor: hand;
+}
+
+.offers-button:hover {
+    -fx-background-color: #FEF3C7;
+}
+
+/* Customer Reviews */
+.reviews-section {
+    -fx-background-color: #1E3A8A;
+    -fx-background-radius: 12;
+    -fx-padding: 40;
+    -fx-spacing: 24;
+}
+
+.reviews-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.review-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 24;
+    -fx-spacing: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+
+.reviewer-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F2937;
+}
+
+.review-stars {
+    -fx-text-fill: #F59E0B;
+    -fx-font-size: 18px;
+}
+
+.review-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #4B5563;
+    -fx-line-spacing: 4;
+}
+
+/* TODO: Add avatar image placeholders for reviewers */
+.reviewer-avatar {
+    -fx-background-radius: 50%;
+    -fx-pref-width: 50;
+    -fx-pref-height: 50;
+    -fx-background-color: #E5E7EB;
+}
+
+/* Tour Cards (Search Results) */
+.tour-card {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-spacing: 12;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);
+}
+
+.tour-card:hover {
+    -fx-border-color: #3B82F6;
+    -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.2), 12, 0, 0, 3);
 }
 
 .tour-title {
-    -fx-font-size: 16px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #F8FAFC;
+    -fx-text-fill: #1F2937;
 }
 
-.no-result {
+.tour-detail-label {
+    -fx-font-weight: 600;
+    -fx-text-fill: #6B7280;
     -fx-font-size: 14px;
-    -fx-text-fill: #94A3B8;
 }
 
-.text-field, .password-field, .date-picker {
-    -fx-background-color: #1E293B;
-    -fx-text-fill: #F8FAFC;
-    -fx-prompt-text-fill: #94A3B8;
+.tour-detail-value {
+    -fx-text-fill: #1F2937;
+    -fx-font-size: 14px;
+}
+
+/* Booking Pages */
+.booking-container {
+    -fx-background-color: white;
     -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-border-color: #334155;
-    -fx-border-width: 1.2;
-    -fx-padding: 6 10 6 10;
-    -fx-font-size: 14px;
+    -fx-padding: 32;
+    -fx-spacing: 24;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 12, 0, 0, 4);
 }
 
-.text-field:focused, .password-field:focused, .date-picker:focused {
-    -fx-border-color: #38BDF8;
+.booking-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F2937;
+}
+
+.room-grid {
+    -fx-hgap: 16;
+    -fx-vgap: 16;
+}
+
+.price-total {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E3A8A;
+}
+
+/* Common Elements */
+.label {
+    -fx-text-fill: #374151;
+}
+
+.text-field, .password-field, .date-picker, .combo-box {
+    -fx-background-color: white;
+    -fx-text-fill: #1F2937;
+    -fx-prompt-text-fill: #9CA3AF;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 1;
+    -fx-padding: 10 14;
+    -fx-font-size: 15px;
+}
+
+.text-field:focused, .password-field:focused, .date-picker:focused, .combo-box:focused {
+    -fx-border-color: #3B82F6;
+    -fx-border-width: 2;
 }
 
 .button {
     -fx-cursor: hand;
-    -fx-font-weight: bold;
-    -fx-background-radius: 26;
+    -fx-font-weight: 600;
 }
 
 .primary-button {
-    -fx-background-color: #38BDF8;
-    -fx-text-fill: #0F172A;
-    -fx-font-size: 14px;
+    -fx-background-color: #2563B5;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-background-radius: 20;
-    -fx-cursor: hand;
+    -fx-background-radius: 8;
+    -fx-padding: 12 24;
 }
 
 .primary-button:hover {
-    -fx-background-color: #0EA5E9;
-}
-
-.primary-button:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
+    -fx-background-color: #1E40AF;
 }
 
 .secondary-button {
-    -fx-background-color: #22C55E;
-    -fx-text-fill: #052E16;
-    -fx-font-size: 17px;
+    -fx-background-color: #10B981;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 24;
 }
 
 .secondary-button:hover {
-    -fx-background-color: #16A34A;
+    -fx-background-color: #059669;
 }
 
-.secondary-button:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
-}
-
-.toggle-button {
+.ghost-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6B7280;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 20;
     -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 22;
+}
+
+.ghost-button:hover {
+    -fx-background-color: #F3F4F6;
+}
+
+/* Utility Classes */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);
+}
+
+.no-result {
+    -fx-font-size: 16px;
+    -fx-text-fill: #6B7280;
+    -fx-font-style: italic;
 }
 
 .hyperlink {
-    -fx-text-fill: #38BDF8;
-    -fx-font-size: 13px;
+    -fx-text-fill: #2563B5;
+    -fx-font-size: 14px;
 }
 
 .hyperlink:hover {
-    -fx-text-fill: #7DD3FC;
+    -fx-text-fill: #1E40AF;
+    -fx-underline: true;
 }

@@ -86,7 +86,7 @@
                </rowConstraints>
                 </GridPane>
 
-                <!-- Nested Grid for Room Type -->
+
                 <GridPane hgap="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="27.0" />

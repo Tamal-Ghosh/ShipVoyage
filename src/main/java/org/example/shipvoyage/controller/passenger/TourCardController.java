@@ -1,13 +1,14 @@
 package org.example.shipvoyage.controller.passenger;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import org.example.shipvoyage.dao.ShipDAO;
 import org.example.shipvoyage.dao.TourDAO;
 import org.example.shipvoyage.model.Ship;
 import org.example.shipvoyage.model.Tour;
 import org.example.shipvoyage.model.TourInstance;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 public class TourCardController {
 
@@ -49,15 +50,25 @@ public class TourCardController {
             startDate.setText(instance.getStartDate().toString());
             endDate.setText(instance.getEndDate().toString());
 
-            Ship ship = ShipDAO.getShipById(instance.getId());
+            Ship ship = ShipDAO.getShipById(instance.getShipId());
             if (ship != null) {
                 shipName.setText(ship.getShipName());
             } else {
-                shipName.setText("Unknown");
+                shipName.setText("Unknown Ship");
             }
+        } else {
+            tourName.setText("Tour Not Found");
+            from.setText("N/A");
+            to.setText("N/A");
+            duration.setText("N/A");
+            startDate.setText(instance.getStartDate().toString());
+            endDate.setText(instance.getEndDate().toString());
+            shipName.setText("N/A");
         }
 
-        bookButton.setOnAction(e -> openBookingPage());
+        if (bookButton != null) {
+            bookButton.setOnAction(e -> openBookingPage());
+        }
     }
 
     private void openBookingPage() {

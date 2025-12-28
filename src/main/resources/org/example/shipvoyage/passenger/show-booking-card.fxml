@@ -1,36 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/25"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.shipvoyage.controller.passenger.BookingCardController"
-      spacing="12"
-      style="-fx-background-color: #1E293B; -fx-background-radius: 16; -fx-border-radius: 16; -fx-border-color: #334155; -fx-padding: 16;">
+      stylesheets="@../style.css"
+      styleClass="card"
+      spacing="16">
 
-    <Label fx:id="tourName"
-           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #F8FAFC;"/>
-
-    <HBox spacing="8">
-        <Label text="From:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
-        <Label fx:id="from" style="-fx-text-fill: #CBD5E1;"/>
-        <Label text="To:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold; padding-left: 20;"/>
-        <Label fx:id="to" style="-fx-text-fill: #CBD5E1;"/>
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <VBox HBox.hgrow="ALWAYS" spacing="4">
+            <Label fx:id="tourName" styleClass="tour-title"/>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="🚢" style="-fx-font-size: 14px;"/>
+                <Label text="Cruise Booking" style="-fx-text-fill: #6B7280; -fx-font-size: 13px;"/>
+            </HBox>
+        </VBox>
+        <Label text="✓" style="-fx-font-size: 24px; -fx-text-fill: #10B981;"/>
     </HBox>
 
-    <HBox spacing="8">
-        <Label text="Start:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
-        <Label fx:id="startDate" style="-fx-text-fill: #CBD5E1;"/>
-        <Label text="End:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold; padding-left: 20;"/>
-        <Label fx:id="endDate" style="-fx-text-fill: #CBD5E1;"/>
+    <Separator/>
+
+    <GridPane hgap="20" vgap="12">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50"/>
+            <ColumnConstraints percentWidth="50"/>
+        </columnConstraints>
+
+        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label text="Route" styleClass="tour-detail-label"/>
+            <HBox spacing="8">
+                <Label fx:id="from" styleClass="tour-detail-value"/>
+                <Label text="→" style="-fx-text-fill: #2563B5;"/>
+                <Label fx:id="to" styleClass="tour-detail-value"/>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label text="Total Amount" styleClass="tour-detail-label"/>
+            <Label fx:id="totalPrice" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1E3A8A;"/>
+        </VBox>
+
+        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label text="Departure Date" styleClass="tour-detail-label"/>
+            <Label fx:id="startDate" styleClass="tour-detail-value"/>
+        </VBox>
+
+        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="Return Date" styleClass="tour-detail-label"/>
+            <Label fx:id="endDate" styleClass="tour-detail-value"/>
+        </VBox>
+    </GridPane>
+
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Button text="View Details" styleClass="ghost-button" prefWidth="120"/>
+        <Button fx:id="cancelButton" text="Cancel Booking" styleClass="ghost-button" 
+                prefWidth="140" style="-fx-text-fill: #DC2626; -fx-border-color: #FCA5A5;"/>
     </HBox>
 
-    <HBox spacing="8">
-        <Label text="Total Price:" style="-fx-text-fill: #CBD5E1; -fx-font-weight: bold;"/>
-        <Label fx:id="totalPrice" style="-fx-text-fill: #CBD5E1;"/>
-    </HBox>
-
-    <Button fx:id="cancelButton" text="Cancel Booking"
-            style="-fx-background-color: #38BDF8; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;"
-            prefHeight="36" prefWidth="160"/>
 </VBox>

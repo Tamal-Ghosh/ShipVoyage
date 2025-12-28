@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/25"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.shipvoyage.controller.passenger.ShowBookingController"
-      spacing="20"
-      style="-fx-background-color: #0F172A; -fx-padding: 20;">
+      stylesheets="@../style.css"
+      styleClass="app-container"
+      spacing="30">
+    
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
 
-    <Label text="My Bookings"
-           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #F8FAFC;"/>
+    <VBox spacing="20">
+        <Label text="My Bookings" styleClass="section-title"/>
+        <Label text="View and manage your cruise reservations" 
+               style="-fx-text-fill: #6B7280; -fx-font-size: 14px;"/>
+    </VBox>
 
-    <ScrollPane fitToWidth="true"
-                style="-fx-background: transparent; -fx-background-color: transparent;">
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
         <content>
-            <VBox fx:id="bookingContainer" spacing="12"/>
+            <VBox fx:id="bookingContainer" spacing="16"/>
         </content>
     </ScrollPane>
 
-    <Label fx:id="noBookingsLabel"
-           text="No bookings available"
-           style="-fx-font-size: 14px; -fx-text-fill: #94A3B8;"
-           visible="false"
-           managed="false"/>
+        <Label fx:id="noBookingsLabel"
+            text="No bookings available"
+            styleClass="no-result"
+            visible="false"
+            managed="false"/>
 </VBox>

@@ -4,67 +4,160 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:id="homeBorderPane"
-            fx:controller="org.example.shipvoyage.controller.passenger.PassengerHomeController"
-            style="-fx-background-color: #0F172A;">
+<VBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="mainContainer"
+      fx:controller="org.example.shipvoyage.controller.passenger.PassengerHomeController"
+      stylesheets="@../style.css"
+      styleClass="app-container">
 
-    <left>
-        <VBox spacing="12" style="-fx-background-color: #1E293B; -fx-padding: 20;">
-            <Button text="Home" maxWidth="Infinity" prefHeight="40" onAction="#onHomeClick"
-                    style="-fx-background-color: #018790; -fx-text-fill: #F4F4F4; -fx-font-weight: bold; -fx-background-radius: 10;"/>
-            <Button text="Bookings" maxWidth="Infinity" prefHeight="40" onAction="#onBookingsClick"
-                    style="-fx-background-color: #018790; -fx-text-fill: #F4F4F4; -fx-font-weight: bold; -fx-background-radius: 10;"/>
-            <Button text="Profile" maxWidth="Infinity" prefHeight="40" onAction="#onProfileClick"
-                    style="-fx-background-color: #018790; -fx-text-fill: #F4F4F4; -fx-font-weight: bold; -fx-background-radius: 10;"/>
-            <Button text="Logout" maxWidth="Infinity" prefHeight="40" onAction="#onLogoutClick"
-                    style="-fx-background-color: #00B7B5; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 10;"/>
-        </VBox>
-    </left>
+    <!-- Navigation Bar -->
+    <HBox styleClass="nav-bar">
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <!-- TODO: Add ship icon/logo here -->
+            <Label text="⚓" style="-fx-font-size: 28px;"/>
+            <Label text="ShipVoyage" styleClass="nav-title" style="-fx-text-fill: white;"/>
+        </HBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox spacing="20" alignment="CENTER">
+            <Button text="Home" styleClass="nav-button" onAction="#onHomeClick"/>
+            <Button text="My Trips" styleClass="nav-button" onAction="#onBookingsClick"/>
+            <Button text="Bookings" styleClass="nav-button" onAction="#onBookingsClick"/>
+            <Button text="Support" styleClass="nav-button"/>
+            <MenuButton text="👤 John Carter" styleClass="nav-user-menu">
+                <items>
+                    <MenuItem text="Profile" onAction="#onProfileClick"/>
+                    <MenuItem text="Settings"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Logout" onAction="#onLogoutClick"/>
+                </items>
+            </MenuButton>
+        </HBox>
+    </HBox>
 
-    <center>
-        <VBox alignment="TOP_CENTER" spacing="24" fx:id="centerVBox">
-            <padding>
-                <Insets top="30" right="30" bottom="30" left="30"/>
-            </padding>
-
-            <Label text="Search for Tours"
-                   style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #F4F4F4;"/>
-
-            <GridPane alignment="CENTER" hgap="16" vgap="16">
+    <!-- Hero Section with Search -->
+    <VBox styleClass="hero-section" alignment="CENTER">
+        <VBox styleClass="search-container" alignment="CENTER" spacing="12">
+            <GridPane hgap="12" vgap="8" alignment="CENTER">
                 <columnConstraints>
-                    <ColumnConstraints halignment="RIGHT" percentWidth="30"/>
-                    <ColumnConstraints halignment="LEFT" percentWidth="70"/>
+                    <ColumnConstraints minWidth="160" prefWidth="180"/>
+                    <ColumnConstraints minWidth="160" prefWidth="180"/>
+                    <ColumnConstraints minWidth="160" prefWidth="180"/>
                 </columnConstraints>
 
-                <Label text="From:" GridPane.columnIndex="0" GridPane.rowIndex="0"
-                       style="-fx-text-fill: #F4F4F4; -fx-font-weight: bold;"/>
-                <TextField fx:id="fromField" promptText="Enter starting location" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                           style="-fx-background-color: #1E293B; -fx-text-fill: #F4F4F4; -fx-prompt-text-fill: #94A3B8; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #334155; -fx-border-width: 1.2;"/>
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="From" styleClass="search-label" style="-fx-text-fill: white;"/>
+                    <TextField fx:id="fromField" promptText="From" styleClass="search-input" style="-fx-control-inner-background: white; -fx-text-fill: #333;"/>
+                </VBox>
 
-                <Label text="To:" GridPane.columnIndex="0" GridPane.rowIndex="1"
-                       style="-fx-text-fill: #F4F4F4; -fx-font-weight: bold;"/>
-                <TextField fx:id="toField" promptText="Enter destination" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                           style="-fx-background-color: #1E293B; -fx-text-fill: #F4F4F4; -fx-prompt-text-fill: #94A3B8; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #334155; -fx-border-width: 1.2;"/>
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="To" styleClass="search-label" style="-fx-text-fill: white;"/>
+                    <TextField fx:id="toField" promptText="To" styleClass="search-input" style="-fx-control-inner-background: white; -fx-text-fill: #333;"/>
+                </VBox>
 
-                <Label text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"
-                       style="-fx-text-fill: #F4F4F4; -fx-font-weight: bold;"/>
-                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                            style="-fx-background-color: #1E293B; -fx-text-fill: #F4F4F4; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #334155; -fx-border-width: 1.2;"/>
-
-                <Button fx:id="searchButton" text="Search" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"
-                        style="-fx-background-color: #38BDF8; -fx-text-fill: #0F172A; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; -fx-pref-width: 120; -fx-pref-height: 38;"/>
+                <VBox spacing="4" GridPane.columnIndex="2">
+                    <Label text="Departure Date" styleClass="search-label" style="-fx-text-fill: white; -fx-font-size: 12px;"/>
+                    <DatePicker fx:id="datePicker" promptText="Choose Date" styleClass="search-input" style="-fx-control-inner-background: white; -fx-text-fill: #333;" prefWidth="180"/>
+                </VBox>
             </GridPane>
-
-            <ScrollPane prefHeight="300" fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
-                <content>
-                    <VBox fx:id="resultsBox" spacing="12"/>
-                </content>
-            </ScrollPane>
-
+            <Button fx:id="searchButton" text="Search Cruises" styleClass="search-button" prefWidth="200"/>
         </VBox>
-    </center>
 
-</BorderPane>
+        <!-- Search Results directly below the search bar -->
+        <VBox spacing="16" fx:id="resultsBox" styleClass="results-stack" maxWidth="1100" visible="false" managed="false" style="-fx-padding: 30 0 0 0;">
+            <!-- Navigation arrows and tour cards container -->
+            <HBox alignment="CENTER" spacing="10">
+                <Button fx:id="prevButton" text="◀" style="-fx-font-size: 18; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-padding: 10 15; -fx-border-radius: 5;" visible="false"/>
+                <HBox spacing="20" fx:id="tourCardsContainer" alignment="TOP_LEFT" prefWidth="1080">
+                    <!-- Tour cards will be dynamically added here -->
+                </HBox>
+                <Button fx:id="nextButton" text="▶" style="-fx-font-size: 18; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-padding: 10 15; -fx-border-radius: 5;" visible="false"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <!-- Main Content -->
+    <ScrollPane fitToWidth="true" style="-fx-background-color: #F5F7FA;">
+        <VBox fx:id="centerVBox">
+            <HBox styleClass="content-wrapper" spacing="30">
+                <!-- Left: Popular Destinations & Search Results -->
+                <VBox spacing="20" HBox.hgrow="ALWAYS">
+                    <!-- Special Offers Banner -->
+                    <HBox styleClass="offers-banner" spacing="40" alignment="CENTER_LEFT">
+                        <VBox spacing="12" HBox.hgrow="ALWAYS">
+                            <Label text="Summer Sale!" styleClass="offers-title"/>
+                            <Label text="Up to 30% Off Selected Cruises" styleClass="offers-subtitle"/>
+                            <Button text="View Deals" styleClass="offers-button" prefWidth="150"/>
+                        </VBox>
+                        <!-- TODO: Add promotional cruise ship image here -->
+                        <Label text="🚢" style="-fx-font-size: 120px; -fx-opacity: 0.8;"/>
+                    </HBox>
+
+                    <!-- Customer Reviews Section -->
+                    <VBox styleClass="reviews-section" spacing="20">
+                        <Label text="Customer Reviews" styleClass="reviews-title"/>
+                        <HBox spacing="20">
+                            <!-- Review Card 1 -->
+                            <VBox styleClass="review-card" spacing="10" HBox.hgrow="ALWAYS">
+                                <HBox spacing="12" alignment="CENTER_LEFT">
+                                    <!-- TODO: Add reviewer avatar image -->
+                                    <Region styleClass="reviewer-avatar"/>
+                                    <VBox>
+                                        <Label text="Sarah M." styleClass="reviewer-name"/>
+                                        <Label text="★★★★★" styleClass="review-stars"/>
+                                    </VBox>
+                                </HBox>
+                                <Label text="Amazing experience! The booking process was smooth and the trip was unforgettable!" 
+                                       styleClass="review-text" wrapText="true"/>
+                            </VBox>
+
+                            <!-- Review Card 2 -->
+                            <VBox styleClass="review-card" spacing="10" HBox.hgrow="ALWAYS">
+                                <HBox spacing="12" alignment="CENTER_LEFT">
+                                    <!-- TODO: Add reviewer avatar image -->
+                                    <Region styleClass="reviewer-avatar"/>
+                                    <VBox>
+                                        <Label text="Michael R." styleClass="reviewer-name"/>
+                                        <Label text="★★★★★" styleClass="review-stars"/>
+                                    </VBox>
+                                </HBox>
+                                <Label text="Best vacation ever! Great service, beautiful destinations, and wonderful staff." 
+                                       styleClass="review-text" wrapText="true"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Right: Upcoming Trips Sidebar -->
+                <VBox styleClass="trips-sidebar" spacing="20">
+                    <Label text="Upcoming Trips" styleClass="section-title" style="-fx-font-size: 22px;"/>
+                    
+                    <!-- Trip Card 1 - Confirmed -->
+                    <VBox styleClass="trip-card">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Greece Getaway" styleClass="trip-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="✓ Confirmed" styleClass="status-badge status-confirmed"/>
+                        </HBox>
+                        <Label text="Athens to Santorini" styleClass="trip-subtitle"/>
+                        <Label text="May 15 - May 20, 2022" styleClass="trip-date"/>
+                    </VBox>
+
+                    <!-- Trip Card 2 - Pending -->
+                    <VBox styleClass="trip-card">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Northern Explorer" styleClass="trip-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="👤 Pending" styleClass="status-badge status-pending"/>
+                        </HBox>
+                        <Label text="Seattle to Alaska" styleClass="trip-subtitle"/>
+                        <Label text="June 5 - June 12, 2022" styleClass="trip-date"/>
+                    </VBox>
+
+                    <Hyperlink text="View All >" styleClass="view-all-link" alignment="CENTER"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+
+</VBox>
