@@ -3,23 +3,25 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
-<VBox xmlns="http://javafx.com/javafx/25" 
+<VBox xmlns="http://javafx.com/javafx/25"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.shipvoyage.controller.passenger.BookingController" 
+      fx:controller="org.example.shipvoyage.controller.passenger.BookingController"
+    fx:id="mainVBox"
       stylesheets="@../style.css"
       styleClass="app-container"
       spacing="30"
       alignment="TOP_CENTER">
-    
+
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>
     </padding>
 
     <VBox styleClass="booking-container" spacing="24" maxWidth="800">
         <Label text="Select Your Rooms" styleClass="booking-title"/>
-        
+
         <VBox spacing="12">
-            <Label text="Available Rooms" style="-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <Label text="Available Rooms"
+                   style="-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #374151;"/>
             <GridPane fx:id="roomGrid" hgap="16" vgap="16" styleClass="room-grid"/>
         </VBox>
 
@@ -27,27 +29,35 @@
 
         <HBox alignment="CENTER_LEFT" spacing="20">
             <VBox spacing="4" HBox.hgrow="ALWAYS">
-                <Label text="Total Amount" style="-fx-font-size: 14px; -fx-text-fill: #6B7280;"/>
-                <Label fx:id="totalLabel" text="$0" styleClass="price-total"/>
+                <Label text="Total Amount"
+                       style="-fx-font-size: 14px; -fx-text-fill: #6B7280;"/>
+                <Label fx:id="totalLabel" text="৳0" styleClass="price-total"/>
             </VBox>
         </HBox>
 
         <Separator/>
 
         <VBox spacing="16">
-            <Label text="Payment Method" style="-fx-font-size: 18px; -fx-font-weight: 600; -fx-text-fill: #1F2937;"/>
-            
+            <Label text="Payment Method"
+                   style="-fx-font-size: 18px; -fx-font-weight: 600; -fx-text-fill: #1F2937;"/>
+
             <VBox spacing="12">
-                <RadioButton fx:id="VisaRadio" text="💳 Visa / Mastercard" 
-                            style="-fx-font-size: 15px; -fx-padding: 12; -fx-background-color: #F9FAFB; -fx-background-radius: 8;"/>
-                <RadioButton fx:id="bkashRadio" text="📱 bKash Mobile Payment" 
-                            style="-fx-font-size: 15px; -fx-padding: 12; -fx-background-color: #F9FAFB; -fx-background-radius: 8;"/>
+                <!-- Fixed fx:id names -->
+                <RadioButton fx:id="visaRadio"
+                             text="💳 Visa / Mastercard"
+                             style="-fx-font-size: 15px; -fx-padding: 12;"/>
+                <RadioButton fx:id="bkashRadio"
+                             text="📱 bKash Mobile Payment"
+                             style="-fx-font-size: 15px; -fx-padding: 12;"/>
             </VBox>
         </VBox>
 
         <HBox spacing="12" alignment="CENTER_RIGHT">
             <Button text="Cancel" styleClass="ghost-button" prefWidth="120"/>
-            <Button fx:id="Confirm_Booking" text="Proceed to Payment" styleClass="primary-button" prefWidth="200"/>
+            <Button fx:id="confirmBooking"
+                    text="Proceed to Payment"
+                    styleClass="primary-button"
+                    prefWidth="200"/>
         </HBox>
     </VBox>
 

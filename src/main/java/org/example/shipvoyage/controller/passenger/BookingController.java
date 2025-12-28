@@ -1,27 +1,31 @@
 package org.example.shipvoyage.controller.passenger;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import org.example.shipvoyage.dao.BookingDAO;
-import org.example.shipvoyage.dao.RoomDAO;
-import org.example.shipvoyage.model.Booking;
-import org.example.shipvoyage.model.Room;
-import org.example.shipvoyage.model.TourInstance;
-import org.example.shipvoyage.model.User;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.example.shipvoyage.dao.BookingDAO;
+import org.example.shipvoyage.dao.RoomDAO;
+import org.example.shipvoyage.model.Booking;
+import org.example.shipvoyage.model.Room;
+import org.example.shipvoyage.model.TourInstance;
+import org.example.shipvoyage.model.User;
 import static org.example.shipvoyage.util.AlertUtil.showInfo;
 import static org.example.shipvoyage.util.AlertUtil.showWarning;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class BookingController {
 
@@ -35,15 +39,14 @@ public class BookingController {
     private Label totalLabel;
 
     @FXML
-    private Button Confirm_Booking;
+    private Button confirmBooking;
 
     @FXML
-    private RadioButton VisaRadio;
+    private RadioButton visaRadio;
 
     @FXML
     private RadioButton bkashRadio;
 
-    @FXML
     private ToggleGroup paymentToggleGroup;
 
     private TourInstance tourInstance;
@@ -51,14 +54,17 @@ public class BookingController {
     private double totalAmount = 0;
     private User currentUser = Session.loggedInUser;
 
-
-
     @FXML
     public void initialize() {
+        // Setup ToggleGroup correctly
         paymentToggleGroup = new ToggleGroup();
-        VisaRadio.setToggleGroup(paymentToggleGroup);
+        visaRadio.setToggleGroup(paymentToggleGroup);
         bkashRadio.setToggleGroup(paymentToggleGroup);
+
+        // Optional: select default payment
+        visaRadio.setSelected(true);
     }
+
     public void setTourInstance(TourInstance instance) {
         this.tourInstance = instance;
         loadRooms();
@@ -85,7 +91,7 @@ public class BookingController {
             if (col == cols) { col = 0; row++; }
         }
 
-        Confirm_Booking.setOnAction(e -> onConfirmBooking());
+        confirmBooking.setOnAction(e -> onConfirmBooking());
     }
 
     private void handleSelection(Room room, ToggleButton btn) {
@@ -93,7 +99,7 @@ public class BookingController {
         if (isSelected) totalAmount += room.getPricePerNight();
         else totalAmount -= room.getPricePerNight();
         btn.setStyle(getColorForRoom(room, isSelected));
-        totalLabel.setText("Total: $" + totalAmount);
+        totalLabel.setText("Total: ৳" + totalAmount);
     }
 
     private String getColorForRoom(Room room, boolean selected) {
@@ -124,7 +130,7 @@ public class BookingController {
         }
 
         String selectedPaymentMethod;
-        if (VisaRadio.isSelected()) selectedPaymentMethod = "Visa";
+        if (visaRadio.isSelected()) selectedPaymentMethod = "Visa";
         else if (bkashRadio.isSelected()) selectedPaymentMethod = "bKash";
         else {
             showWarning("Please select a payment method.");
@@ -132,27 +138,27 @@ public class BookingController {
         }
 
         Booking booking = new Booking(
-                0,
-                tourInstance.getId(),
-                currentUser.getUserID(),
-                roomIds,
-                roomNumbers,
-                totalAmount,
-                "Booked",
-                "Pending",
-                "Unpaid"
+            0,
+            tourInstance.getId(),
+            currentUser.getUserID(),
+            roomIds,
+            roomNumbers,
+            totalAmount,
+            "Pending Payment",
+            selectedPaymentMethod,
+            "Unpaid"
         );
 
         boolean success = BookingDAO.addBooking(booking);
 
         if (success) {
-            showInfo("Booking confirmed successfully! Proceed to payment.");
+            showInfo("Reservation created. Ticket will be confirmed after payment.");
             selectedRooms.forEach(r -> {
                 roomButtons.get(r).setDisable(true);
                 roomButtons.get(r).setSelected(false);
             });
             totalAmount = 0;
-            totalLabel.setText("Total: $0");
+            totalLabel.setText("Total: ৳0");
 
             try {
                 FXMLLoader loader;
@@ -161,9 +167,10 @@ public class BookingController {
                 } else {
                     loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/bkash-payment.fxml"));
                 }
-                Stage stage = new Stage();
+                Scene scene = new Scene(loader.load());
+                Stage stage = (Stage) mainVBox.getScene().getWindow();
                 stage.setTitle(selectedPaymentMethod + " Payment");
-                stage.setScene(new Scene(loader.load()));
+                stage.setScene(scene);
                 PaymentController controller = loader.getController();
                 controller.setBooking(booking);
                 stage.show();

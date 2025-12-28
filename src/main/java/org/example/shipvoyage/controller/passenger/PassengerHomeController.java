@@ -223,8 +223,11 @@ public class PassengerHomeController {
         Label route = new Label(tour.getFrom() + " → " + tour.getTo());
         route.setStyle("-fx-text-fill: #666; -fx-font-size: 12;");
         
-        Label dates = new Label("Depart: " + instance.getStartDate() + " | Return: " + instance.getEndDate());
-        dates.setStyle("-fx-text-fill: #666; -fx-font-size: 11;");
+        Label departLabel = new Label("Depart: " + instance.getStartDate());
+        departLabel.setStyle("-fx-text-fill: #666; -fx-font-size: 11;");
+        
+        Label returnLabel = new Label("Return: " + instance.getEndDate());
+        returnLabel.setStyle("-fx-text-fill: #666; -fx-font-size: 11;");
         
         Label duration = new Label("Duration: " + tour.getDuration() + " days");
         duration.setStyle("-fx-text-fill: #666; -fx-font-size: 11;");
@@ -239,7 +242,7 @@ public class PassengerHomeController {
         bookButton.setStyle("-fx-padding: 8 20; -fx-font-size: 12; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-border-radius: 5;");
         bookButton.setOnAction(e -> PassengerHomeController.openBookingPage(instance));
         
-        card.getChildren().addAll(tourName, route, dates, duration, shipLabel, price, bookButton);
+        card.getChildren().addAll(tourName, route, departLabel, returnLabel, duration, shipLabel, price, bookButton);
         return card;
     }
 
