@@ -60,6 +60,13 @@
     /* Recommended: Add a semi-transparent cruise ship image overlay */
 }
 
+/* My Trips Section - match Home bluish theme */
+.mytrips-section {
+    -fx-background-color: linear-gradient(to bottom, #1E4A8A, #2563B5);
+    -fx-padding: 60 40 60 40;
+    -fx-alignment: CENTER;
+}
+
 .search-container {
     -fx-background-color: rgba(30, 58, 98, 0.95);
     -fx-background-radius: 12;

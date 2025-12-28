@@ -15,14 +15,13 @@
     <HBox styleClass="nav-bar">
         <HBox alignment="CENTER_LEFT" spacing="8">
             <!-- TODO: Add ship icon/logo here -->
-            <Label text="⚓" style="-fx-font-size: 28px;"/>
+            <Label text="⚓" style="-fx-font-size: 28px; -fx-text-fill: white;"/>
             <Label text="ShipVoyage" styleClass="nav-title" style="-fx-text-fill: white;"/>
         </HBox>
         <Region HBox.hgrow="ALWAYS"/>
         <HBox spacing="20" alignment="CENTER">
             <Button text="Home" styleClass="nav-button" onAction="#onHomeClick"/>
             <Button text="My Trips" styleClass="nav-button" onAction="#onBookingsClick"/>
-            <Button text="Bookings" styleClass="nav-button" onAction="#onBookingsClick"/>
             <Button text="Support" styleClass="nav-button"/>
             <MenuButton text="👤 John Carter" styleClass="nav-user-menu">
                 <items>
@@ -36,8 +35,8 @@
     </HBox>
 
     <!-- Hero Section with Search -->
-    <VBox styleClass="hero-section" alignment="CENTER">
-        <VBox styleClass="search-container" alignment="CENTER" spacing="12">
+    <VBox fx:id="heroSection" styleClass="hero-section" alignment="CENTER">
+        <VBox styleClass="search-container" alignment="CENTER" spacing="12" maxWidth="720">
             <GridPane hgap="12" vgap="8" alignment="CENTER">
                 <columnConstraints>
                     <ColumnConstraints minWidth="160" prefWidth="180"/>
@@ -67,11 +66,11 @@
         <VBox spacing="16" fx:id="resultsBox" styleClass="results-stack" maxWidth="1100" visible="false" managed="false" style="-fx-padding: 30 0 0 0;">
             <!-- Navigation arrows and tour cards container -->
             <HBox alignment="CENTER" spacing="10">
-                <Button fx:id="prevButton" text="◀" style="-fx-font-size: 18; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-padding: 10 15; -fx-border-radius: 5;" visible="false"/>
+                <Button fx:id="prevButton" text="◀" style="-fx-font-size: 18; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-padding: 10 15; -fx-border-radius: 5;" visible="false" managed="false"/>
                 <HBox spacing="20" fx:id="tourCardsContainer" alignment="TOP_LEFT" prefWidth="1080">
                     <!-- Tour cards will be dynamically added here -->
                 </HBox>
-                <Button fx:id="nextButton" text="▶" style="-fx-font-size: 18; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-padding: 10 15; -fx-border-radius: 5;" visible="false"/>
+                <Button fx:id="nextButton" text="▶" style="-fx-font-size: 18; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-padding: 10 15; -fx-border-radius: 5;" visible="false" managed="false"/>
             </HBox>
         </VBox>
     </VBox>

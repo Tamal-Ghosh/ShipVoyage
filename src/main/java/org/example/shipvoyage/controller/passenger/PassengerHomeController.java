@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
@@ -34,6 +35,9 @@ public class PassengerHomeController {
 
     @FXML
     private VBox mainContainer;
+
+    @FXML
+    private VBox heroSection;
 
     @FXML
     private TextField fromField;
@@ -67,6 +71,7 @@ public class PassengerHomeController {
     private List<TourInstance> allTourInstances = new java.util.ArrayList<>();
     private int currentPage = 0;
     private static final int TOURS_PER_PAGE = 4;
+    private java.util.List<Node> homeContentBackup;
 
     @FXML
     public void initialize() {
@@ -74,6 +79,8 @@ public class PassengerHomeController {
         setupAutoComplete(fromField, fromSuggestions);
         setupAutoComplete(toField, toSuggestions);
         searchButton.setOnAction(e -> searchTours());
+        // Backup original center content to restore on Home
+        homeContentBackup = new java.util.ArrayList<>(centerVBox.getChildren());
         
         // Setup navigation buttons
         if (prevButton != null) {
@@ -147,14 +154,16 @@ public class PassengerHomeController {
         tourCardsContainer.getChildren().clear();
         final LocalDate finalSelectedDate = selectedDate;
 
-        allTourInstances = TourInstanceDAO.getAllTourInstances().stream()
+        allTourInstances = new java.util.ArrayList<>(
+            TourInstanceDAO.getAllTourInstances().stream()
                 .filter(t -> {
                     var tour = TourDAO.getTourById(t.getTourId());
                     return tour != null &&
                             tour.getFrom().equalsIgnoreCase(finalFrom) &&
                             tour.getTo().equalsIgnoreCase(finalTo) &&
                             !t.getStartDate().isBefore(finalSelectedDate);
-                }).toList();
+            }).toList()
+        );
 
         if (allTourInstances.isEmpty()) {
             Label noToursLabel = new Label("No upcoming tours found for this route.");
@@ -192,9 +201,13 @@ public class PassengerHomeController {
             }
         }
         
-        // Update navigation buttons visibility
-        prevButton.setVisible(currentPage > 0);
-        nextButton.setVisible(endIndex < allTourInstances.size());
+        // Update navigation buttons visibility + layout participation
+        boolean hasPrev = currentPage > 0;
+        boolean hasNext = endIndex < allTourInstances.size();
+        prevButton.setVisible(hasPrev);
+        nextButton.setVisible(hasNext);
+        prevButton.setManaged(hasPrev);
+        nextButton.setManaged(hasNext);
     }
 
     private void showPreviousPage() {
@@ -214,7 +227,7 @@ public class PassengerHomeController {
 
     private VBox createTourCard(org.example.shipvoyage.model.Tour tour, TourInstance instance, org.example.shipvoyage.model.Ship ship) {
         VBox card = new VBox();
-        card.setStyle("-fx-border-color: #DDD; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: white; -fx-spacing: 8;");
+        card.setStyle("-fx-border-color: #E5E7EB; -fx-border-width: 1; -fx-border-radius: 16; -fx-background-radius: 16; -fx-padding: 16; -fx-background-color: white; -fx-spacing: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);");
         card.setPrefWidth(280);
         
         Label tourName = new Label(tour.getTourName());
@@ -288,23 +301,43 @@ public class PassengerHomeController {
         toField.clear();
         datePicker.setValue(null);
         tourCardsContainer.getChildren().clear();
-        allTourInstances.clear();
+        allTourInstances = new java.util.ArrayList<>();
         currentPage = 0;
+        // Hide results and arrows fully
         resultsBox.setVisible(false);
         resultsBox.setManaged(false);
+        // Also hide and clear the inner containers to avoid lingering UI
+        tourCardsContainer.getChildren().clear();
+        tourCardsContainer.setVisible(false);
+        tourCardsContainer.setManaged(false);
         prevButton.setVisible(false);
+        prevButton.setManaged(false);
         nextButton.setVisible(false);
+        nextButton.setManaged(false);
+        // Restore hero/search section and the original center content
+        if (heroSection != null) {
+            heroSection.setVisible(true);
+            heroSection.setManaged(true);
+        }
+        if (homeContentBackup != null) {
+            centerVBox.getChildren().setAll(homeContentBackup);
+        }
     }
 
     @FXML
     private void onBookingsClick() throws IOException {
-        // TODO: Navigate to bookings page or show in dialog
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/show-passenger-booking.fxml"));
-        Stage stage = new Stage();
-        stage.setTitle("My Bookings");
-        stage.setScene(new javafx.scene.Scene(loader.load()));
-        ShowBookingController controller = loader.getController();
-        controller.setPassengerId(Session.loggedInUser.getUserID());
-        stage.show();
+        Parent bookingsView = loader.load();
+        // Hide hero/search section; show trips starting under nav bar
+        if (heroSection != null) {
+            heroSection.setVisible(false);
+            heroSection.setManaged(false);
+        }
+        // Inject bookings view into the main content area
+        centerVBox.getChildren().setAll(bookingsView);
+        try {
+            ShowBookingController controller = loader.getController();
+            controller.setPassengerId(Session.loggedInUser.getUserID());
+        } catch (Exception ignored) { }
     }
 }
