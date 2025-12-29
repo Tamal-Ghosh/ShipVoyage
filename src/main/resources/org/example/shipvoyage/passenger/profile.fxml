@@ -5,19 +5,22 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/25"
+<ScrollPane xmlns="http://javafx.com/javafx/25"
   xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="org.example.shipvoyage.controller.passenger.ProfileController"
   stylesheets="@../style.css"
-  styleClass="mytrips-section"
-  spacing="30"
-  alignment="TOP_CENTER">
+  fitToWidth="true"
+  style="-fx-background: transparent; -fx-control-inner-background: transparent;">
     
-    <padding>
-        <Insets top="40" right="40" bottom="40" left="40"/>
-    </padding>
+    <VBox styleClass="mytrips-section"
+      spacing="30"
+      alignment="TOP_CENTER">
+        
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
 
-    <VBox styleClass="booking-container" spacing="30" maxWidth="600" alignment="TOP_CENTER">
+        <VBox styleClass="booking-container" spacing="30" maxWidth="600" alignment="TOP_CENTER">
         
         <Label text="My Profile" styleClass="booking-title" alignment="CENTER"/>
 
@@ -94,8 +97,8 @@
                     styleClass="secondary-button" prefWidth="140"/>
             <Button fx:id="saveButton" text="Save Changes" onAction="#onSaveProfile" 
                     styleClass="primary-button" prefWidth="140"/>
-        </HBox>
+        </VBox>
 
     </VBox>
 
-</VBox>
+</ScrollPane>

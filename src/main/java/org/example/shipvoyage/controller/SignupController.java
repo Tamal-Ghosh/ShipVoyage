@@ -43,7 +43,20 @@ public class SignupController {
 
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || role.isEmpty() || phone.isEmpty()) {
-            System.out.println("Missing Information");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Missing Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all fields.");
+            alert.showAndWait();
+            return;
+        }
+
+        if (password.length() < 6) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Password");
+            alert.setHeaderText(null);
+            alert.setContentText("Password must be at least 6 characters long.");
+            alert.showAndWait();
             return;
         }
 

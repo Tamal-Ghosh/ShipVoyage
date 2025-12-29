@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/25"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="org.example.shipvoyage.controller.admin.AdminProfileController"
+  stylesheets="@../style.css"
+  fitToWidth="true"
+  style="-fx-background: transparent; -fx-control-inner-background: transparent;">
+    
+    <VBox styleClass="mytrips-section"
+      spacing="30"
+      alignment="TOP_CENTER">
+        
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <VBox styleClass="booking-container" spacing="30" maxWidth="600" alignment="TOP_CENTER">
+            
+            <Label text="Admin Profile" styleClass="booking-title" alignment="CENTER"/>
+
+            <VBox spacing="16" alignment="CENTER">
+              <StackPane prefWidth="140" prefHeight="140">
+                <ImageView fx:id="profileImageView" fitHeight="140" fitWidth="140" preserveRatio="true" smooth="true">
+                  <clip>
+                    <javafx.scene.shape.Circle radius="70" centerX="70" centerY="70" />
+                  </clip>
+                </ImageView>
+                <Label fx:id="avatarPlaceholder" text="👤" style="-fx-font-size: 48px; -fx-text-fill: #9CA3AF;"/>
+              </StackPane>
+              <Button fx:id="changePhotoButton" text="Change Photo" onAction="#onChangeImage"
+                  styleClass="ghost-button" prefWidth="140" visible="false" managed="false"/>
+            </VBox>
+
+            <Separator/>
+
+            <GridPane hgap="20" vgap="20">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="35"/>
+                    <ColumnConstraints percentWidth="65"/>
+                </columnConstraints>
+
+                <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                       style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                          styleClass="text-field" promptText="Enter username"/>
+
+                <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                       style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                          styleClass="text-field" promptText="Enter email"/>
+
+                <Label text="Phone" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                       style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                          styleClass="text-field" promptText="Enter mobile number"/>
+            </GridPane>
+
+            <Separator/>
+
+            <VBox spacing="12" alignment="CENTER_LEFT" maxWidth="480">
+              <Label text="Change Password" styleClass="booking-title"/>
+              <GridPane hgap="16" vgap="14">
+                <columnConstraints>
+                  <ColumnConstraints percentWidth="40"/>
+                  <ColumnConstraints percentWidth="60"/>
+                </columnConstraints>
+                <Label text="Current Password" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                <PasswordField fx:id="currentPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="0" promptText="Enter current password" styleClass="password-field"/>
+
+                <Label text="New Password" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                <PasswordField fx:id="newPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Enter new password" styleClass="password-field"/>
+
+                <Label text="Confirm New Password" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+                <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="Re-enter new password" styleClass="password-field"/>
+              </GridPane>
+              <Button fx:id="changePasswordButton" text="Change Password" onAction="#onChangePassword" styleClass="primary-button" prefWidth="200"/>
+            </VBox>
+
+            <HBox spacing="12" alignment="CENTER">
+                <Button fx:id="editButton" text="Edit Profile" onAction="#onEditProfile" 
+                        styleClass="secondary-button" prefWidth="140"/>
+                <Button fx:id="saveButton" text="Save Changes" onAction="#onSaveProfile" 
+                        styleClass="primary-button" prefWidth="140"/>
+            </HBox>
+
+        </VBox>
+
+    </VBox>
+
+</ScrollPane>

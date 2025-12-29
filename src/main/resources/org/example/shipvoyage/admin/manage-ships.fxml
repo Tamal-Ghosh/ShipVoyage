@@ -14,24 +14,27 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.shipvoyage.controller.admin.ManageShipsController">
-
-    <top>
-        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Manage Ships" BorderPane.alignment="CENTER" />
-    </top>
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.shipvoyage.controller.admin.ManageShipsController" stylesheets="@../style.css">
 
     <center>
-        <VBox spacing="15">
+        <VBox spacing="15" styleClass="mytrips-section">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <TableView fx:id="shipTable" VBox.vgrow="ALWAYS">
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;" text="Manage Ships"/>
+
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <TextField promptText="Search by name" prefWidth="240"/>
+                <Button text="Search" styleClass="search-button"/>
+            </HBox>
+
+            <TableView fx:id="shipTable" VBox.vgrow="ALWAYS" style="-fx-text-fill: black;">
                 <columns>
-                    <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
-                    <TableColumn fx:id="nameColumn" prefWidth="200" text="Ship Name" />
-                    <TableColumn fx:id="capacityColumn" prefWidth="100" text="Capacity" />
-                    <TableColumn fx:id="actionsColumn" prefWidth="150" text="Actions" />
+                    <TableColumn fx:id="idColumn" prefWidth="50" text="ID" style="-fx-text-fill: black;" />
+                    <TableColumn fx:id="nameColumn" prefWidth="200" text="Ship Name" style="-fx-text-fill: black;" />
+                    <TableColumn fx:id="capacityColumn" prefWidth="100" text="Capacity" style="-fx-text-fill: black;" />
+                    <TableColumn fx:id="actionsColumn" prefWidth="150" text="Actions" style="-fx-text-fill: black;" />
                 </columns>
             </TableView>
         </VBox>

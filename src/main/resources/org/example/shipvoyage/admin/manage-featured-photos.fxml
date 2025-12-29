@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.shipvoyage.controller.admin.FeaturedPhotosController"
+      stylesheets="@../style.css" styleClass="mytrips-section" spacing="20">
+    <padding><Insets top="20" left="20" right="20" bottom="20"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Label text="Featured Images" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Add New" onAction="#onNew" style="-fx-background-color:#2563EB; -fx-text-fill:white;"/>
+    </HBox>
+
+    <HBox spacing="20">
+        <VBox spacing="10" prefWidth="360" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #E5E7EB; -fx-padding: 14;">
+            <Label text="Edit / Create" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+            <ImageView fx:id="preview" fitWidth="320" fitHeight="180" preserveRatio="true"/>
+            <HBox spacing="8">
+                <TextField fx:id="imagePathField" promptText="Image path (file)" HBox.hgrow="ALWAYS"/>
+                <Button text="Browse" onAction="#onBrowse"/>
+            </HBox>
+            <TextField fx:id="titleField" promptText="Title"/>
+            <TextArea fx:id="descField" promptText="Subtitle / Description" prefRowCount="3"/>
+            <HBox spacing="10">
+                <Button text="Save" onAction="#onSave" style="-fx-background-color:#10B981; -fx-text-fill:white;"/>
+                <Button text="Reset" onAction="#onReset"/>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="12" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #E5E7EB; -fx-padding: 14;">
+            <Label text="Featured Slots (6)" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+            <GridPane fx:id="tilesPane" hgap="16" vgap="16">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33"/>
+                    <ColumnConstraints percentWidth="33"/>
+                    <ColumnConstraints percentWidth="34"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                </rowConstraints>
+            </GridPane>
+        </VBox>
+    </HBox>
+</VBox>

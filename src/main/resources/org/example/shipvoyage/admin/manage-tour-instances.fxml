@@ -4,26 +4,29 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.shipvoyage.controller.admin.ManageTourInstancesController">
-
-    <top>
-        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Manage Tour Instances" BorderPane.alignment="CENTER" />
-    </top>
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.shipvoyage.controller.admin.ManageTourInstancesController" stylesheets="@../style.css">
 
     <center>
-        <VBox spacing="15">
+        <VBox spacing="15" styleClass="mytrips-section">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <TableView fx:id="instanceTable" VBox.vgrow="ALWAYS">
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;" text="Manage Tour Instances"/>
+
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <TextField promptText="Search by tour or date" prefWidth="280"/>
+                <Button text="Search" styleClass="search-button"/>
+            </HBox>
+
+            <TableView fx:id="instanceTable" VBox.vgrow="ALWAYS" style="-fx-text-fill: black;">
                 <columns>
-                    <TableColumn fx:id="idColumn" prefWidth="60" text="ID" />
-                    <TableColumn fx:id="tourIdColumn" prefWidth="200" text="Tour" />
-                    <TableColumn fx:id="shipIdColumn" prefWidth="200" text="Ship" />
-                    <TableColumn fx:id="startDateColumn" prefWidth="150" text="Start Date" />
-                    <TableColumn fx:id="endDateColumn" prefWidth="150" text="End Date" />
-                    <TableColumn fx:id="actionColumn" prefWidth="160" text="Actions" />
+                    <TableColumn fx:id="idColumn" prefWidth="60" text="ID" style="-fx-text-fill: black;" />
+                    <TableColumn fx:id="tourIdColumn" prefWidth="200" text="Tour" style="-fx-text-fill: black;" />
+                    <TableColumn fx:id="shipIdColumn" prefWidth="200" text="Ship" style="-fx-text-fill: black;" />
+                    <TableColumn fx:id="startDateColumn" prefWidth="150" text="Start Date" style="-fx-text-fill: black;" />
+                    <TableColumn fx:id="endDateColumn" prefWidth="150" text="End Date" style="-fx-text-fill: black;" />
+                    <TableColumn fx:id="actionColumn" prefWidth="160" text="Actions" style="-fx-text-fill: black;" />
                 </columns>
             </TableView>
         </VBox>

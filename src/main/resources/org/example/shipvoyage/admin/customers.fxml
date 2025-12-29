@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.shipvoyage.controller.admin.CustomerListController"
+      stylesheets="@../style.css" styleClass="mytrips-section" spacing="16">
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="Customers" styleClass="section-title" style="-fx-text-fill: white;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="instanceCombo" promptText="Filter by tour instance" prefWidth="240"/>
+        <TextField fx:id="searchField" promptText="Search by name or mobile" prefWidth="240"/>
+        <Button text="Search" onAction="#onSearch" styleClass="search-button"/>
+    </HBox>
+
+    <TableView fx:id="customersTable" prefHeight="500" style="-fx-background-radius: 12; -fx-text-fill: black;">
+        <columns>
+            <TableColumn fx:id="colName" text="Name" prefWidth="180" style="-fx-text-fill: black;"/>
+            <TableColumn fx:id="colEmail" text="Email" prefWidth="200" style="-fx-text-fill: black;"/>
+            <TableColumn fx:id="colPhone" text="Mobile" prefWidth="140" style="-fx-text-fill: black;"/>
+            <TableColumn fx:id="colInstance" text="Tour Instance" prefWidth="220" style="-fx-text-fill: black;"/>
+            <TableColumn fx:id="colPayment" text="Payment" prefWidth="120" style="-fx-text-fill: black;"/>
+            <TableColumn fx:id="colActions" text="Actions" prefWidth="180" style="-fx-text-fill: black;"/>
+        </columns>
+    </TableView>
+
+</VBox>

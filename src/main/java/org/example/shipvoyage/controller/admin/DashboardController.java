@@ -1,13 +1,13 @@
 package org.example.shipvoyage.controller.admin;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-
-import java.io.IOException;
 
 public class DashboardController {
 
@@ -24,7 +24,16 @@ public class DashboardController {
     private Label lblTourInstances;
 
     @FXML
-    private Label lblTotalRooms;
+    private Label lblUpcomingTours;
+
+    @FXML
+    private Label lblCurrentTours;
+
+    @FXML
+    private Label lblTotalBookings;
+
+    @FXML
+    private Label lblTotalCustomers;
 
     private Node dashboardCenter;
 
@@ -39,8 +48,25 @@ public class DashboardController {
         lblTotalShips.setText(String.valueOf(org.example.shipvoyage.dao.DashboardDAO.getCount("ships")));
         lblTotalTours.setText(String.valueOf(org.example.shipvoyage.dao.DashboardDAO.getCount("tours")));
         lblTourInstances.setText(String.valueOf(org.example.shipvoyage.dao.DashboardDAO.getCount("tour_instances")));
-        lblTotalRooms.setText(String.valueOf(org.example.shipvoyage.dao.DashboardDAO.getCount("rooms")));
+        java.time.LocalDate today = java.time.LocalDate.now();
+        int upcoming = org.example.shipvoyage.dao.TourInstanceDAO.getAllTourInstances().stream()
+            .map(org.example.shipvoyage.model.TourInstance::getStartDate)
+            .filter(d -> d.isAfter(today))
+            .toList().size();
+        int current = org.example.shipvoyage.dao.TourInstanceDAO.getAllTourInstances().stream()
+            .filter(ti -> !ti.getStartDate().isAfter(today) && !ti.getEndDate().isBefore(today))
+            .toList().size();
+        if (lblUpcomingTours != null) lblUpcomingTours.setText(String.valueOf(upcoming));
+        if (lblCurrentTours != null) lblCurrentTours.setText(String.valueOf(current));
+
+        if (lblTotalBookings != null) lblTotalBookings.setText(String.valueOf(org.example.shipvoyage.dao.DashboardDAO.getCount("bookings")));
+        if (lblTotalCustomers != null) lblTotalCustomers.setText(String.valueOf(org.example.shipvoyage.dao.DashboardDAO.getPassengerCount()));
     }
+
+        @FXML
+        void onManageCustomersClick(ActionEvent event) throws IOException {
+        loadCenter("/org/example/shipvoyage/admin/customers.fxml");
+        }
 
     @FXML
     void onDashboardClick(ActionEvent event) {
@@ -71,6 +97,16 @@ public class DashboardController {
     @FXML
     void onViewBookingsClick(ActionEvent event) throws IOException {
         loadCenter("/org/example/shipvoyage/admin/view-bookings.fxml");
+    }
+
+    @FXML
+    void onManageFeaturedClick(ActionEvent event) throws IOException {
+        loadCenter("/org/example/shipvoyage/admin/manage-featured-photos.fxml");
+    }
+
+    @FXML
+    void onAdminProfileClick(ActionEvent event) throws IOException {
+        loadCenter("/org/example/shipvoyage/admin/admin-profile.fxml");
     }
 
     private void loadCenter(String fxml) throws IOException {

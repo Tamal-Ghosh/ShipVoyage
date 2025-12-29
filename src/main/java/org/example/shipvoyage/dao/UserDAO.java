@@ -11,6 +11,29 @@ import org.example.shipvoyage.util.DBConnection;
 
 public class UserDAO {
 
+    public static java.util.List<org.example.shipvoyage.model.User> getAllPassengers() {
+        java.util.List<org.example.shipvoyage.model.User> users = new java.util.ArrayList<>();
+        String sql = "SELECT userID, username, password, email, role, phone_number FROM users WHERE LOWER(role)='passenger'";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                org.example.shipvoyage.model.User u = new org.example.shipvoyage.model.User(
+                        rs.getInt("userID"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("role")
+                );
+                try { u.setPhoneNumber(rs.getString("phone_number")); } catch (Exception ignored) {}
+                users.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
     public static void createUserTable() {
         String sql = "CREATE TABLE IF NOT EXISTS users (" +
                 "userID INTEGER PRIMARY KEY AUTOINCREMENT," +
