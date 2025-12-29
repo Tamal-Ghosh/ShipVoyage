@@ -31,10 +31,38 @@ public class LoginController {
     private PasswordField passwordField;
 
     @FXML
+    private TextField passwordTextField;
+
+    @FXML
+    private Button togglePasswordBtn;
+
+    @FXML
     private Hyperlink regHyperlink;
 
     @FXML
     private TextField usernameField;
+
+    private boolean passwordVisible = false;
+
+    @FXML
+    void togglePasswordVisibility(ActionEvent event) {
+        passwordVisible = !passwordVisible;
+        if (passwordVisible) {
+            passwordTextField.setText(passwordField.getText());
+            passwordTextField.setVisible(true);
+            passwordTextField.setManaged(true);
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+            togglePasswordBtn.setText("🙈");
+        } else {
+            passwordField.setText(passwordTextField.getText());
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+            passwordTextField.setVisible(false);
+            passwordTextField.setManaged(false);
+            togglePasswordBtn.setText("👁");
+        }
+    }
 
     public void setRole(String role) {
         this.role = role;
@@ -58,7 +86,7 @@ public class LoginController {
     @FXML
     void onLogin(ActionEvent event) throws IOException {
         String username = usernameField.getText();
-        String password = passwordField.getText();
+        String password = passwordVisible ? passwordTextField.getText() : passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
             System.out.println("Missing username or password");

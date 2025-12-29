@@ -17,8 +17,8 @@
             <Label text="View Bookings"
                    style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
 
-            <HBox spacing="10">
-                <Label text="Tour Instance"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Tour Instance" style="-fx-text-fill: white; -fx-font-weight: 600;"/>
                 <ComboBox fx:id="tourInstanceComboBox" HBox.hgrow="ALWAYS"/>
             </HBox>
 
