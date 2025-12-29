@@ -55,7 +55,6 @@
     </GridPane>
 
     <HBox spacing="12" alignment="CENTER_RIGHT">
-        <Button text="View Details" styleClass="ghost-button" prefWidth="120"/>
         <Button fx:id="cancelButton" text="Cancel Booking" styleClass="ghost-button" 
                 prefWidth="140" style="-fx-text-fill: #DC2626; -fx-border-color: #FCA5A5;"/>
     </HBox>

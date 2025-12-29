@@ -9,7 +9,9 @@
     stylesheets="@../style.css"
     styleClass="mytrips-section"
     alignment="CENTER"
-    spacing="30">
+    spacing="30"
+    minHeight="700"
+    prefHeight="700">
     
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>

@@ -114,7 +114,7 @@
                 <VBox styleClass="trips-sidebar" spacing="20">
                     <Label text="Upcoming Trips" styleClass="section-title" style="-fx-font-size: 22px;"/>
                     <VBox fx:id="upcomingContainer" spacing="12"/>
-                    <Hyperlink text="View All >" styleClass="view-all-link" alignment="CENTER"/>
+                    <Hyperlink text="View All >" styleClass="view-all-link" alignment="CENTER" onAction="#onViewAllUpcoming"/>
                 </VBox>
             </HBox>
         </VBox>

@@ -1,4 +1,4 @@
-  <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
@@ -7,42 +7,51 @@
 <VBox xmlns="http://javafx.com/javafx/25"
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="org.example.shipvoyage.controller.passenger.SupportController"
-    spacing="24"
-    alignment="TOP_CENTER"
-    styleClass="app-container support-page"
-    stylesheets="@../style.css">
+       spacing="30"
+       alignment="TOP_CENTER"
+       styleClass="mytrips-section"
+       stylesheets="@../style.css"
+       minHeight="700"
+       prefHeight="700">
 
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>
     </padding>
 
-    <VBox spacing="8" alignment="CENTER" styleClass="support-hero">
-        <Label text="Support" styleClass="section-title support-title" />
-        <Label text="We're here to help with your bookings." styleClass="support-subtitle" />
-    </VBox>
+    <VBox styleClass="booking-container" spacing="24" maxWidth="600" alignment="TOP_CENTER">
+        <Label text="Support" styleClass="booking-title" alignment="CENTER"/>
+        <Label text="We're here to help with your bookings." style="-fx-text-fill: #6B7280; -fx-font-size: 14px;" alignment="CENTER"/>
 
-    <VBox spacing="16" maxWidth="640" styleClass="booking-container support-card">
-        <Label text="Contact Information" styleClass="booking-title support-heading" />
+        <Separator/>
 
-        <VBox spacing="8">
-            <Label text="Phone" styleClass="support-label" />
-            <Label text="+880-1234-567890" styleClass="support-value" />
-        </VBox>
+        <GridPane hgap="20" vgap="20">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="30"/>
+                <ColumnConstraints percentWidth="70"/>
+            </columnConstraints>
 
-        <VBox spacing="8">
-            <Label text="Email" styleClass="support-label" />
-            <Label text="support@shipvoyage.com" styleClass="support-value" />
-        </VBox>
+            <Label text="Phone" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                   style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <Label text="+880-1234-567890" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                   style="-fx-text-fill: #6B7280;"/>
 
-        <VBox spacing="8">
-            <Label text="Hours" styleClass="support-label" />
-            <Label text="24/7 for urgent travel issues; 09:00-18:00 local time for general inquiries." styleClass="support-value" wrapText="true" />
-        </VBox>
+            <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                   style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <Label text="support@shipvoyage.com" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                   style="-fx-text-fill: #6B7280;"/>
 
-        <VBox spacing="8">
-            <Label text="FAQ" styleClass="support-label" />
-            <Label text="Visit our FAQ in the app to find quick answers on payments, bookings, and cancellations." wrapText="true" styleClass="support-value" />
-        </VBox>
+            <Label text="Hours" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                   style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <Label text="24/7 for urgent travel issues; 09:00-18:00 local time for general inquiries." 
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"
+                   style="-fx-text-fill: #6B7280;" wrapText="true"/>
+
+            <Label text="FAQ" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                   style="-fx-font-weight: 600; -fx-text-fill: #374151;"/>
+            <Label text="Visit our FAQ in the app to find quick answers on payments, bookings, and cancellations." 
+                   GridPane.columnIndex="1" GridPane.rowIndex="3"
+                   style="-fx-text-fill: #6B7280;" wrapText="true"/>
+        </GridPane>
     </VBox>
 
 </VBox>
