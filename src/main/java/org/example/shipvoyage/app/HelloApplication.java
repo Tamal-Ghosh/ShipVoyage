@@ -1,16 +1,13 @@
 package org.example.shipvoyage.app;
 
+import java.io.IOException;
+
+import static org.example.shipvoyage.util.DBConnection.createAllTables;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.example.shipvoyage.dao.ShipDAO;
-import org.example.shipvoyage.dao.UserDAO;
-import org.example.shipvoyage.util.DBConnection;
-
-import java.io.IOException;
-
-import static org.example.shipvoyage.util.DBConnection.createAllTables;
 
 public class HelloApplication extends Application {
     @Override

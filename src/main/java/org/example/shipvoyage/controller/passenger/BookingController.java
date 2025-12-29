@@ -12,7 +12,6 @@ import org.example.shipvoyage.model.Booking;
 import org.example.shipvoyage.model.Room;
 import org.example.shipvoyage.model.TourInstance;
 import org.example.shipvoyage.model.User;
-import static org.example.shipvoyage.util.AlertUtil.showInfo;
 import static org.example.shipvoyage.util.AlertUtil.showWarning;
 
 import javafx.fxml.FXML;
@@ -56,12 +55,9 @@ public class BookingController {
 
     @FXML
     public void initialize() {
-        // Setup ToggleGroup correctly
         paymentToggleGroup = new ToggleGroup();
         visaRadio.setToggleGroup(paymentToggleGroup);
         bkashRadio.setToggleGroup(paymentToggleGroup);
-
-        // Optional: select default payment
         visaRadio.setSelected(true);
     }
 
@@ -144,42 +140,28 @@ public class BookingController {
             roomIds,
             roomNumbers,
             totalAmount,
-            "Pending Payment",
+            "Confirmed",
             selectedPaymentMethod,
-            "Unpaid"
+            "Paid"
         );
 
-        boolean success = BookingDAO.addBooking(booking);
-
-        if (success) {
-            showInfo("Reservation created. Ticket will be confirmed after payment.");
-            selectedRooms.forEach(r -> {
-                roomButtons.get(r).setDisable(true);
-                roomButtons.get(r).setSelected(false);
-            });
-            totalAmount = 0;
-            totalLabel.setText("Total: ৳0");
-
-            try {
-                FXMLLoader loader;
-                if ("Visa".equals(selectedPaymentMethod)) {
-                    loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/visa-payment.fxml"));
-                } else {
-                    loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/bkash-payment.fxml"));
-                }
-                Scene scene = new Scene(loader.load());
-                Stage stage = (Stage) mainVBox.getScene().getWindow();
-                stage.setTitle(selectedPaymentMethod + " Payment");
-                stage.setScene(scene);
-                PaymentController controller = loader.getController();
-                controller.setBooking(booking);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            FXMLLoader loader;
+            if ("Visa".equals(selectedPaymentMethod)) {
+                loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/visa-payment.fxml"));
+            } else {
+                loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/bkash-payment.fxml"));
             }
-
-        } else {
-            showWarning("Some rooms could not be booked. They may already be taken.");
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) mainVBox.getScene().getWindow();
+            stage.setTitle(selectedPaymentMethod + " Payment");
+            stage.setScene(scene);
+            PaymentController controller = loader.getController();
+            controller.setBooking(booking);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showWarning("Could not open payment page.");
         }
     }
 

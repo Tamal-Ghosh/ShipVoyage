@@ -1,15 +1,21 @@
 package org.example.shipvoyage.controller.admin;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.shipvoyage.dao.BookingDAO;
 import org.example.shipvoyage.dao.TourDAO;
 import org.example.shipvoyage.dao.TourInstanceDAO;
 import org.example.shipvoyage.model.Booking;
 import org.example.shipvoyage.model.TourInstance;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ViewBookingsController {
 
@@ -27,6 +33,9 @@ public class ViewBookingsController {
 
     @FXML
     private TableColumn<Booking, String> emailColumn;
+
+    @FXML
+    private TableColumn<Booking, String> phoneColumn;
 
     @FXML
     private TableColumn<Booking, String> roomColumn;
@@ -47,6 +56,7 @@ public class ViewBookingsController {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("passengerName"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("passengerEmail"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("passengerPhone"));
         roomColumn.setCellValueFactory(new PropertyValueFactory<>("roomNumbersAsString"));
         totalPaymentColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("paymentStatus"));

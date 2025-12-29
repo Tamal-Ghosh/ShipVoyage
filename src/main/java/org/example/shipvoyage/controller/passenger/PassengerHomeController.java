@@ -2,6 +2,9 @@ package org.example.shipvoyage.controller.passenger;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +29,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -70,11 +74,20 @@ public class PassengerHomeController {
     @FXML
     private MenuButton userMenuButton;
 
+    @FXML
+    private ScrollPane contentScroll;
+
+    @FXML
+    private VBox upcomingContainer;
+
 
     private ObservableList<String> fromSuggestions;
     private ObservableList<String> toSuggestions;
     private List<TourInstance> allTourInstances = new java.util.ArrayList<>();
+    private List<TourInstance> upcomingInstances = new java.util.ArrayList<>();
     private int currentPage = 0;
+    private int upcomingIndex = 0;
+    private Timeline upcomingTimeline;
     private static final int TOURS_PER_PAGE = 4;
     private java.util.List<Node> homeContentBackup;
 
@@ -84,22 +97,20 @@ public class PassengerHomeController {
         setupAutoComplete(fromField, fromSuggestions);
         setupAutoComplete(toField, toSuggestions);
         searchButton.setOnAction(e -> searchTours());
-        // Backup original center content to restore on Home
         homeContentBackup = new java.util.ArrayList<>(centerVBox.getChildren());
-        // Set username in nav menu dynamically
         if (userMenuButton != null && Session.loggedInUser != null) {
             String name = Session.loggedInUser.getUsername();
             if (name == null || name.isBlank()) name = "User";
             userMenuButton.setText("👤 " + name);
         }
-        
-        // Setup navigation buttons
         if (prevButton != null) {
             prevButton.setOnAction(e -> showPreviousPage());
         }
         if (nextButton != null) {
             nextButton.setOnAction(e -> showNextPage());
         }
+
+        loadUpcomingTrips();
     }
 
     private void setupAutoComplete(TextField field, ObservableList<String> suggestions) {
@@ -190,13 +201,15 @@ public class PassengerHomeController {
         currentPage = 0;
         displayCurrentPage();
         
-        // Show results section
         resultsBox.setVisible(true);
         resultsBox.setManaged(true);
     }
 
     private void displayCurrentPage() {
         tourCardsContainer.getChildren().clear();
+        
+        tourCardsContainer.setVisible(true);
+        tourCardsContainer.setManaged(true);
         
         int startIndex = currentPage * TOURS_PER_PAGE;
         int endIndex = Math.min(startIndex + TOURS_PER_PAGE, allTourInstances.size());
@@ -212,13 +225,87 @@ public class PassengerHomeController {
             }
         }
         
-        // Update navigation buttons visibility + layout participation
         boolean hasPrev = currentPage > 0;
         boolean hasNext = endIndex < allTourInstances.size();
         prevButton.setVisible(hasPrev);
         nextButton.setVisible(hasNext);
         prevButton.setManaged(hasPrev);
         nextButton.setManaged(hasNext);
+    }
+
+    private void loadUpcomingTrips() {
+        if (upcomingContainer == null) return;
+        upcomingContainer.getChildren().clear();
+        LocalDate today = LocalDate.now();
+        upcomingInstances = TourInstanceDAO.getAllTourInstances().stream()
+                .filter(t -> !t.getStartDate().isBefore(today.plusDays(1)))
+                .toList();
+
+        if (upcomingTimeline != null) {
+            upcomingTimeline.stop();
+        }
+
+        if (upcomingInstances.isEmpty()) {
+            Label none = new Label("No upcoming trips found.");
+            none.setStyle("-fx-text-fill: #6B7280; -fx-font-size: 13px;");
+            upcomingContainer.getChildren().add(none);
+            return;
+        }
+
+        upcomingIndex = 0;
+        showUpcomingCard();
+
+        if (upcomingInstances.size() > 1) {
+            upcomingTimeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> advanceUpcoming()));
+            upcomingTimeline.setCycleCount(Timeline.INDEFINITE);
+            upcomingTimeline.play();
+        }
+    }
+
+    private void advanceUpcoming() {
+        if (upcomingInstances.isEmpty()) return;
+        upcomingIndex = (upcomingIndex + 1) % upcomingInstances.size();
+        showUpcomingCard();
+    }
+
+    private void showUpcomingCard() {
+        if (upcomingContainer == null || upcomingInstances.isEmpty()) return;
+        upcomingContainer.getChildren().clear();
+        TourInstance inst = upcomingInstances.get(upcomingIndex);
+        var tour = TourDAO.getTourById(inst.getTourId());
+        var ship = ShipDAO.getShipById(inst.getShipId());
+        if (tour == null || ship == null) {
+            Label none = new Label("Upcoming trip details unavailable.");
+            none.setStyle("-fx-text-fill: #6B7280; -fx-font-size: 13px;");
+            upcomingContainer.getChildren().add(none);
+            return;
+        }
+
+        VBox card = new VBox();
+        card.setSpacing(8);
+        card.getStyleClass().add("trip-card");
+
+        HBox header = new HBox(8);
+        header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        Label title = new Label(tour.getTourName());
+        title.getStyleClass().add("trip-title");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        Label status = new Label("Upcoming");
+        status.getStyleClass().addAll("status-badge", "status-pending");
+        header.getChildren().addAll(title, spacer, status);
+
+        Label route = new Label(tour.getFrom() + " → " + tour.getTo());
+        route.getStyleClass().add("trip-subtitle");
+
+        Label dates = new Label(inst.getStartDate() + " - " + inst.getEndDate());
+        dates.getStyleClass().add("trip-date");
+
+        Label shipLabel = new Label("Ship: " + ship.getShipName());
+        shipLabel.getStyleClass().add("trip-date");
+
+        card.getChildren().addAll(header, route, dates, shipLabel);
+        upcomingContainer.getChildren().add(card);
     }
 
     private void showPreviousPage() {
@@ -298,12 +385,16 @@ public class PassengerHomeController {
 
     @FXML
     private void onProfileClick() throws IOException {
-        // TODO: Navigate to profile page or show in dialog
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/profile.fxml"));
-        Stage stage = new Stage();
-        stage.setTitle("My Profile");
-        stage.setScene(new javafx.scene.Scene(loader.load()));
-        stage.show();
+        Parent profileView = loader.load();
+        if (heroSection != null) {
+            heroSection.setVisible(false);
+            heroSection.setManaged(false);
+        }
+        centerVBox.getChildren().setAll(profileView);
+        if (contentScroll != null) {
+            contentScroll.setStyle("-fx-background-color: transparent;");
+        }
     }
 
     @FXML
@@ -314,10 +405,8 @@ public class PassengerHomeController {
         tourCardsContainer.getChildren().clear();
         allTourInstances = new java.util.ArrayList<>();
         currentPage = 0;
-        // Hide results and arrows fully
         resultsBox.setVisible(false);
         resultsBox.setManaged(false);
-        // Also hide and clear the inner containers to avoid lingering UI
         tourCardsContainer.getChildren().clear();
         tourCardsContainer.setVisible(false);
         tourCardsContainer.setManaged(false);
@@ -325,7 +414,6 @@ public class PassengerHomeController {
         prevButton.setManaged(false);
         nextButton.setVisible(false);
         nextButton.setManaged(false);
-        // Restore hero/search section and the original center content
         if (heroSection != null) {
             heroSection.setVisible(true);
             heroSection.setManaged(true);
@@ -333,22 +421,40 @@ public class PassengerHomeController {
         if (homeContentBackup != null) {
             centerVBox.getChildren().setAll(homeContentBackup);
         }
+        if (contentScroll != null) {
+            contentScroll.setStyle("-fx-background-color: #F5F7FA;");
+        }
     }
 
     @FXML
     private void onBookingsClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/show-passenger-booking.fxml"));
         Parent bookingsView = loader.load();
-        // Hide hero/search section; show trips starting under nav bar
         if (heroSection != null) {
             heroSection.setVisible(false);
             heroSection.setManaged(false);
         }
-        // Inject bookings view into the main content area
         centerVBox.getChildren().setAll(bookingsView);
         try {
             ShowBookingController controller = loader.getController();
             controller.setPassengerId(Session.loggedInUser.getUserID());
         } catch (Exception ignored) { }
+        if (contentScroll != null) {
+            contentScroll.setStyle("-fx-background-color: transparent;");
+        }
+    }
+
+    @FXML
+    private void onSupportClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/shipvoyage/passenger/support.fxml"));
+        Parent supportView = loader.load();
+        if (heroSection != null) {
+            heroSection.setVisible(false);
+            heroSection.setManaged(false);
+        }
+        centerVBox.getChildren().setAll(supportView);
+        if (contentScroll != null) {
+            contentScroll.setStyle("-fx-background-color: transparent;");
+        }
     }
 }

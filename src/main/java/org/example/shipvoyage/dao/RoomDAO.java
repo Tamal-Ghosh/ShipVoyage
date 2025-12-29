@@ -1,11 +1,15 @@
 package org.example.shipvoyage.dao;
 
-import org.example.shipvoyage.model.Room;
-import org.example.shipvoyage.util.DBConnection;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.example.shipvoyage.model.Room;
+import org.example.shipvoyage.util.DBConnection;
 
 public class RoomDAO {
 
@@ -25,7 +29,7 @@ public class RoomDAO {
              Statement stmt = con.createStatement()) {
             stmt.execute("PRAGMA foreign_keys = ON;");
             stmt.execute(sql);
-            addAvailableColumnIfNotExists(); // ensure available column exists
+            addAvailableColumnIfNotExists();
         } catch (SQLException e) {
             e.printStackTrace();
         }

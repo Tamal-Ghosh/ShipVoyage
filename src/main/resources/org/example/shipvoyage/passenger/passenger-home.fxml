@@ -11,10 +11,8 @@
       stylesheets="@../style.css"
       styleClass="app-container">
 
-    <!-- Navigation Bar -->
     <HBox styleClass="nav-bar">
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <!-- TODO: Add ship icon/logo here -->
             <Label text="⚓" style="-fx-font-size: 28px; -fx-text-fill: white;"/>
             <Label text="ShipVoyage" styleClass="nav-title" style="-fx-text-fill: white;"/>
         </HBox>
@@ -22,11 +20,10 @@
         <HBox spacing="20" alignment="CENTER">
             <Button text="Home" styleClass="nav-button" onAction="#onHomeClick"/>
             <Button text="My Trips" styleClass="nav-button" onAction="#onBookingsClick"/>
-            <Button text="Support" styleClass="nav-button"/>
+            <Button text="Support" styleClass="nav-button" onAction="#onSupportClick"/>
             <MenuButton fx:id="userMenuButton" text="👤" styleClass="nav-user-menu">
                 <items>
                     <MenuItem text="Profile" onAction="#onProfileClick"/>
-                    <MenuItem text="Settings"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Logout" onAction="#onLogoutClick"/>
                 </items>
@@ -34,7 +31,6 @@
         </HBox>
     </HBox>
 
-    <!-- Hero Section with Search -->
     <VBox fx:id="heroSection" styleClass="hero-section" alignment="CENTER">
         <VBox styleClass="search-container" alignment="CENTER" spacing="12" maxWidth="720">
             <GridPane hgap="12" vgap="8" alignment="CENTER">
@@ -62,44 +58,34 @@
             <Button fx:id="searchButton" text="Search Cruises" styleClass="search-button" prefWidth="200"/>
         </VBox>
 
-        <!-- Search Results directly below the search bar -->
         <VBox spacing="16" fx:id="resultsBox" styleClass="results-stack" maxWidth="1100" visible="false" managed="false" style="-fx-padding: 30 0 0 0;">
-            <!-- Navigation arrows and tour cards container -->
             <HBox alignment="CENTER" spacing="10">
                 <Button fx:id="prevButton" text="◀" style="-fx-font-size: 18; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-padding: 10 15; -fx-border-radius: 5;" visible="false" managed="false"/>
                 <HBox spacing="20" fx:id="tourCardsContainer" alignment="TOP_LEFT" prefWidth="1080">
-                    <!-- Tour cards will be dynamically added here -->
                 </HBox>
                 <Button fx:id="nextButton" text="▶" style="-fx-font-size: 18; -fx-background-color: #FF6B35; -fx-text-fill: white; -fx-padding: 10 15; -fx-border-radius: 5;" visible="false" managed="false"/>
             </HBox>
         </VBox>
     </VBox>
 
-    <!-- Main Content -->
-    <ScrollPane fitToWidth="true" style="-fx-background-color: #F5F7FA;">
+    <ScrollPane fx:id="contentScroll" fitToWidth="true" style="-fx-background-color: #F5F7FA;">
         <VBox fx:id="centerVBox">
             <HBox styleClass="content-wrapper" spacing="30">
-                <!-- Left: Popular Destinations & Search Results -->
                 <VBox spacing="20" HBox.hgrow="ALWAYS">
-                    <!-- Special Offers Banner -->
                     <HBox styleClass="offers-banner" spacing="40" alignment="CENTER_LEFT">
                         <VBox spacing="12" HBox.hgrow="ALWAYS">
-                            <Label text="Summer Sale!" styleClass="offers-title"/>
-                            <Label text="Up to 30% Off Selected Cruises" styleClass="offers-subtitle"/>
+                            <Label text="Winter  Sale!" styleClass="offers-title"/>
+                            <Label text="Up to 30% Off Selected Tours" styleClass="offers-subtitle"/>
                             <Button text="View Deals" styleClass="offers-button" prefWidth="150"/>
                         </VBox>
-                        <!-- TODO: Add promotional cruise ship image here -->
                         <Label text="🚢" style="-fx-font-size: 120px; -fx-opacity: 0.8;"/>
                     </HBox>
 
-                    <!-- Customer Reviews Section -->
                     <VBox styleClass="reviews-section" spacing="20">
                         <Label text="Customer Reviews" styleClass="reviews-title"/>
                         <HBox spacing="20">
-                            <!-- Review Card 1 -->
                             <VBox styleClass="review-card" spacing="10" HBox.hgrow="ALWAYS">
                                 <HBox spacing="12" alignment="CENTER_LEFT">
-                                    <!-- TODO: Add reviewer avatar image -->
                                     <Region styleClass="reviewer-avatar"/>
                                     <VBox>
                                         <Label text="Sarah M." styleClass="reviewer-name"/>
@@ -110,10 +96,8 @@
                                        styleClass="review-text" wrapText="true"/>
                             </VBox>
 
-                            <!-- Review Card 2 -->
                             <VBox styleClass="review-card" spacing="10" HBox.hgrow="ALWAYS">
                                 <HBox spacing="12" alignment="CENTER_LEFT">
-                                    <!-- TODO: Add reviewer avatar image -->
                                     <Region styleClass="reviewer-avatar"/>
                                     <VBox>
                                         <Label text="Michael R." styleClass="reviewer-name"/>
@@ -127,32 +111,9 @@
                     </VBox>
                 </VBox>
 
-                <!-- Right: Upcoming Trips Sidebar -->
                 <VBox styleClass="trips-sidebar" spacing="20">
                     <Label text="Upcoming Trips" styleClass="section-title" style="-fx-font-size: 22px;"/>
-                    
-                    <!-- Trip Card 1 - Confirmed -->
-                    <VBox styleClass="trip-card">
-                        <HBox alignment="CENTER_LEFT" spacing="8">
-                            <Label text="Greece Getaway" styleClass="trip-title"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="✓ Confirmed" styleClass="status-badge status-confirmed"/>
-                        </HBox>
-                        <Label text="Athens to Santorini" styleClass="trip-subtitle"/>
-                        <Label text="May 15 - May 20, 2022" styleClass="trip-date"/>
-                    </VBox>
-
-                    <!-- Trip Card 2 - Pending -->
-                    <VBox styleClass="trip-card">
-                        <HBox alignment="CENTER_LEFT" spacing="8">
-                            <Label text="Northern Explorer" styleClass="trip-title"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="👤 Pending" styleClass="status-badge status-pending"/>
-                        </HBox>
-                        <Label text="Seattle to Alaska" styleClass="trip-subtitle"/>
-                        <Label text="June 5 - June 12, 2022" styleClass="trip-date"/>
-                    </VBox>
-
+                    <VBox fx:id="upcomingContainer" spacing="12"/>
                     <Hyperlink text="View All >" styleClass="view-all-link" alignment="CENTER"/>
                 </VBox>
             </HBox>

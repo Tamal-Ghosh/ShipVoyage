@@ -29,24 +29,29 @@
                 </children>
             </VBox>
 
-            <GridPane hgap="16"
-                      vgap="16"
-                      maxWidth="420"
-                      style="-fx-padding: 20;">
-                <columnConstraints>
-                    <ColumnConstraints percentWidth="35"/>
-                    <ColumnConstraints percentWidth="65"/>
-                </columnConstraints>
+            <VBox spacing="16" alignment="CENTER" maxWidth="420" style="-fx-padding: 20;">
+                
+                <VBox spacing="8">
+                    <Label text="Username" style="-fx-text-fill: #F8FAFC; -fx-font-weight: 600;"/>
+                    <TextField fx:id="usernameField" promptText="Enter username" styleClass="text-field"/>
+                </VBox>
 
-                <Label text="Username" GridPane.rowIndex="0" style="-fx-text-fill: #F8FAFC;"/>
-                <TextField fx:id="usernameField" promptText="Enter username" GridPane.columnIndex="1"/>
+                <VBox spacing="8">
+                    <Label text="Email" style="-fx-text-fill: #F8FAFC; -fx-font-weight: 600;"/>
+                    <TextField fx:id="emailField" promptText="Enter email" styleClass="text-field"/>
+                </VBox>
 
-                <Label text="Email" GridPane.rowIndex="1" style="-fx-text-fill: #F8FAFC;"/>
-                <TextField fx:id="emailField" promptText="Enter email" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <VBox spacing="8">
+                    <Label text="Password" style="-fx-text-fill: #F8FAFC; -fx-font-weight: 600;"/>
+                    <PasswordField fx:id="passwordField" promptText="Enter password" styleClass="password-field"/>
+                </VBox>
 
-                <Label text="Password" GridPane.rowIndex="2" style="-fx-text-fill: #F8FAFC;"/>
-                <PasswordField fx:id="passwordField" promptText="Enter password" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-            </GridPane>
+                <VBox spacing="8">
+                    <Label text="Mobile" style="-fx-text-fill: #F8FAFC; -fx-font-weight: 600;"/>
+                    <TextField fx:id="phoneField" promptText="Enter mobile number" styleClass="text-field"/>
+                </VBox>
+                
+            </VBox>
 
             <Button fx:id="signupBtn"
                     text="Sign Up"

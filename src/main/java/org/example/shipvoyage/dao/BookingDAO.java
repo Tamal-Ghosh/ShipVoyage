@@ -1,11 +1,15 @@
 package org.example.shipvoyage.dao;
 
-import org.example.shipvoyage.model.Booking;
-import org.example.shipvoyage.util.DBConnection;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.example.shipvoyage.model.Booking;
+import org.example.shipvoyage.util.DBConnection;
 
 public class BookingDAO {
 
@@ -167,7 +171,7 @@ public class BookingDAO {
     public static List<Booking> getBookingsByTourInstance(int tourInstanceId) {
         List<Booking> bookings = new ArrayList<>();
         String sql = """
-        SELECT b.*, u.username AS passenger_name, u.email AS passenger_email
+        SELECT b.*, u.username AS passenger_name, u.email AS passenger_email, u.phone_number AS passenger_phone
         FROM bookings b
         JOIN users u ON b.passenger_id = u.userID
         WHERE b.tour_instance_id = ?
@@ -212,9 +216,9 @@ public class BookingDAO {
                             rs.getString("payment_status")
                     );
 
-                    // Set passenger name and email from users table
                     booking.setPassengerName(rs.getString("passenger_name"));
                     booking.setPassengerEmail(rs.getString("passenger_email"));
+                    booking.setPassengerPhone(rs.getString("passenger_phone"));
 
                     bookings.add(booking);
                 }

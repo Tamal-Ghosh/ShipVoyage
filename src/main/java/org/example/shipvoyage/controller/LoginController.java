@@ -1,16 +1,24 @@
 package org.example.shipvoyage.controller;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
+import java.io.IOException;
+
+import org.controlsfx.control.Notifications;
 import org.example.shipvoyage.controller.passenger.Session;
 import org.example.shipvoyage.dao.UserDAO;
 import org.example.shipvoyage.model.User;
 
-import java.io.IOException;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class LoginController {
 
@@ -58,10 +66,10 @@ public class LoginController {
         }
 
         User user = new UserDAO().searchLoginUser(username, password);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         if (user == null) {
             System.out.println("Invalid username or password");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Invalid username or password");
             alert.showAndWait();
             return;
@@ -81,15 +89,23 @@ public class LoginController {
             stage.setScene(passengerScene);
         }
         else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Role mismatch. Please login with the correct user type.");
             alert.showAndWait();
             return;
         }
         Session.loggedInUser = user;
 
-        alert.setContentText("Successfully Logged In");
-        alert.showAndWait();
-
         stage.show();
+
+        Notifications.create()
+            .title(null)
+            .text("Login successful")
+            .position(Pos.BOTTOM_CENTER)
+            .owner(stage)
+            .hideAfter(Duration.seconds(2.2))
+            .graphic(null)
+            .darkStyle()
+            .showConfirm();
     }
 }

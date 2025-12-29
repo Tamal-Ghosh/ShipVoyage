@@ -18,6 +18,7 @@ public class UserDAO {
                 "password TEXT NOT NULL," +
                 "email TEXT NOT NULL," +
                 "role TEXT NOT NULL," +
+                "phone_number TEXT," +
                 "created_at DATETIME DEFAULT CURRENT_TIMESTAMP," +
                 "profile_image_path TEXT" +
                 ");";
@@ -31,7 +32,10 @@ public class UserDAO {
         }
     }
 
-    // Ensure columns exist for existing installations
+    
+    
+    
+    
     public static void ensureUserSchema() {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement("PRAGMA table_info(users)");) {
@@ -45,13 +49,19 @@ public class UserDAO {
             if (!cols.contains("profile_image_path")) {
                 try (PreparedStatement add = con.prepareStatement("ALTER TABLE users ADD COLUMN profile_image_path TEXT")) { add.executeUpdate(); }
             }
+            if (!cols.contains("phone_number")) {
+                try (PreparedStatement add = con.prepareStatement("ALTER TABLE users ADD COLUMN phone_number TEXT")) { add.executeUpdate(); }
+            }
+            try (PreparedStatement upd = con.prepareStatement("UPDATE users SET created_at = COALESCE(created_at, CURRENT_TIMESTAMP)")) {
+                upd.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean insertUser(String username, String password, String email, String role) {
-        String sql = "INSERT INTO users(username, password, email,role) VALUES(?,?,?,?)";
+    public static boolean insertUser(String username, String password, String email, String role, String phone) {
+        String sql = "INSERT INTO users(username, password, email, role, phone_number) VALUES(?,?,?,?,?)";
         try {
             Connection con = DBConnection.getConnection();
             PreparedStatement statement = con.prepareStatement(sql);
@@ -59,6 +69,7 @@ public class UserDAO {
             statement.setString(2, password);
             statement.setString(3, email);
             statement.setString(4, role);
+            statement.setString(5, phone);
             int rowsInserted = statement.executeUpdate();
             statement.close();
             return rowsInserted > 0;
@@ -84,15 +95,14 @@ public class UserDAO {
                 String role=rs.getString("role");
                 rs.close();
                 User u = new User(userID, username, password, email, role);
-                // Attempt to load optional columns
                 try {
-                    // Re-query with column access
-                    PreparedStatement stmt2 = con.prepareStatement("SELECT created_at, profile_image_path FROM users WHERE userID=?");
+                    PreparedStatement stmt2 = con.prepareStatement("SELECT created_at, profile_image_path, phone_number FROM users WHERE userID=?");
                     stmt2.setInt(1, userID);
                     var rs2 = stmt2.executeQuery();
                     if (rs2.next()) {
                         u.setCreatedAt(rs2.getString("created_at"));
                         u.setProfileImagePath(rs2.getString("profile_image_path"));
+                        u.setPhoneNumber(rs2.getString("phone_number"));
                     }
                     rs2.close();
                     stmt2.close();
@@ -126,6 +136,32 @@ public class UserDAO {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, path);
+            stmt.setInt(2, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updatePhoneNumber(int userId, String phone) {
+        String sql = "UPDATE users SET phone_number=? WHERE userID=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, phone);
+            stmt.setInt(2, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updatePassword(int userId, String password) {
+        String sql = "UPDATE users SET password=? WHERE userID=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, password);
             stmt.setInt(2, userId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

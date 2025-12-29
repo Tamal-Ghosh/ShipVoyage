@@ -42,7 +42,6 @@
                    style="-fx-font-size: 18px; -fx-font-weight: 600; -fx-text-fill: #1F2937;"/>
 
             <VBox spacing="12">
-                <!-- Fixed fx:id names -->
                 <RadioButton fx:id="visaRadio"
                              text="💳 Visa / Mastercard"
                              style="-fx-font-size: 15px; -fx-padding: 12;"/>

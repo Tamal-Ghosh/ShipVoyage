@@ -1,5 +1,9 @@
 package org.example.shipvoyage.controller;
 
+import java.io.IOException;
+
+import org.example.shipvoyage.dao.UserDAO;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +13,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.shipvoyage.dao.UserDAO;
-
-import java.io.IOException;
 
 public class SignupController {
     String role;
@@ -28,42 +29,45 @@ public class SignupController {
     @FXML
     private TextField usernameField;
 
+    @FXML
+    private TextField phoneField;
+
 
     @FXML
     void handleSignup(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
+        String phone = phoneField.getText();
 
 
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || role.isEmpty()) {
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || role.isEmpty() || phone.isEmpty()) {
             System.out.println("Missing Information");
             return;
         }
 
-//        System.out.println("Username: " + username);
-//        System.out.println("Email: " + email);
-//        System.out.println("Password: " + password);
-        boolean added= UserDAO.insertUser(username, password, email, role);
+        boolean added= UserDAO.insertUser(username, password, email, role, phone);
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         if(added){
             alert.setContentText("Signup Successful");
             alert.showAndWait();
-            //System.out.println("User Added Successfully");
+            
+            FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/login.fxml"));
+            Scene loginScene = new Scene(loader.load());
+            LoginController loginController = loader.getController();
+            loginController.setRole(this.role);
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(loginScene);
+            stage.show();
         }else{
-            alert.setContentText("Signup Failed");
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setTitle("Signup Failed");
+            alert.setHeaderText("Username already exists");
+            alert.setContentText("This username is already taken. Please choose a different username.");
             alert.showAndWait();
-            	//System.out.println("Error Adding User");
-                return;
         }
-
-        FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/login.fxml"));
-        Scene loginScene = new Scene(loader.load());
-        Stage stage = (Stage) emailField.getScene().getWindow();
-        stage.setScene(loginScene);
-        stage.show();
 
     }
 
@@ -71,6 +75,8 @@ public class SignupController {
     void goToLogin(ActionEvent event) throws IOException {
         FXMLLoader loader = new  FXMLLoader(getClass().getResource("/org/example/shipvoyage/login.fxml"));
         Scene loginScene = new Scene(loader.load());
+        LoginController loginController = loader.getController();
+        loginController.setRole(this.role);
         Stage stage = (Stage) emailField.getScene().getWindow();
         stage.setScene(loginScene);
         stage.show();

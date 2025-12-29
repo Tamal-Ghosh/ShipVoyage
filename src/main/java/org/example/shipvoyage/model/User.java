@@ -8,6 +8,7 @@ public class User {
     private String email;
     private String password;
     private String role;
+    private String phoneNumber;
     private Image profileImage;
     private String profileImagePath;
     private String createdAt;
@@ -34,6 +35,9 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     public Image getProfileImage() { return profileImage; }
     public void setProfileImage(Image profileImage) { this.profileImage = profileImage; }

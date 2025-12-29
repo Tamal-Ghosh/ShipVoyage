@@ -16,6 +16,7 @@ import static org.example.shipvoyage.util.AlertUtil.showWarning;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,6 +30,9 @@ public class ProfileController {
 
     @FXML
     private TextField emailField;
+
+    @FXML
+    private TextField phoneField;
 
     @FXML
     private ImageView profileImageView;
@@ -52,12 +56,26 @@ public class ProfileController {
     private Label totalBookingsLabel;
 
     @FXML
+    private PasswordField currentPasswordField;
+
+    @FXML
+    private PasswordField newPasswordField;
+
+    @FXML
+    private PasswordField confirmPasswordField;
+
+    @FXML
+    private Button changePasswordButton;
+
+    @FXML
     public void initialize() {
         User user = Session.loggedInUser;
         usernameField.setText(user.getUsername());
         emailField.setText(user.getEmail());
+        phoneField.setText(user.getPhoneNumber());
         usernameField.setEditable(false);
         emailField.setEditable(false);
+        phoneField.setEditable(false);
         saveButton.setDisable(true);
         if (changePhotoButton != null) {
             changePhotoButton.setVisible(false);
@@ -78,17 +96,21 @@ public class ProfileController {
 
         if (memberSinceLabel != null) {
             String since = user.getCreatedAt() != null ? user.getCreatedAt() : "";
+            if (since.contains(" ")) {
+                since = since.substring(0, since.indexOf(' '));
+            }
             memberSinceLabel.setText(since);
         }
         if (totalBookingsLabel != null) {
             int count = BookingDAO.getBookingsByPassenger(user.getUserID()).size();
-            totalBookingsLabel.setText(count + " cruises");
+            totalBookingsLabel.setText(count + " Trips");
         }
     }
 
     @FXML
     private void onEditProfile() {
         emailField.setEditable(true);
+        phoneField.setEditable(true);
         saveButton.setDisable(false);
         if (changePhotoButton != null) {
             changePhotoButton.setVisible(true);
@@ -100,15 +122,23 @@ public class ProfileController {
     private void onSaveProfile() {
         User user = Session.loggedInUser;
         String newEmail = emailField.getText() == null ? "" : emailField.getText().trim();
+        String newPhone = phoneField.getText() == null ? "" : phoneField.getText().trim();
         if (newEmail.isEmpty()) {
             showWarning("Email cannot be empty.");
             return;
         }
-        boolean ok = UserDAO.updateUserEmail(user.getUserID(), newEmail);
-        if (ok) {
+        if (newPhone.isEmpty()) {
+            showWarning("Phone number cannot be empty.");
+            return;
+        }
+        boolean okEmail = UserDAO.updateUserEmail(user.getUserID(), newEmail);
+        boolean okPhone = UserDAO.updatePhoneNumber(user.getUserID(), newPhone);
+        if (okEmail && okPhone) {
             user.setEmail(newEmail);
+            user.setPhoneNumber(newPhone);
             showInfo("Profile updated successfully.");
             emailField.setEditable(false);
+            phoneField.setEditable(false);
             saveButton.setDisable(true);
             if (changePhotoButton != null) {
                 changePhotoButton.setVisible(false);
@@ -116,6 +146,50 @@ public class ProfileController {
             }
         } else {
             showError("Failed to update email.");
+        }
+    }
+
+    @FXML
+    private void onChangePassword() {
+        User user = Session.loggedInUser;
+        String current = currentPasswordField.getText() == null ? "" : currentPasswordField.getText();
+        String fresh = newPasswordField.getText() == null ? "" : newPasswordField.getText();
+        String confirm = confirmPasswordField.getText() == null ? "" : confirmPasswordField.getText();
+
+        if (current.isBlank()) {
+            showWarning("Please enter your current password.");
+            return;
+        }
+        if (!current.equals(user.getPassword())) {
+            showError("Current password is incorrect.");
+            return;
+        }
+        if (fresh.isBlank()) {
+            showWarning("New password cannot be empty.");
+            return;
+        }
+        if (fresh.length() < 6) {
+            showWarning("New password must be at least 6 characters.");
+            return;
+        }
+        if (!fresh.equals(confirm)) {
+            showWarning("New password and confirmation do not match.");
+            return;
+        }
+        if (fresh.equals(current)) {
+            showWarning("New password must be different from the current password.");
+            return;
+        }
+
+        boolean ok = UserDAO.updatePassword(user.getUserID(), fresh);
+        if (ok) {
+            user.setPassword(fresh);
+            currentPasswordField.clear();
+            newPasswordField.clear();
+            confirmPasswordField.clear();
+            showInfo("Password updated successfully.");
+        } else {
+            showError("Failed to update password. Please try again.");
         }
     }
 
@@ -128,7 +202,6 @@ public class ProfileController {
         );
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
-            // Copy to app-managed directory for stable access
             try {
                 Path imagesDir = Path.of("profile-images");
                 Files.createDirectories(imagesDir);
@@ -140,7 +213,6 @@ public class ProfileController {
                 Image img = new Image(dest.toUri().toString());
                 profileImageView.setImage(img);
                 Session.loggedInUser.setProfileImage(img);
-                // Persist managed file path
                 UserDAO.updateProfileImagePath(Session.loggedInUser.getUserID(), dest.toAbsolutePath().toString());
                 Session.loggedInUser.setProfileImagePath(dest.toAbsolutePath().toString());
                 if (avatarPlaceholder != null) avatarPlaceholder.setVisible(false);

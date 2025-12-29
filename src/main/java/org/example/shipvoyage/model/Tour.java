@@ -5,7 +5,6 @@ public class Tour {
    private String tourName;
    private String from;
    private String to;
-   //private String route;
    private int duration;
    private String description;
 

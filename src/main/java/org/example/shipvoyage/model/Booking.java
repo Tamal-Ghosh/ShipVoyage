@@ -14,6 +14,7 @@ public class Booking {
     private String status;
     private String paymentMethod;
     private String paymentStatus;
+    private String passengerPhone;
 
     public Booking(int id, int tourInstanceId, int passengerId,
                    List<Integer> roomIds, List<String> roomNumbers,
@@ -39,6 +40,7 @@ public class Booking {
     public String getStatus() { return status; }
     public String getPaymentMethod() { return paymentMethod; }
     public String getPaymentStatus() { return paymentStatus; }
+    public String getPassengerPhone() { return passengerPhone; }
 
     public void setRoomIds(List<Integer> roomIds) { this.roomIds = roomIds; }
     public void setRoomNumbers(List<String> roomNumbers) { this.roomNumbers = roomNumbers; }
@@ -46,6 +48,7 @@ public class Booking {
     public void setStatus(String status) { this.status = status; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
     public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
+    public void setPassengerPhone(String passengerPhone) { this.passengerPhone = passengerPhone; }
     public String getRoomNumbersAsString() {
         return String.join(", ", roomNumbers);
     }

@@ -61,7 +61,6 @@
                     <RowConstraints vgrow="ALWAYS" />
                 </rowConstraints>
 
-                <!-- Nested Grid for Ship -->
                 <GridPane hgap="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="27.0" />
@@ -99,7 +98,6 @@
                </rowConstraints>
                 </GridPane>
 
-                <!-- Nested Grid for Price -->
                 <GridPane hgap="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="33.0" />

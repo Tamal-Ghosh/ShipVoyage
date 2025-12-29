@@ -1,12 +1,13 @@
 package org.example.shipvoyage.controller.passenger;
 
+import org.example.shipvoyage.dao.BookingDAO;
+import org.example.shipvoyage.model.Booking;
+import org.example.shipvoyage.util.AlertUtil;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.shipvoyage.dao.BookingDAO;
-import org.example.shipvoyage.model.Booking;
-import org.example.shipvoyage.util.AlertUtil;
 
 public class PaymentController {
 
@@ -58,15 +59,16 @@ public class PaymentController {
     private void processPayment(String method) {
         booking.setPaymentMethod(method);
         booking.setPaymentStatus("Paid");
+        booking.setStatus("Confirmed");
         booking.setTotalPrice(amount);
-        boolean success = BookingDAO.updatePaymentStatus(booking);
+        boolean success = BookingDAO.addBooking(booking);
+        
         if (success) {
-            AlertUtil.showInfo("Payment successful via " + method);
+            AlertUtil.showInfo("Payment successful! Your booking is confirmed.");
             Stage stage = (Stage) amountLabel.getScene().getWindow();
             stage.close();
         } else {
-            BookingDAO.cancelBookingByInstanceAndPassenger(booking.getTourInstanceId(), booking.getPassengerId());
-            AlertUtil.showWarning("Payment failed. Try again!");
+            AlertUtil.showWarning("Payment failed or rooms already booked. Please try again!");
         }
     }
 }
