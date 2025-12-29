@@ -97,6 +97,8 @@
                     styleClass="secondary-button" prefWidth="140"/>
             <Button fx:id="saveButton" text="Save Changes" onAction="#onSaveProfile" 
                     styleClass="primary-button" prefWidth="140"/>
+        </HBox>
+
         </VBox>
 
     </VBox>

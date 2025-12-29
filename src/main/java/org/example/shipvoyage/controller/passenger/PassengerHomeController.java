@@ -11,9 +11,11 @@ import org.example.shipvoyage.dao.TourDAO;
 import org.example.shipvoyage.dao.TourInstanceDAO;
 import org.example.shipvoyage.model.TourInstance;
 import static org.example.shipvoyage.util.AlertUtil.showWarning;
+import org.example.shipvoyage.util.ThreadPool;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -148,16 +150,22 @@ public class PassengerHomeController {
             }
         });
     }
-
+    
     private void loadSuggestions() {
-        Set<String> fromSet = new HashSet<>();
-        Set<String> toSet = new HashSet<>();
-        for (var t : TourDAO.getAllTours()) {
-            fromSet.add(t.getFrom());
-            toSet.add(t.getTo());
-        }
-        fromSuggestions = FXCollections.observableArrayList(fromSet);
-        toSuggestions = FXCollections.observableArrayList(toSet);
+        fromSuggestions = FXCollections.observableArrayList();
+        toSuggestions = FXCollections.observableArrayList();
+        ThreadPool.getExecutor().execute(() -> {
+            Set<String> fromSet = new HashSet<>();
+            Set<String> toSet = new HashSet<>();
+            for (var t : TourDAO.getAllTours()) {
+                fromSet.add(t.getFrom());
+                toSet.add(t.getTo());
+            }
+            Platform.runLater(() -> {
+                fromSuggestions.addAll(fromSet);
+                toSuggestions.addAll(toSet);
+            });
+        });
     }
 
 
@@ -172,6 +180,7 @@ public class PassengerHomeController {
         final String finalFrom = from;
         final String finalTo = to;
         LocalDate selectedDate = datePicker.getValue();
+        
         if (selectedDate == null) {
             showWarning("Please select a date.");
             return;
@@ -183,34 +192,38 @@ public class PassengerHomeController {
 
         tourCardsContainer.getChildren().clear();
         final LocalDate finalSelectedDate = selectedDate;
-
-        allTourInstances = new java.util.ArrayList<>(
-            TourInstanceDAO.getAllTourInstances().stream()
+        
+        ThreadPool.getExecutor().execute(() -> {
+            java.util.List<TourInstance> results = TourInstanceDAO.getAllTourInstances().stream()
                 .filter(t -> {
                     var tour = TourDAO.getTourById(t.getTourId());
                     return tour != null &&
                             tour.getFrom().equalsIgnoreCase(finalFrom) &&
                             tour.getTo().equalsIgnoreCase(finalTo) &&
                             !t.getStartDate().isBefore(finalSelectedDate);
-            }).toList()
-        );
+            }).toList();
+            
+            Platform.runLater(() -> {
+                allTourInstances = new java.util.ArrayList<>(results);
+                tourCardsContainer.getChildren().clear();
+                
+                if (allTourInstances.isEmpty()) {
+                    Label noToursLabel = new Label("No upcoming tours found for this route.");
+                    noToursLabel.setStyle("-fx-text-fill: #666; -fx-font-size: 14px; -fx-padding: 20;");
+                    tourCardsContainer.getChildren().add(noToursLabel);
+                    resultsBox.setVisible(true);
+                    resultsBox.setManaged(true);
+                    prevButton.setVisible(false);
+                    nextButton.setVisible(false);
+                    return;
+                }
 
-        if (allTourInstances.isEmpty()) {
-            Label noToursLabel = new Label("No upcoming tours found for this route.");
-            noToursLabel.setStyle("-fx-text-fill: #666; -fx-font-size: 14px; -fx-padding: 20;");
-            tourCardsContainer.getChildren().add(noToursLabel);
-            resultsBox.setVisible(true);
-            resultsBox.setManaged(true);
-            prevButton.setVisible(false);
-            nextButton.setVisible(false);
-            return;
-        }
-
-        currentPage = 0;
-        displayCurrentPage();
-        
-        resultsBox.setVisible(true);
-        resultsBox.setManaged(true);
+                currentPage = 0;
+                displayCurrentPage();
+                resultsBox.setVisible(true);
+                resultsBox.setManaged(true);
+            });
+        });
     }
 
     private void displayCurrentPage() {
@@ -240,16 +253,17 @@ public class PassengerHomeController {
         prevButton.setManaged(hasPrev);
         nextButton.setManaged(hasNext);
     }
-
+    
     private void loadUpcomingTrips() {
         if (upcomingContainer == null) return;
+        
         upcomingContainer.getChildren().clear();
         LocalDate today = LocalDate.now();
         upcomingInstances = TourInstanceDAO.getAllTourInstances().stream()
             .filter(t -> !t.getStartDate().isBefore(today))
             .sorted(java.util.Comparator.comparing(TourInstance::getStartDate))
             .toList();
-
+        
         if (upcomingTimeline != null) {
             upcomingTimeline.stop();
         }
@@ -479,20 +493,24 @@ public class PassengerHomeController {
             contentScroll.setStyle("-fx-background-color: transparent;");
         }
     }
-
+    
     private void loadFeaturedPhotos() {
         if (featuredContainer == null) return;
-        featuredContainer.getChildren().clear();
-        var photos = org.example.shipvoyage.dao.PhotoDAO.getFeaturedPhotos(6);
-        if (photos.isEmpty()) {
-            Label none = new Label("No photos yet.");
-            none.setStyle("-fx-text-fill: #6B7280;");
-            featuredContainer.getChildren().add(none);
-            return;
-        }
-        for (var p : photos) {
-            featuredContainer.getChildren().add(buildPhotoCard(p));
-        }
+        ThreadPool.getExecutor().execute(() -> {
+            var photos = org.example.shipvoyage.dao.PhotoDAO.getFeaturedPhotos(6);
+            Platform.runLater(() -> {
+                featuredContainer.getChildren().clear();
+                if (photos.isEmpty()) {
+                    Label none = new Label("No photos yet.");
+                    none.setStyle("-fx-text-fill: #6B7280;");
+                    featuredContainer.getChildren().add(none);
+                    return;
+                }
+                for (var p : photos) {
+                    featuredContainer.getChildren().add(buildPhotoCard(p));
+                }
+            });
+        });
     }
 
     private VBox buildPhotoCard(org.example.shipvoyage.model.FeaturedPhoto photo) {
@@ -509,7 +527,6 @@ public class PassengerHomeController {
             try {
                 imageView.setImage(new Image("file:" + photo.getImagePath(), 240, 160, true, true));
             } catch (Exception ignored) {
-                // fallback below
             }
         }
         if (imageView.getImage() == null) {

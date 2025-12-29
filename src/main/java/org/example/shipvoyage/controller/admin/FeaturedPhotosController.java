@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.example.shipvoyage.dao.PhotoDAO;
 import org.example.shipvoyage.model.FeaturedPhoto;
+import org.example.shipvoyage.util.ThreadPool;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -80,17 +82,21 @@ public class FeaturedPhotosController {
     }
 
     private void refreshTiles() {
-        tilesPane.getChildren().clear();
-        List<FeaturedPhoto> all = PhotoDAO.getAll();
-        int max = 6;
-        for (int i = 0; i < max; i++) {
-            Node tile;
-            if (i < all.size()) tile = buildTile(all.get(i));
-            else tile = buildEmptyTile();
-            tilesPane.add(tile, i % 3, i / 3);
-            GridPane.setVgrow(tile, Priority.NEVER);
-            GridPane.setHgrow(tile, Priority.ALWAYS);
-        }
+        ThreadPool.getExecutor().execute(() -> {
+            List<FeaturedPhoto> all = PhotoDAO.getAll();
+            Platform.runLater(() -> {
+                tilesPane.getChildren().clear();
+                int max = 6;
+                for (int i = 0; i < max; i++) {
+                    Node tile;
+                    if (i < all.size()) tile = buildTile(all.get(i));
+                    else tile = buildEmptyTile();
+                    tilesPane.add(tile, i % 3, i / 3);
+                    GridPane.setVgrow(tile, Priority.NEVER);
+                    GridPane.setHgrow(tile, Priority.ALWAYS);
+                }
+            });
+        });
     }
 
     private VBox buildTile(FeaturedPhoto p) {

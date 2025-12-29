@@ -108,7 +108,6 @@ public class CustomerListController {
         masterData.clear();
         TourInstance selected = instanceCombo.getValue();
         if (selected == null) {
-            // Show all passengers as customers
             var users = UserDAO.getAllPassengers();
             for (var u : users) {
                 Booking pseudo = new Booking(0, 0, u.getUserID(), new java.util.ArrayList<>(), new java.util.ArrayList<>(), 0, "", "", "-");
@@ -118,7 +117,6 @@ public class CustomerListController {
                 masterData.add(pseudo);
             }
         } else {
-            // Show customers who booked the selected instance
             masterData.addAll(BookingDAO.getBookingsByTourInstance(selected.getId()));
         }
         customersTable.setItems(FXCollections.observableArrayList(masterData));
@@ -158,7 +156,6 @@ public class CustomerListController {
             boolean ok2 = UserDAO.updatePhoneNumber(b.getPassengerId(), phoneRes.get());
             if (!ok2) { showInfo("Failed to update mobile."); return; }
         }
-        // refresh current table row
         loadAllBookings();
         filterTable();
     }

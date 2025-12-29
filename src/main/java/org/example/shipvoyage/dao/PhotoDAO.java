@@ -43,10 +43,8 @@ public class PhotoDAO {
                 }
             }
         } catch (Exception e) {
-            // fallback below
         }
         if (photos.isEmpty()) {
-            // Fallback placeholders if table empty/not present
             photos.add(new FeaturedPhoto(1, "Sundarban Explorer", "Dense mangrove views & wildlife", ""));
             photos.add(new FeaturedPhoto(2, "Bay of Bengal Cruise", "Open-water sunsets aboard MV The Wave", ""));
             photos.add(new FeaturedPhoto(3, "Heritage Riverline", "Calm river cruise with cultural stops", ""));

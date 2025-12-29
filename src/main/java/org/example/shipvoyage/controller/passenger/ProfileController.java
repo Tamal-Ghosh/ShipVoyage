@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+import javafx.application.Platform;
 import org.example.shipvoyage.dao.BookingDAO;
 import org.example.shipvoyage.dao.UserDAO;
 import org.example.shipvoyage.model.User;
@@ -22,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.example.shipvoyage.util.ThreadPool;
 
 public class ProfileController {
 
@@ -102,8 +104,12 @@ public class ProfileController {
             memberSinceLabel.setText(since);
         }
         if (totalBookingsLabel != null) {
-            int count = BookingDAO.getBookingsByPassenger(user.getUserID()).size();
-            totalBookingsLabel.setText(count + " Trips");
+            ThreadPool.getExecutor().execute(() -> {
+                int count = BookingDAO.getBookingsByPassenger(user.getUserID()).size();
+                Platform.runLater(() -> {
+                    totalBookingsLabel.setText(count + " Trips");
+                });
+            });
         }
     }
 

@@ -1,8 +1,5 @@
 package org.example.shipvoyage.dao;
 
-import org.example.shipvoyage.model.TourInstance;
-import org.example.shipvoyage.util.DBConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +7,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.example.shipvoyage.model.TourInstance;
+import org.example.shipvoyage.util.DBConnection;
 
 
 public class TourInstanceDAO {
@@ -56,10 +56,9 @@ public class TourInstanceDAO {
     public static List<TourInstance> getAllTourInstances() {
         List<TourInstance> tourInstances = new ArrayList<>();
         String sql = "SELECT * FROM tour_instances";
-        try {
-            Connection con = DBConnection.getConnection();
-            PreparedStatement statement = con.prepareStatement(sql);
-            ResultSet rs = statement.executeQuery();
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
                 tourInstances.add(new TourInstance(
                         rs.getInt("id"),
