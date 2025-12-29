@@ -30,7 +30,10 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -81,6 +84,9 @@ public class PassengerHomeController {
     @FXML
     private VBox upcomingContainer;
 
+    @FXML
+    private FlowPane featuredContainer;
+
 
     private ObservableList<String> fromSuggestions;
     private ObservableList<String> toSuggestions;
@@ -112,6 +118,7 @@ public class PassengerHomeController {
         }
 
         loadUpcomingTrips();
+        loadFeaturedPhotos();
     }
 
     private void setupAutoComplete(TextField field, ObservableList<String> suggestions) {
@@ -471,6 +478,53 @@ public class PassengerHomeController {
         if (contentScroll != null) {
             contentScroll.setStyle("-fx-background-color: transparent;");
         }
+    }
+
+    private void loadFeaturedPhotos() {
+        if (featuredContainer == null) return;
+        featuredContainer.getChildren().clear();
+        var photos = org.example.shipvoyage.dao.PhotoDAO.getFeaturedPhotos(6);
+        if (photos.isEmpty()) {
+            Label none = new Label("No photos yet.");
+            none.setStyle("-fx-text-fill: #6B7280;");
+            featuredContainer.getChildren().add(none);
+            return;
+        }
+        for (var p : photos) {
+            featuredContainer.getChildren().add(buildPhotoCard(p));
+        }
+    }
+
+    private VBox buildPhotoCard(org.example.shipvoyage.model.FeaturedPhoto photo) {
+        VBox card = new VBox(8);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 14; -fx-border-radius: 14; -fx-border-color: #E5E7EB; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);");
+        card.setPrefWidth(260);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(240);
+        imageView.setFitHeight(140);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        if (photo.getImagePath() != null && !photo.getImagePath().isBlank()) {
+            try {
+                imageView.setImage(new Image("file:" + photo.getImagePath(), 240, 160, true, true));
+            } catch (Exception ignored) {
+                // fallback below
+            }
+        }
+        if (imageView.getImage() == null) {
+            imageView.setStyle("-fx-background-color: #E5E7EB; -fx-background-radius: 12; -fx-alignment: center;");
+            imageView.setFitHeight(120);
+        }
+
+        Label title = new Label(photo.getTitle());
+        title.setStyle("-fx-font-weight: bold; -fx-text-fill: #1F2937; -fx-font-size: 14px;");
+        Label desc = new Label(photo.getDescription());
+        desc.setStyle("-fx-text-fill: #6B7280; -fx-font-size: 12px;");
+        desc.setWrapText(true);
+
+        card.getChildren().addAll(imageView, title, desc);
+        return card;
     }
 
     @FXML

@@ -17,6 +17,7 @@ module org.example.shipvoyage {
     opens org.example.shipvoyage.app to javafx.fxml;
     opens org.example.shipvoyage.controller to javafx.fxml;
     opens org.example.shipvoyage.controller.passenger to javafx.fxml;
+    opens org.example.shipvoyage.dao to javafx.base;
     opens org.example.shipvoyage.controller.admin to javafx.fxml;
     opens org.example.shipvoyage.model to javafx.base, javafx.fxml;
 

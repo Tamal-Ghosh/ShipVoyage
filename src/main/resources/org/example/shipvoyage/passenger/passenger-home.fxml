@@ -71,44 +71,9 @@
     <ScrollPane fx:id="contentScroll" fitToWidth="true" style="-fx-background-color: #F5F7FA;">
         <VBox fx:id="centerVBox">
             <HBox styleClass="content-wrapper" spacing="30">
-                <VBox spacing="20" HBox.hgrow="ALWAYS">
-                    <HBox styleClass="offers-banner" spacing="40" alignment="CENTER_LEFT">
-                        <VBox spacing="12" HBox.hgrow="ALWAYS">
-                            <Label text="Winter  Sale!" styleClass="offers-title"/>
-                            <Label text="Up to 30% Off Selected Tours" styleClass="offers-subtitle"/>
-                            <Button text="View Deals" styleClass="offers-button" prefWidth="150"/>
-                        </VBox>
-                        <Label text="🚢" style="-fx-font-size: 120px; -fx-opacity: 0.8;"/>
-                    </HBox>
-
-                    <VBox styleClass="reviews-section" spacing="20">
-                        <Label text="Customer Reviews" styleClass="reviews-title"/>
-                        <HBox spacing="20">
-                            <VBox styleClass="review-card" spacing="10" HBox.hgrow="ALWAYS">
-                                <HBox spacing="12" alignment="CENTER_LEFT">
-                                    <Region styleClass="reviewer-avatar"/>
-                                    <VBox>
-                                        <Label text="Sarah M." styleClass="reviewer-name"/>
-                                        <Label text="★★★★★" styleClass="review-stars"/>
-                                    </VBox>
-                                </HBox>
-                                <Label text="Amazing experience! The booking process was smooth and the trip was unforgettable!" 
-                                       styleClass="review-text" wrapText="true"/>
-                            </VBox>
-
-                            <VBox styleClass="review-card" spacing="10" HBox.hgrow="ALWAYS">
-                                <HBox spacing="12" alignment="CENTER_LEFT">
-                                    <Region styleClass="reviewer-avatar"/>
-                                    <VBox>
-                                        <Label text="Michael R." styleClass="reviewer-name"/>
-                                        <Label text="★★★★★" styleClass="review-stars"/>
-                                    </VBox>
-                                </HBox>
-                                <Label text="Best vacation ever! Great service, beautiful destinations, and wonderful staff." 
-                                       styleClass="review-text" wrapText="true"/>
-                            </VBox>
-                        </HBox>
-                    </VBox>
+                <VBox spacing="16" HBox.hgrow="ALWAYS">
+                    <Label text="Featured Destinations &amp; Ships" styleClass="section-title"/>
+                    <FlowPane fx:id="featuredContainer" hgap="16" vgap="16" prefWrapLength="900" />
                 </VBox>
 
                 <VBox styleClass="trips-sidebar" spacing="20">
