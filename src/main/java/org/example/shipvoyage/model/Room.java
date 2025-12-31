@@ -29,6 +29,7 @@ public class Room {
     public String getRoomType() { return roomType; }
     public void setRoomType(String roomType) { this.roomType = roomType; }
 
+
     public double getPricePerNight() { return pricePerNight; }
     public void setPricePerNight(double pricePerNight) { this.pricePerNight = pricePerNight; }
 

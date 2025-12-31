@@ -27,6 +27,7 @@
                 <MenuButton text="Manage" styleClass="nav-user-menu">
                     <items>
                         <MenuItem text="Ships" onAction="#onManageShipsClick"/>
+                        <MenuItem text="Rooms" onAction="#onManageRoomsClick"/>
                         <MenuItem text="Tours" onAction="#onManageToursClick"/>
                         <MenuItem text="Instances" onAction="#onManageTourInstanceClick"/>
                         <MenuItem text="Customers" onAction="#onManageCustomersClick"/>

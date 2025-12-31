@@ -115,16 +115,20 @@ public class ManageRoomsController {
 
     public void onSaveRoom(ActionEvent e) {
         Ship ship = shipComboBox.getValue();
-        if (ship == null) return;
+        if (ship == null) {
+            AlertUtil.showWarning("Please select a ship first!");
+            return;
+        }
+
+        if (ship.getCapacity() <= 0) {
+            AlertUtil.showWarning("Ship capacity must be greater than 0!");
+            return;
+        }
 
         int currentRoomCount = RoomDAO.getRoomsByShip(ship.getId()).size();
 
         if (selectedRoom == null && currentRoomCount >= ship.getCapacity()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Capacity Reached");
-            alert.setHeaderText(null);
-            alert.setContentText("Cannot add more rooms. Ship capacity reached!");
-            alert.showAndWait();
+            AlertUtil.showWarning("Cannot add more rooms. Ship capacity reached! Current: " + currentRoomCount + "/" + ship.getCapacity());
             return;
         }
 
@@ -132,29 +136,57 @@ public class ManageRoomsController {
         String roomType = roomTypeComboBox.getValue();
         double price = priceSpinner.getValue();
 
-        if (roomNumber.isEmpty() || roomType == null) return;
+        if (roomNumber.isEmpty()) {
+            AlertUtil.showWarning("Please enter room number!");
+            return;
+        }
+
+        if (roomType == null) {
+            AlertUtil.showWarning("Please select room type!");
+            return;
+        }
+
+        if (price <= 0) {
+            AlertUtil.showWarning("Please enter valid price!");
+            return;
+        }
 
         if (selectedRoom == null) {
             boolean available = true;
-            RoomDAO.addRoom(new Room(0, ship.getId(), roomNumber, roomType, price, available));
-            AlertUtil.showInfo("Room added successfully!");
+            boolean success = RoomDAO.addRoom(new Room(0, ship.getId(), roomNumber, roomType, price, available));
+            if (success) {
+                AlertUtil.showInfo("Room added successfully!");
+                clearFields();
+                loadRooms();
+            } else {
+                AlertUtil.showError("Failed to add room. Room number may already exist for this ship!");
+            }
         } else {
             selectedRoom.setRoomNumber(roomNumber);
             selectedRoom.setRoomType(roomType);
             selectedRoom.setPricePerNight(price);
-            RoomDAO.updateRoom(selectedRoom);
-            selectedRoom = null;
-            saveButton.setText("Save");
-            AlertUtil.showInfo("Room updated successfully!");
+            boolean success = RoomDAO.updateRoom(selectedRoom);
+            if (success) {
+                AlertUtil.showInfo("Room updated successfully!");
+                selectedRoom = null;
+                saveButton.setText("Save");
+                clearFields();
+                loadRooms();
+            } else {
+                AlertUtil.showError("Failed to update room. Room number may already exist for this ship!");
+            }
         }
-
-        clearFields();
-        loadRooms();
     }
 
     private void clearFields() {
         roomNumberField.clear();
         roomTypeComboBox.getSelectionModel().clearSelection();
         priceSpinner.getValueFactory().setValue(0);
+    }
+
+    public void onClearRoom(ActionEvent e) {
+        clearFields();
+        selectedRoom = null;
+        saveButton.setText("Save");
     }
 }

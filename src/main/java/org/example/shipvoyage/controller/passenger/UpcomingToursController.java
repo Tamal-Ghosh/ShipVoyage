@@ -3,18 +3,18 @@ package org.example.shipvoyage.controller.passenger;
 import java.time.LocalDate;
 import java.util.List;
 
-import javafx.application.Platform;
 import org.example.shipvoyage.dao.ShipDAO;
 import org.example.shipvoyage.dao.TourDAO;
 import org.example.shipvoyage.dao.TourInstanceDAO;
 import org.example.shipvoyage.model.TourInstance;
+import org.example.shipvoyage.util.ThreadPool;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import org.example.shipvoyage.util.ThreadPool;
 
 public class UpcomingToursController {
 

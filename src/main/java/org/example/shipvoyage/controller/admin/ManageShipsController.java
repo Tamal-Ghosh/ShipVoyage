@@ -23,18 +23,17 @@ public class ManageShipsController {
     public TableColumn<Ship, Void> actionsColumn;
 
     public TextField nameField;
-    public TextField capacityField;
+    public Spinner<Integer> capacitySpinner;
     public Button saveButton;
     public Button cancelButton;
-    @FXML
-    private Spinner<Integer> capacitySpinner;
 
     private ObservableList<Ship> shipList = FXCollections.observableArrayList();
     private Ship selectedShip = null;
 
     public void initialize() {
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 100);
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10000, 0, 1);
         capacitySpinner.setValueFactory(valueFactory);
+        capacitySpinner.setEditable(true);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("shipName"));
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
@@ -61,7 +60,7 @@ public class ManageShipsController {
                         editBtn.setOnAction(event -> {
                             Ship ship = getTableView().getItems().get(getIndex());
                             nameField.setText(ship.getShipName());
-                            capacityField.setText(String.valueOf(ship.getCapacity()));
+                            capacitySpinner.getValueFactory().setValue(ship.getCapacity());
                             selectedShip = ship;
                             saveButton.setText("Update");
                         });
@@ -101,18 +100,10 @@ public class ManageShipsController {
 
     public void OnShipSaveClicked(ActionEvent actionEvent) {
         String name = nameField.getText();
-        String capacityText = capacityField.getText();
+        int capacity = capacitySpinner.getValue();
 
-        if (name.isEmpty() || capacityText.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter ship name and capacity!");
-            return;
-        }
-
-        int capacity;
-        try {
-            capacity = Integer.parseInt(capacityText);
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Capacity must be a number!");
+        if (name.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter ship name!");
             return;
         }
 
@@ -147,7 +138,7 @@ public class ManageShipsController {
 
     private void clearFields() {
         nameField.clear();
-        capacityField.clear();
+        capacitySpinner.getValueFactory().setValue(0);
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

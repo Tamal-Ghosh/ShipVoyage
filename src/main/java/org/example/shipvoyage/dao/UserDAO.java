@@ -55,10 +55,10 @@ public class UserDAO {
         }
     }
 
-    
-    
-    
-    
+
+
+
+
     public static void ensureUserSchema() {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement("PRAGMA table_info(users)");) {
@@ -105,7 +105,7 @@ public class UserDAO {
     public static User searchLoginUser(String username, String password) {
         String sql="SELECT * FROM users WHERE username =? AND password = ?";
         try(Connection con =DBConnection.getConnection();
-        PreparedStatement statement = con.prepareStatement(sql))
+            PreparedStatement statement = con.prepareStatement(sql))
         {
             statement.setString(1, username);
             statement.setString(2, password);
@@ -193,5 +193,5 @@ public class UserDAO {
         }
     }
 
-    
+
 }
